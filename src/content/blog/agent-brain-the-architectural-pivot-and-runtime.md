@@ -174,7 +174,7 @@ When a complex feature request arrives:
 
 The era of prompt-stuffing "autonomous" coding is over. Real autonomy requires the same architectural rigor we demand of distributed systems: **hard boundaries, token budgets, multi-process IPC isolation, and verifiable cryptographic receipts**.
 
-With `agent-brain` v0.9.x, we have moved from guessing what an agent should know to guaranteeing how an agent behaves.
+With `agent-brain` v1.0.0-rc3, we have moved from guessing what an agent should know to guaranteeing how an agent behaves.
 
 ---
 

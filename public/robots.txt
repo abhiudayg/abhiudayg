@@ -20,6 +20,6 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://abhiudayg-blog.vercel.app/sitemap-index.xml
-Host: https://abhiudayg-blog.vercel.app
+Sitemap: https://abhiudayg.dev/sitemap-index.xml
+Host: https://abhiudayg.dev
 

@@ -11,13 +11,13 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://abhiudayg-blog.vercel.app',
+  site: 'https://abhiudayg.dev',
   integrations: [
     mdx(),
     sitemap({
       filter: (page) => !page.includes('/rss.xml'),
       serialize(item) {
-        if (item.url === 'https://abhiudayg-blog.vercel.app/' || item.url === 'https://abhiudayg-blog.vercel.app') {
+        if (item.url === 'https://abhiudayg.dev/' || item.url === 'https://abhiudayg.dev') {
           item.priority = 1.0;
           item.changefreq = 'daily';
         } else if (item.url.includes('/blog/series/')) {

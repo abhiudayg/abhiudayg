@@ -5,8 +5,8 @@
 </p>
 
 <p align="left">
-  <a href="https://abhiudayg-blog.vercel.app"><strong>Website &amp; Essays</strong></a> ·
-  <a href="https://abhiudayg-blog.vercel.app/rss.xml"><strong>RSS Feed</strong></a> ·
+  <a href="https://abhiudayg.dev"><strong>Website &amp; Essays</strong></a> ·
+  <a href="https://abhiudayg.dev/rss.xml"><strong>RSS Feed</strong></a> ·
   <a href="https://x.com/abhiudayg"><strong>X (@abhiudayg)</strong></a> ·
   <a href="https://linkedin.com/in/abhiudayg"><strong>LinkedIn</strong></a> ·
   <a href="https://dev.to/abhiudayg"><strong>Dev.to</strong></a>
@@ -16,27 +16,27 @@
 
 ### Featured Systems &amp; Runtimes
 
-| System | Role | Architecture &amp; Stack | Repository |
-|---|---|---|---|
-| **`agent-brain`** | Cognitive Runtime &amp; Token Gate | Hard read gates (`read_gate=hard`), token-budgeted local MCP routing, supervised daemon (`serve.sock`), and verification contracts | [`autonomic-ai-dev/agent-brain`](https://github.com/autonomic-ai-dev/agent-brain) |
-| **`agent-spine`** | Workflow State Machine | Declarative DAG execution (`workflows/*.yaml`), Tarjan SCC cycle detection, automated verification gates, and human approval checkpoints | [`autonomic-ai-dev/agent-spine`](https://github.com/autonomic-ai-dev/agent-spine) |
-| **`agentrun`** | Isolated Agent Workspace | Ephemeral coding environments, copy-on-write filesystem snapshotting, eBPF network telemetry, and sub-4ms recovery boot | [`autonomic-ai-dev/agentrun`](https://github.com/autonomic-ai-dev/agentrun) |
-| **`harbor`** | Execution Sandbox | Firewalled, headless execution runtime for autonomous coding without host filesystem corruption | [`autonomic-ai-dev/harbor`](https://github.com/autonomic-ai-dev/harbor) |
-| **`dustmap`** | Native Systems Utility | High-performance macOS disk space analyzer and conservative cleaner built with Rust, Tauri, and parallel lock-free directory traversal (&lt; 12ms scans) | [`abhiudayg/dustmap`](https://github.com/abhiudayg/dustmap) |
+| System | Version | Role | Architecture &amp; Stack | Repository |
+|---|---|---|---|---|
+| **`agent-brain`** | `v1.0.0-rc3` | Cognitive Runtime &amp; Token Gate | Hard read gates (`read_gate=hard`), token-budgeted local MCP routing, supervised daemon (`serve.sock`), and verification contracts | [`autonomic-ai-dev/agent-brain`](https://github.com/autonomic-ai-dev/agent-brain) |
+| **`agent-spine`** | `v1.0.0-rc3` | Workflow State Machine | Declarative DAG execution (`workflows/*.yaml`), Tarjan SCC cycle detection, automated verification gates, and human approval checkpoints | [`autonomic-ai-dev/agent-spine`](https://github.com/autonomic-ai-dev/agent-spine) |
+| **`dustmap`** | `v1.0.1` | Native Systems Utility | High-performance macOS disk space analyzer and conservative cleaner built with Rust, Tauri, and parallel lock-free directory traversal (&lt; 12ms scans) | [`abhiudayg/dustmap`](https://github.com/abhiudayg/dustmap) |
+| **`agentrun`** | `v0.4.0` | Isolated Agent Workspace | Ephemeral coding environments, copy-on-write filesystem snapshotting, eBPF network telemetry, and sub-4ms recovery boot | [`autonomic-ai-dev/agentrun`](https://github.com/autonomic-ai-dev/agentrun) |
+| **`harbor`** | `v0.2.0` | Execution Sandbox | Firewalled, headless execution runtime for autonomous coding without host filesystem corruption | [`autonomic-ai-dev/harbor`](https://github.com/autonomic-ai-dev/harbor) |
 
 ---
 
 ### Selected Technical Essays &amp; Publications
 
-* **[agent-brain: the architectural pivot — from passive retrieval to deterministic cognitive runtime](https://abhiudayg-blog.vercel.app/blog/agent-brain-the-architectural-pivot-and-runtime/)** (Part 3)  
+* **[agent-brain: the architectural pivot — from passive retrieval to deterministic cognitive runtime](https://abhiudayg.dev/blog/agent-brain-the-architectural-pivot-and-runtime/)** (Part 3)  
   *Why passive context retrieval broke down in real-world autonomous coding, how we pivoted into a hard-gated execution runtime with token budgets, verify invariants, and upstream MCP routing.*
-* **[agent-brain: memory scopes, temporal pruning, and cross-session routing](https://abhiudayg-blog.vercel.app/blog/agent-brain-memory-scopes-and-reinforcement/)** (Part 2)  
+* **[agent-brain: memory scopes, temporal pruning, and cross-session routing](https://abhiudayg.dev/blog/agent-brain-memory-scopes-and-reinforcement/)** (Part 2)  
   *Multi-session context persistence, temporal fact decay, and circuit-broken upstream tools.*
-* **[agent-brain: local MCP routing under a token budget](https://abhiudayg-blog.vercel.app/blog/agent-brain-local-mcp-routing/)** (Part 1)  
+* **[agent-brain: local MCP routing under a token budget](https://abhiudayg.dev/blog/agent-brain-local-mcp-routing/)** (Part 1)  
   *Answering the question: what should the model see right now under a strict 700-token ceiling?*
-* **[agentrun: isolated coding agent runtimes with container workspaces](https://abhiudayg-blog.vercel.app/blog/agentrun-isolated-coding-agent-runtimes/)**  
+* **[agentrun: isolated coding agent runtimes with container workspaces](https://abhiudayg.dev/blog/agentrun-isolated-coding-agent-runtimes/)**  
   *Designing hermetic, reproducible execution environments with copy-on-write workspaces.*
-* **[dustmap: sub-12ms disk space visualizer in Rust and Tauri](https://abhiudayg-blog.vercel.app/blog/dustmap-disk-space-visualizer-rust-tauri/)**  
+* **[dustmap: sub-12ms disk space visualizer in Rust and Tauri](https://abhiudayg.dev/blog/dustmap-disk-space-visualizer-rust-tauri/)**  
   *Low-latency parallel directory traversal with Rayon and native macOS disk reporting.*
 
 ---
@@ -64,7 +64,7 @@
 
 <br>
 
-This repository (`abhiudayg/abhiudayg`) also houses the source code for the personal brand platform and engineering blog ([abhiudayg-blog.vercel.app](https://abhiudayg-blog.vercel.app)):
+This repository (`abhiudayg/abhiudayg`) also houses the source code for the personal brand platform and engineering blog ([abhiudayg.dev](https://abhiudayg.dev)):
 
 ```bash
 # Clone repository

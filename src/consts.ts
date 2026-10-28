@@ -2,7 +2,7 @@ export const SITE_TITLE = 'Abhiuday — Systems & AI Engineer';
 export const SITE_DESCRIPTION =
 	'Architecting autonomous agent runtimes, real-time distributed systems, and low-latency developer tooling. Documenting the build, one commit at a time.';
 export const AUTHOR_NAME = 'Abhiuday';
-export const SITE_URL = 'https://abhiudayg-blog.vercel.app';
+export const SITE_URL = 'https://abhiudayg.dev';
 export const RSS_FEED_URL = `${SITE_URL}/rss.xml`;
 
 export const GITHUB_URL = 'https://github.com/abhiudayg';
@@ -34,14 +34,14 @@ export const BLOG_SERIES = {
 		description: 'Local MCP routing for agents, skills, rules, and memory under a token budget.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/agent-brain',
 		tag: 'AI Agents',
-		badge: 'v0.9.4-rc',
+		badge: 'v1.0.0-rc3',
 	},
 	'dustmap': {
 		title: 'dustmap',
 		description: 'A blazing-fast, transparent macOS disk space analyzer and conservative cleaner in Rust and Tauri.',
 		repoUrl: 'https://github.com/abhiudayg/dustmap',
 		tag: 'Systems',
-		badge: '< 12ms scan',
+		badge: 'v1.0.1',
 	},
 	'agentrun': {
 		title: 'agentrun',
@@ -55,7 +55,7 @@ export const BLOG_SERIES = {
 		description: 'Deterministic multi-step DAG workflow engine with human-in-the-loop approval gates.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/agent-spine',
 		tag: 'Orchestration',
-		badge: 'DAG Workflows',
+		badge: 'v1.0.0-rc3',
 	},
 	'harbor': {
 		title: 'harbor',
