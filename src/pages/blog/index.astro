@@ -13,7 +13,7 @@ import { absoluteUrl, blogJsonLd, breadcrumbJsonLd, graphJsonLd } from '../../ut
 const posts = await getSortedPosts();
 const pagination = paginatePosts(posts, 1, POSTS_PER_PAGE);
 const description =
-	'Technical write-ups on building software in public — architecture, CI, agents, and lessons from the repos I ship.';
+	'In-depth technical essays on autonomous agent runtimes, local MCP routing under token budgets, distributed systems architecture, and engineering post-mortems.';
 const schema = graphJsonLd(
 	blogJsonLd(Astro.site),
 	breadcrumbJsonLd([
@@ -26,7 +26,7 @@ const schema = graphJsonLd(
 <!doctype html>
 <html lang="en" class="dark">
 	<head>
-		<BaseHead title="Essays & Blog Archive" description={description} />
+		<BaseHead title="Technical Essays & Architecture Dispatches" description={description} />
 		<JsonLd schema={schema} />
 		{
 			pagination.totalPages > 1 && (

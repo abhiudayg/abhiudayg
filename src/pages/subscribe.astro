@@ -24,8 +24,8 @@ const readers = [
 const schema = graphJsonLd(
 	{
 		'@type': 'WebPage',
-		name: 'Subscribe via RSS',
-		description: 'Subscribe to the engineering journal RSS feed for immediate updates on software architecture, autonomous agents, and systems.',
+		name: 'Subscribe to Open RSS Dispatches',
+		description: 'Subscribe to full-text open RSS dispatches on autonomous agent runtimes, systems engineering, and low-latency developer infrastructure.',
 		url: absoluteUrl('/subscribe/', Astro.site),
 		inLanguage: 'en-US',
 	},
@@ -40,8 +40,8 @@ const schema = graphJsonLd(
 <html lang="en" class="dark">
 	<head>
 		<BaseHead
-			title="Subscribe via RSS"
-			description="Subscribe to the engineering journal RSS feed for immediate updates on software architecture, autonomous agents, and systems."
+			title="Subscribe to Open RSS Dispatches"
+			description="Subscribe to full-text open RSS dispatches on autonomous agent runtimes, systems engineering, and low-latency developer infrastructure."
 		/>
 		<JsonLd schema={schema} />
 	</head>
