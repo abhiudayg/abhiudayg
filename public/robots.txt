@@ -20,6 +20,6 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://abhiudayg.dev/sitemap-index.xml
-Host: https://abhiudayg.dev
+Sitemap: https://www.abhiudayg.dev/sitemap-index.xml
+Host: https://www.abhiudayg.dev
 

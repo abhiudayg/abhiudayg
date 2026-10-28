@@ -2,7 +2,7 @@ export const SITE_TITLE = 'Abhiuday — Systems & AI Engineer';
 export const SITE_DESCRIPTION =
 	'Architecting autonomous agent runtimes, real-time distributed systems, and low-latency developer tooling. Documenting the build, one commit at a time.';
 export const AUTHOR_NAME = 'Abhiuday';
-export const SITE_URL = 'https://abhiudayg.dev';
+export const SITE_URL = 'https://www.abhiudayg.dev';
 export const RSS_FEED_URL = `${SITE_URL}/rss.xml`;
 
 export const GITHUB_URL = 'https://github.com/abhiudayg';

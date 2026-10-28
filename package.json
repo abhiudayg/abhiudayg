@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/aeswibon/abhiudayg-blog.git"
   },
-  "homepage": "https://abhiudayg.dev",
+  "homepage": "https://www.abhiudayg.dev",
   "engines": {
     "node": ">=24.22.1"
   },

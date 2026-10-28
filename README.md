@@ -5,8 +5,8 @@
 </p>
 
 <p align="left">
-  <a href="https://abhiudayg.dev"><strong>Website &amp; Essays</strong></a> ·
-  <a href="https://abhiudayg.dev/rss.xml"><strong>RSS Feed</strong></a> ·
+  <a href="https://www.abhiudayg.dev"><strong>Website &amp; Essays</strong></a> ·
+  <a href="https://www.abhiudayg.dev/rss.xml"><strong>RSS Feed</strong></a> ·
   <a href="https://x.com/abhiudayg"><strong>X (@abhiudayg)</strong></a> ·
   <a href="https://linkedin.com/in/abhiudayg"><strong>LinkedIn</strong></a> ·
   <a href="https://dev.to/abhiudayg"><strong>Dev.to</strong></a>
@@ -28,15 +28,15 @@
 
 ### Selected Technical Essays &amp; Publications
 
-* **[agent-brain: the architectural pivot — from passive retrieval to deterministic cognitive runtime](https://abhiudayg.dev/blog/agent-brain-the-architectural-pivot-and-runtime/)** (Part 3)  
+* **[agent-brain: the architectural pivot — from passive retrieval to deterministic cognitive runtime](https://www.abhiudayg.dev/blog/agent-brain-the-architectural-pivot-and-runtime/)** (Part 3)  
   *Why passive context retrieval broke down in real-world autonomous coding, how we pivoted into a hard-gated execution runtime with token budgets, verify invariants, and upstream MCP routing.*
-* **[agent-brain: memory scopes, temporal pruning, and cross-session routing](https://abhiudayg.dev/blog/agent-brain-memory-scopes-and-reinforcement/)** (Part 2)  
+* **[agent-brain: memory scopes, temporal pruning, and cross-session routing](https://www.abhiudayg.dev/blog/agent-brain-memory-scopes-and-reinforcement/)** (Part 2)  
   *Multi-session context persistence, temporal fact decay, and circuit-broken upstream tools.*
-* **[agent-brain: local MCP routing under a token budget](https://abhiudayg.dev/blog/agent-brain-local-mcp-routing/)** (Part 1)  
+* **[agent-brain: local MCP routing under a token budget](https://www.abhiudayg.dev/blog/agent-brain-local-mcp-routing/)** (Part 1)  
   *Answering the question: what should the model see right now under a strict 700-token ceiling?*
-* **[agentrun: isolated coding agent runtimes with container workspaces](https://abhiudayg.dev/blog/agentrun-isolated-coding-agent-runtimes/)**  
+* **[agentrun: isolated coding agent runtimes with container workspaces](https://www.abhiudayg.dev/blog/agentrun-isolated-coding-agent-runtimes/)**  
   *Designing hermetic, reproducible execution environments with copy-on-write workspaces.*
-* **[dustmap: sub-12ms disk space visualizer in Rust and Tauri](https://abhiudayg.dev/blog/dustmap-disk-space-visualizer-rust-tauri/)**  
+* **[dustmap: sub-12ms disk space visualizer in Rust and Tauri](https://www.abhiudayg.dev/blog/dustmap-disk-space-visualizer-rust-tauri/)**  
   *Low-latency parallel directory traversal with Rayon and native macOS disk reporting.*
 
 ---
@@ -64,7 +64,7 @@
 
 <br>
 
-This repository (`abhiudayg/abhiudayg`) also houses the source code for the personal brand platform and engineering blog ([abhiudayg.dev](https://abhiudayg.dev)):
+This repository (`abhiudayg/abhiudayg`) also houses the source code for the personal brand platform and engineering blog ([www.abhiudayg.dev](https://www.abhiudayg.dev)):
 
 ```bash
 # Clone repository
