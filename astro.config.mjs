@@ -16,6 +16,22 @@ export default defineConfig({
     mdx(),
     sitemap({
       filter: (page) => !page.includes('/rss.xml'),
+      serialize(item) {
+        if (item.url === 'https://abhiudayg-blog.vercel.app/' || item.url === 'https://abhiudayg-blog.vercel.app') {
+          item.priority = 1.0;
+          item.changefreq = 'daily';
+        } else if (item.url.includes('/blog/series/')) {
+          item.priority = 0.9;
+          item.changefreq = 'weekly';
+        } else if (item.url.includes('/blog/')) {
+          item.priority = 0.85;
+          item.changefreq = 'weekly';
+        } else {
+          item.priority = 0.7;
+          item.changefreq = 'monthly';
+        }
+        return item;
+      },
     }),
   ],
 

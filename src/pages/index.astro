@@ -6,10 +6,10 @@ import Header from '../components/Header.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { BLOG_SERIES, GITHUB_URL, RSS_FEED_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getSortedPosts } from '../utils/blog';
-import { graphJsonLd, websiteJsonLd } from '../utils/seo';
+import { graphJsonLd, personJsonLd, websiteJsonLd } from '../utils/seo';
 
 const allPosts = await getSortedPosts();
-const schema = graphJsonLd(websiteJsonLd(Astro.site));
+const schema = graphJsonLd(websiteJsonLd(Astro.site), personJsonLd(Astro.site));
 
 const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 	slug,

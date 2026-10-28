@@ -5,8 +5,10 @@ import {
 	breadcrumbJsonLd,
 	formatTitle,
 	graphJsonLd,
+	personJsonLd,
 	resolveImageUrl,
 	twitterHandle,
+	websiteJsonLd,
 } from './seo';
 
 describe('SEO formatting utilities', () => {
@@ -71,5 +73,20 @@ describe('JSON-LD schema generators', () => {
 		const graph = graphJsonLd({ '@type': 'WebSite' }, { '@type': 'Person' });
 		expect(graph['@context']).toBe('https://schema.org');
 		expect(graph['@graph'].length).toBe(2);
+	});
+
+	it('generates rich Person schema with verified sameAs profiles', () => {
+		const person = personJsonLd();
+		expect(person['@type']).toBe('Person');
+		expect(person.name).toBe('Abhiuday');
+		expect(person.sameAs.length).toBeGreaterThanOrEqual(4);
+		expect(person.jobTitle).toBe('Systems & AI Engineer');
+	});
+
+	it('generates WebSite schema with search action entry point', () => {
+		const website = websiteJsonLd();
+		expect(website['@type']).toBe('WebSite');
+		expect(website.potentialAction['@type']).toBe('SearchAction');
+		expect(website.potentialAction.target['@type']).toBe('EntryPoint');
 	});
 });

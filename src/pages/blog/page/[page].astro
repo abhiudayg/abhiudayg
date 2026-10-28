@@ -3,11 +3,13 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
+import JsonLd from '../../../components/JsonLd.astro';
 import Pagination from '../../../components/Pagination.astro';
 import PostCard from '../../../components/PostCard.astro';
 import SeriesFilter from '../../../components/SeriesFilter.astro';
 import { POSTS_PER_PAGE, SITE_TITLE } from '../../../consts';
 import { getExtraPaginationPages, getSortedPosts, paginatePosts } from '../../../utils/blog';
+import { absoluteUrl, breadcrumbJsonLd, collectionPageJsonLd, graphJsonLd } from '../../../utils/seo';
 
 export async function getStaticPaths() {
 	const posts = await getSortedPosts();
@@ -29,12 +31,30 @@ if (pagination.currentPage !== page) {
 }
 
 const description = `Older posts from the ${SITE_TITLE} archive — page ${pagination.currentPage} of ${pagination.totalPages}.`;
+const pageUrl = absoluteUrl(`/blog/page/${pagination.currentPage}/`, Astro.site);
+const schema = graphJsonLd(
+	collectionPageJsonLd({
+		name: `Blog — Page ${pagination.currentPage}`,
+		description,
+		url: pageUrl,
+	}),
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'Blog', url: absoluteUrl('/blog/', Astro.site) },
+		{ name: `Page ${pagination.currentPage}`, url: pageUrl },
+	]),
+);
 ---
 
 <!doctype html>
 <html lang="en" class="dark">
 	<head>
-		<BaseHead title={`Blog — page ${pagination.currentPage}`} description={description} />
+		<BaseHead
+			title={`Blog — page ${pagination.currentPage}`}
+			description={description}
+			canonicalPath={`/blog/page/${pagination.currentPage}/`}
+		/>
+		<JsonLd schema={schema} />
 		{
 			pagination.currentPage > 1 && (
 				<link rel="prev" href={pagination.currentPage === 2 ? '/blog/' : `/blog/page/${pagination.currentPage - 1}/`} />

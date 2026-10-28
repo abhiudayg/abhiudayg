@@ -2,7 +2,9 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import JsonLd from '../components/JsonLd.astro';
 import { RSS_FEED_URL } from '../consts';
+import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../utils/seo';
 
 const readers = [
 	{
@@ -18,6 +20,20 @@ const readers = [
 		href: `https://newsblur.com/?url=${encodeURIComponent(RSS_FEED_URL)}`,
 	},
 ];
+
+const schema = graphJsonLd(
+	{
+		'@type': 'WebPage',
+		name: 'Subscribe via RSS',
+		description: 'Subscribe to the engineering journal RSS feed for immediate updates on software architecture, autonomous agents, and systems.',
+		url: absoluteUrl('/subscribe/', Astro.site),
+		inLanguage: 'en-US',
+	},
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'Subscribe', url: absoluteUrl('/subscribe/', Astro.site) },
+	]),
+);
 ---
 
 <!doctype html>
@@ -27,6 +43,7 @@ const readers = [
 			title="Subscribe via RSS"
 			description="Subscribe to the engineering journal RSS feed for immediate updates on software architecture, autonomous agents, and systems."
 		/>
+		<JsonLd schema={schema} />
 	</head>
 	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
 		<!-- Subdued ambient dark radial halo -->

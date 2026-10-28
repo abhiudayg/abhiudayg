@@ -42,10 +42,24 @@ const canonicalURL = absoluteUrl(canonicalPath ?? Astro.url.pathname, Astro.site
 const ogImage = resolveImageUrl(image, Astro.site);
 const twitterSite = twitterHandle();
 const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large';
+
+const defaultKeywords = [
+	'systems engineering',
+	'autonomous agents',
+	'agent runtime',
+	'rust',
+	'mcp',
+	'distributed systems',
+	'tokio',
+	'developer infrastructure',
+];
+const allKeywords = Array.from(new Set([...tags, ...defaultKeywords]));
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#090a0f" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <script is:inline>
 	(function () {
 		const theme = localStorage.getItem('theme') || 'light';
@@ -69,9 +83,7 @@ const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:l
 <meta name="author" content={AUTHOR_NAME} />
 <meta name="robots" content={robots} />
 <meta name="googlebot" content={robots} />
-{
-	tags.length > 0 && <meta name="keywords" content={tags.join(', ')} />
-}
+<meta name="keywords" content={allKeywords.join(', ')} />
 
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:locale" content="en_US" />
@@ -81,6 +93,9 @@ const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:l
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
 <meta property="og:image:alt" content={description} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/jpeg" />
 {
 	type === 'article' && publishedTime && (
 		<meta property="article:published_time" content={publishedTime.toISOString()} />
@@ -104,6 +119,7 @@ const robots = noindex ? 'noindex, follow' : 'index, follow, max-image-preview:l
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:domain" content={new URL(canonicalURL).hostname} />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />

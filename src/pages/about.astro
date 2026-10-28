@@ -5,10 +5,16 @@ import Header from '../components/Header.astro';
 import JsonLd from '../components/JsonLd.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import { AUTHOR_NAME, GITHUB_URL, SITE_DESCRIPTION } from '../consts';
-import { aboutPageJsonLd, graphJsonLd } from '../utils/seo';
+import { aboutPageJsonLd, absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../utils/seo';
 
 const description = `About ${AUTHOR_NAME} — Systems & AI Engineer, builder of autonomous agent runtimes, real-time distributed data pipelines, and developer infrastructure.`;
-const schema = graphJsonLd(aboutPageJsonLd(Astro.site));
+const schema = graphJsonLd(
+	aboutPageJsonLd(Astro.site),
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'About', url: absoluteUrl('/about/', Astro.site) },
+	]),
+);
 ---
 
 <!doctype html>

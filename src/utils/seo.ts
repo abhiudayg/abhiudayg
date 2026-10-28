@@ -1,7 +1,11 @@
 import type { ImageMetadata } from 'astro';
 import {
 	AUTHOR_NAME,
+	DEVTO_URL,
 	GITHUB_URL,
+	HASHNODE_URL,
+	LINKEDIN_URL,
+	REDDIT_URL,
 	SITE_DESCRIPTION,
 	SITE_TITLE,
 	SITE_URL,
@@ -38,7 +42,17 @@ export function personJsonLd(site: URL | string = SITE_URL) {
 		'@type': 'Person',
 		name: AUTHOR_NAME,
 		url: authorProfileUrl(),
-		sameAs: [GITHUB_URL, TWITTER_URL],
+		sameAs: [GITHUB_URL, TWITTER_URL, LINKEDIN_URL, DEVTO_URL, HASHNODE_URL, REDDIT_URL].filter(Boolean),
+		jobTitle: 'Systems & AI Engineer',
+		knowsAbout: [
+			'Autonomous Agents',
+			'Model Context Protocol (MCP)',
+			'Rust Runtimes',
+			'Distributed Systems',
+			'Developer Tooling',
+			'Astro',
+			'TypeScript',
+		],
 	};
 }
 
@@ -49,7 +63,16 @@ export function websiteJsonLd(site: URL | string = SITE_URL) {
 		description: SITE_DESCRIPTION,
 		url: absoluteUrl('/', site),
 		inLanguage: 'en-US',
+		publisher: personJsonLd(site),
 		author: personJsonLd(site),
+		potentialAction: {
+			'@type': 'SearchAction',
+			target: {
+				'@type': 'EntryPoint',
+				urlTemplate: `${absoluteUrl('/blog/', site)}?q={search_term_string}`,
+			},
+			'query-input': 'required name=search_term_string',
+		},
 	};
 }
 
@@ -130,6 +153,11 @@ export function blogPostJsonLd({
 		},
 		author: personJsonLd(),
 		publisher: personJsonLd(),
+		isPartOf: {
+			'@type': 'Blog',
+			name: `${SITE_TITLE} Blog`,
+			url: absoluteUrl('/blog/'),
+		},
 		...(series ? { articleSection: series, keywords: series } : {}),
 	};
 }

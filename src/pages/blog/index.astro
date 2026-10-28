@@ -8,13 +8,19 @@ import PostCard from '../../components/PostCard.astro';
 import SeriesFilter from '../../components/SeriesFilter.astro';
 import { POSTS_PER_PAGE } from '../../consts';
 import { getSortedPosts, paginatePosts } from '../../utils/blog';
-import { blogJsonLd, graphJsonLd } from '../../utils/seo';
+import { absoluteUrl, blogJsonLd, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
 
 const posts = await getSortedPosts();
 const pagination = paginatePosts(posts, 1, POSTS_PER_PAGE);
 const description =
 	'Technical write-ups on building software in public — architecture, CI, agents, and lessons from the repos I ship.';
-const schema = graphJsonLd(blogJsonLd(Astro.site));
+const schema = graphJsonLd(
+	blogJsonLd(Astro.site),
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'Blog', url: absoluteUrl('/blog/', Astro.site) },
+	]),
+);
 ---
 
 <!doctype html>
