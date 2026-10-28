@@ -153,20 +153,21 @@ flowchart TD
 
 ---
 
-## 6. The Three Pillars: `agent-brain`, `agent-spine`, and `harbor`
+## 6. The Ecosystem: `agent-brain`, `agent-spine`, `agentrun`, and `harbor`
 
-`agent-brain` does not operate in isolation. It forms the cognitive nucleus of a three-tiered autonomous engineering architecture:
+`agent-brain` does not operate in isolation. It forms the cognitive nucleus of a multi-tiered autonomous engineering architecture:
 
 | System | Role | Core Responsibility |
 |---|---|---|
 | **[agent-brain](https://github.com/autonomic-ai-dev/agent-brain)** | **Cognitive Runtime** | Local token-budgeted routing, scoped memory, temporal pruning, verification contracts, and upstream MCP federation. |
 | **[agent-spine](https://github.com/autonomic-ai-dev/agent-spine)** | **Workflow State Machine** | Declarative DAG execution (`workflows/*.yaml`), Tarjan cycle detection, checkpoint gates, and interactive human-in-the-loop approval. |
-| **[harbor](https://github.com/autonomic-ai-dev/harbor)** | **Execution Sandbox** | Ephemeral containerized environments, copy-on-write workspace isolation, and firewalled network policies. |
+| **[agentrun](https://github.com/autonomic-ai-dev/agentrun)** | **Job & Container Runtime** | Isolated task execution in dedicated containers and git worktrees with recoverable state and audit trails. |
+| **[harbor](https://github.com/autonomic-ai-dev/harbor)** | **Agent-Native Browser** | macOS WebKit browser engine with explicit permission engine, approval gates, SHA-256 audit log, and local MCP. |
 
-When a complex feature request arrives:
-1. `agent-spine` constructs an acyclic state machine graph of tasks (Reproduce → Fix → Verify → Document → Approval).
-2. For each node, `agent-brain` enforces the hard read gate, injects the minimal verified token envelope, and records verification proofs.
-3. The workload runs inside `harbor` sandboxes, ensuring host filesystem protection and immutable reproduction artifacts.
+When a complex engineering workflow executes:
+1. `agent-spine` orchestrates the acyclic state machine graph of tasks (Reproduce → Fix → Verify → Document → Approval).
+2. For each turn, `agent-brain` enforces the pre-tool `route_gate`, injects the minimal verified token envelope, and records verification proofs.
+3. Code workloads execute inside isolated `agentrun` container sandboxes and git worktrees, while web tasks run safely through `harbor`'s gated browser environment.
 
 ---
 
@@ -181,4 +182,5 @@ With `agent-brain` v1.0.0-rc3, we have moved from guessing what an agent should 
 *Code and documentation for the entire ecosystem are open-source on GitHub:*
 - *`agent-brain`: [github.com/autonomic-ai-dev/agent-brain](https://github.com/autonomic-ai-dev/agent-brain)*
 - *`agent-spine`: [github.com/autonomic-ai-dev/agent-spine](https://github.com/autonomic-ai-dev/agent-spine)*
-- *`agentrun` / `harbor`: [github.com/autonomic-ai-dev/agentrun](https://github.com/autonomic-ai-dev/agentrun)*
+- *`agentrun`: [github.com/autonomic-ai-dev/agentrun](https://github.com/autonomic-ai-dev/agentrun)*
+- *`harbor`: [github.com/autonomic-ai-dev/harbor](https://github.com/autonomic-ai-dev/harbor)*

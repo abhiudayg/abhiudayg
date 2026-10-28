@@ -18,11 +18,11 @@
 
 | System | Version | Role | Architecture &amp; Stack | Repository |
 |---|---|---|---|---|
-| **`agent-brain`** | `v1.0.0-rc3` | Cognitive Runtime &amp; Token Gate | Hard read gates (`read_gate=hard`), token-budgeted local MCP routing, supervised daemon (`serve.sock`), and verification contracts | [`autonomic-ai-dev/agent-brain`](https://github.com/autonomic-ai-dev/agent-brain) |
-| **`agent-spine`** | `v1.0.0-rc3` | Workflow State Machine | Declarative DAG execution (`workflows/*.yaml`), Tarjan SCC cycle detection, automated verification gates, and human approval checkpoints | [`autonomic-ai-dev/agent-spine`](https://github.com/autonomic-ai-dev/agent-spine) |
-| **`dustmap`** | `v1.0.1` | Native Systems Utility | High-performance macOS disk space analyzer and conservative cleaner built with Rust, Tauri, and parallel lock-free directory traversal (&lt; 12ms scans) | [`abhiudayg/dustmap`](https://github.com/abhiudayg/dustmap) |
-| **`agentrun`** | `v0.4.0` | Isolated Agent Workspace | Ephemeral coding environments, copy-on-write filesystem snapshotting, eBPF network telemetry, and sub-4ms recovery boot | [`autonomic-ai-dev/agentrun`](https://github.com/autonomic-ai-dev/agentrun) |
-| **`harbor`** | `v0.2.0` | Execution Sandbox | Firewalled, headless execution runtime for autonomous coding without host filesystem corruption | [`autonomic-ai-dev/harbor`](https://github.com/autonomic-ai-dev/harbor) |
+| **`agent-brain`** | `v1.0.0-rc3` | Cognitive Runtime &amp; Token Gate | Local-first cognitive governor, pre-tool `route_gate` hook, ~500-token knapsack packer, and `agent-brain verify` execution ledger (Rust, SQLite + HNSW, FastEmbed ONNX, stdio MCP) | [`autonomic-ai-dev/agent-brain`](https://github.com/autonomic-ai-dev/agent-brain) |
+| **`agent-spine`** | `v1.0.0-rc3` | Workflow State Machine | Deterministic workflow DAG engine &amp; cognitive state machine executing `workflows/*.yaml` with Tarjan SCC acyclicity checks and approval gates (Rust, Tokio, SQLite) | [`autonomic-ai-dev/agent-spine`](https://github.com/autonomic-ai-dev/agent-spine) |
+| **`dustmap`** | `v1.0.1` | Native Systems Utility | High-performance macOS disk space analyzer and conservative cleaner with squarified treemaps, sector donuts, and parallel Rayon walk (Rust, Tauri 2, 100% offline) | [`abhiudayg/dustmap`](https://github.com/abhiudayg/dustmap) |
+| **`agentrun`** | `Pre-alpha` | Job &amp; Container Runtime | Runs coding-agent tasks as isolated, recoverable jobs on your machine in dedicated containers and git worktrees with shared queues and audit trails (Go, Containers, Git Worktrees, macOS) | [`autonomic-ai-dev/agentrun`](https://github.com/autonomic-ai-dev/agentrun) |
+| **`harbor`** | `Pre-alpha` | Agent-Native Browser | Open-source agent-native macOS browser built on WebKit with explicit permission engines, human approval gates, SHA-256 hash-chained audit logs, and local MCP server (Swift, WebKit, macOS) | [`autonomic-ai-dev/harbor`](https://github.com/autonomic-ai-dev/harbor) |
 
 ---
 
@@ -52,9 +52,9 @@
 
 ### Tech Stack &amp; Focus
 
-* **Languages &amp; Runtimes**: Rust, TypeScript, Node.js, Bun, POSIX Shell
-* **Distributed &amp; Systems**: Tokio, Tonic (gRPC), SQLite WAL, Unix Domain Sockets, eBPF, Linux cgroups
-* **AI &amp; Autonomous Agents**: Model Context Protocol (MCP), FastEmbed ONNX, Agent-Spine DAGs
+* **Languages &amp; Runtimes**: Rust, Go, Swift, TypeScript, Node.js, Bun, POSIX Shell
+* **Distributed &amp; Systems**: Tokio, SQLite + HNSW, FastEmbed ONNX, macOS WebKit, Container Sandboxing, Git Worktrees, Unix Domain Sockets
+* **AI &amp; Autonomous Agents**: Model Context Protocol (MCP), Agent-Spine Workflow DAGs, Cognitive Governors
 * **Web Platform**: Astro, Tailwind CSS v4, Web Standards, KaTeX, Mermaid.js
 
 ---

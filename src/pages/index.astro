@@ -85,7 +85,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 					<span class="text-border-hover">&bull;</span>
 					<span class="tag-pill text-text">Local MCP Routing</span>
 					<span class="text-border-hover">&bull;</span>
-					<span class="tag-pill text-text">MicroVM Sandboxing</span>
+					<span class="tag-pill text-text">Container Sandboxing</span>
 					<span class="text-border-hover">&bull;</span>
 					<span class="tag-pill text-text">100% Zero-Tracker RSS</span>
 				</div>
@@ -120,7 +120,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 										</svg>
 									</div>
 									<h3 class="text-xl font-semibold text-text tracking-tight">agent-brain</h3>
-									<span class="px-2 py-0.5 rounded bg-bg border border-border font-mono text-[11px] text-text-muted">v1.0.0-rc3</span>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.0.0-rc3</span>
 								</div>
 								
 								<!-- GitHub Direct Button -->
@@ -139,18 +139,18 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								</a>
 							</div>
 							<p class="text-sm text-text-muted leading-relaxed">
-								Autonomous hierarchical planning and memory runtime for multi-agent swarms with local MCP vector routing under token budget. Tokio channels, dynamic validation, and zero-copy gRPC serialization.
+								Local-first cognitive governor, turn router &amp; procedure graph for coding agents under token budgets. Intercepts tool calls via host pre-tool hooks, packs ~500-token knapsack envelopes, and records verification receipts.
 							</p>
 						</div>
 
-						<!-- Interactive Live DAG Playground Visualizer -->
+						<!-- Interactive Live Cognitive Architecture Visualizer -->
 						<div class="bg-code-bg border border-border rounded-lg p-4 font-mono text-xs space-y-3">
 							<div class="flex items-center justify-between text-text-dim text-[11px] border-b border-border pb-2">
 								<span class="flex items-center gap-1.5">
 									<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
-									<span>Interactive DAG Engine &bull; Click nodes to inspect</span>
+									<span>Cognitive Pipeline &bull; Click stage to inspect</span>
 								</span>
-								<span class="text-status-emerald font-medium" id="dag-mode-label">tokio::sync::broadcast</span>
+								<span class="text-status-emerald font-medium" id="dag-mode-label">host pre-tool hook</span>
 							</div>
 
 							<!-- Clickable Node Pipeline -->
@@ -159,28 +159,28 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 									<button
 										type="button"
 										class="dag-node-btn px-2.5 py-1 rounded bg-surface-card border border-status-emerald text-text cursor-pointer hover:border-border-hover transition-colors font-mono"
-										onclick="inspectDagStage('intent')"
-										id="node-intent"
+										onclick="inspectDagStage('route_gate')"
+										id="node-route_gate"
 									>
-										<span class="text-status-emerald">&gt;</span> Intent Planner
+										<span class="text-status-emerald">&gt;</span> route_gate
 									</button>
-									<span class="text-text-dim">&mdash;(mpsc)&rarr;</span>
+									<span class="text-text-dim">&mdash;(budget)&rarr;</span>
 									<button
 										type="button"
 										class="dag-node-btn px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted cursor-pointer hover:border-border-hover transition-colors font-mono"
-										onclick="inspectDagStage('validator')"
-										id="node-validator"
+										onclick="inspectDagStage('knapsack')"
+										id="node-knapsack"
 									>
-										Hierarchical Validator
+										knapsack
 									</button>
-									<span class="text-text-dim">&mdash;(gRPC)&rarr;</span>
+									<span class="text-text-dim">&mdash;(exec)&rarr;</span>
 									<button
 										type="button"
 										class="dag-node-btn px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted cursor-pointer hover:border-border-hover transition-colors font-mono"
-										onclick="inspectDagStage('dispatcher')"
-										id="node-dispatcher"
+										onclick="inspectDagStage('verify')"
+										id="node-verify"
 									>
-										Tool Dispatcher
+										verify
 									</button>
 								</div>
 							</div>
@@ -188,11 +188,11 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 							<!-- Live Telemetry Terminal -->
 							<div class="p-2.5 rounded bg-bg border border-border text-[11px] font-mono text-text-dim space-y-1" id="dag-stage-info">
 								<div class="flex justify-between text-text">
-									<span class="text-status-emerald font-semibold">Active Stage: Intent Planner</span>
-									<span class="text-text-dim">IPC: zero-copy active</span>
+									<span class="text-status-emerald font-semibold">Active Stage: route_gate</span>
+									<span class="text-text-dim">Hook: host pre-tool hook</span>
 								</div>
 								<div class="text-text-muted">
-									Breakdown: decompose goal into acyclic task graphs &bull; mean latency: 120&mu;s &bull; memory: zero-alloc
+									Intercepts unrouted tool calls before execution &bull; enforces mandatory route_task routing &bull; zero prompt bypass
 								</div>
 							</div>
 						</div>
@@ -200,9 +200,9 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						<!-- Tags & Action -->
 						<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border font-mono text-xs">
 							<span class="tag-pill">Rust</span>
-							<span class="tag-pill">Tokio</span>
-							<span class="tag-pill">gRPC</span>
-							<span class="tag-pill">SQLite WAL</span>
+							<span class="tag-pill">SQLite + HNSW</span>
+							<span class="tag-pill">FastEmbed ONNX</span>
+							<span class="tag-pill">stdio MCP</span>
 							<a class="ml-auto text-text-dim hover:text-text no-underline flex items-center gap-1" href="/blog/series/agent-brain/" aria-label="Read agent-brain series breakdown and publications">
 								<span>Read agent-brain series breakdown</span>
 								<span aria-hidden="true">&rarr;</span>
@@ -217,7 +217,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								<div class="flex items-center gap-2">
 									<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
 									<h3 class="text-lg font-semibold text-text tracking-tight">dustmap</h3>
-									<span class="px-2 py-0.5 rounded bg-bg border border-border font-mono text-[11px] text-text-muted">v1.0.1</span>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.0.1</span>
 								</div>
 								
 								<a
@@ -234,7 +234,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								</a>
 							</div>
 							<p class="text-sm text-text-muted leading-relaxed">
-								Blazing-fast macOS disk space visualizer and conservative system cleaner in Rust &amp; Tauri.
+								Blazing-fast macOS disk space visualizer and conservative system cleaner in Rust &amp; Tauri. Treemap &amp; sector donuts with Rayon parallel traversal.
 							</p>
 						</div>
 
@@ -244,20 +244,22 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								<span class="text-text font-medium">&lt; 12ms / 85k files</span>
 							</div>
 							<div class="flex justify-between">
-								<span>Memory footprint:</span>
-								<span class="text-text font-medium">&lt; 28MB RSS</span>
+								<span>Engine:</span>
+								<span class="text-status-emerald font-medium">Rayon parallel walk</span>
 							</div>
 							<div class="flex justify-between">
-								<span>Engine:</span>
-								<span class="text-status-emerald">Rayon parallel walk</span>
+								<span>Storage safety:</span>
+								<span class="text-text font-medium">Trash-first &bull; 100% offline</span>
 							</div>
 						</div>
 
 						<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border font-mono text-xs">
 							<span class="tag-pill">Rust</span>
-							<span class="tag-pill">Tauri</span>
+							<span class="tag-pill">Tauri 2</span>
+							<span class="tag-pill">Rayon</span>
+							<span class="tag-pill">macOS</span>
 							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/dustmap/" aria-label="Explore dustmap series and architecture write-up">
-								<span>Explore dustmap series &rarr;</span>
+								<span>Explore dustmap &rarr;</span>
 							</a>
 						</div>
 					</div>
@@ -266,7 +268,10 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
 						<div class="space-y-2">
 							<div class="flex items-center justify-between">
-								<h3 class="text-base font-semibold text-text tracking-tight">agentrun</h3>
+								<div class="flex items-center gap-2">
+									<h3 class="text-base font-semibold text-text tracking-tight">agentrun</h3>
+									<span class="px-2 py-0.5 rounded-full bg-bg-subtle border border-border font-mono text-[11px] text-text-dim">Pre-alpha</span>
+								</div>
 								
 								<a
 									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
@@ -282,14 +287,16 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								</a>
 							</div>
 							<p class="text-xs text-text-muted leading-relaxed">
-								Isolated, recoverable coding agent runtimes with container sandboxing and strict eBPF syscall filtering (4ms boot).
+								Runs coding-agent tasks as isolated, recoverable jobs on your machine. Lite mode executes in dedicated containers and git worktrees; Full mode manages shared queues and audit trails.
 							</p>
 						</div>
 						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
+							<span class="tag-pill">Go</span>
 							<span class="tag-pill">Containers</span>
-							<span class="tag-pill">eBPF</span>
+							<span class="tag-pill">Git Worktrees</span>
+							<span class="tag-pill">macOS</span>
 							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/agentrun/" aria-label="Explore agentrun series and runtime documentation">
-								<span>Explore agentrun runtime &rarr;</span>
+								<span>Explore agentrun &rarr;</span>
 							</a>
 						</div>
 					</div>
@@ -300,7 +307,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-2">
 									<h3 class="text-base font-semibold text-text tracking-tight">agent-spine</h3>
-									<span class="px-2 py-0.5 rounded bg-bg border border-border font-mono text-[11px] text-text-muted">v1.0.0-rc3</span>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.0.0-rc3</span>
 								</div>
 								
 								<a
@@ -317,15 +324,16 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								</a>
 							</div>
 							<p class="text-xs text-text-muted leading-relaxed">
-								Deterministic multi-step DAG workflow runner with approval gates, state machine orchestration, and deterministic replay.
+								Deterministic workflow DAG engine &amp; cognitive state machine for coding agents. Executes declarative graphs (<code class="text-[11px] font-mono">workflows/*.yaml</code>) with Tarjan SCC acyclicity validation, automated verification gates, and human approval checkpoints.
 							</p>
 						</div>
 						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
 							<span class="tag-pill">Rust</span>
 							<span class="tag-pill">Tokio</span>
-							<span class="tag-pill">YAML DAG</span>
+							<span class="tag-pill">YAML DAGs</span>
+							<span class="tag-pill">SQLite</span>
 							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/agent-spine/" aria-label="Explore agent-spine workflow series">
-								<span>Explore agent-spine workflows &rarr;</span>
+								<span>Explore agent-spine &rarr;</span>
 							</a>
 						</div>
 					</div>
@@ -334,7 +342,10 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
 						<div class="space-y-2">
 							<div class="flex items-center justify-between">
-								<h3 class="text-base font-semibold text-text tracking-tight">harbor</h3>
+								<div class="flex items-center gap-2">
+									<h3 class="text-base font-semibold text-text tracking-tight">harbor</h3>
+									<span class="px-2 py-0.5 rounded-full bg-bg-subtle border border-border font-mono text-[11px] text-text-dim">Pre-alpha</span>
+								</div>
 								
 								<a
 									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
@@ -350,15 +361,16 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								</a>
 							</div>
 							<p class="text-xs text-text-muted leading-relaxed">
-								Headless browser execution engine and DOM inspection sandbox designed specifically for autonomous agents and verification.
+								An open-source, agent-native web browser for macOS built on WebKit. Features explicit permission engines, human approval gates for sensitive actions, SHA-256 hash-chained audit logs, and a local MCP server.
 							</p>
 						</div>
 						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
-							<span class="tag-pill">TypeScript</span>
-							<span class="tag-pill">Playwright</span>
-							<span class="tag-pill">CDP</span>
+							<span class="tag-pill">Swift</span>
+							<span class="tag-pill">WebKit</span>
+							<span class="tag-pill">macOS</span>
+							<span class="tag-pill">Local MCP</span>
 							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/harbor/" aria-label="Explore harbor sandbox series">
-								<span>Explore harbor sandbox &rarr;</span>
+								<span>Explore harbor &rarr;</span>
 							</a>
 						</div>
 					</div>
@@ -532,22 +544,22 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 				}
 			}
 
-			// Interactive DAG Stage Inspector
+			// Interactive Cognitive Pipeline Stage Inspector
 			const stages = {
-				intent: {
-					title: 'Intent Planner',
-					mode: 'tokio::sync::broadcast',
-					detail: 'Breakdown: decompose user goal into acyclic task graphs • mean latency: 120μs • memory: zero-alloc'
+				route_gate: {
+					title: 'route_gate',
+					mode: 'host pre-tool hook',
+					detail: 'Intercepts unrouted tool calls before execution • enforces mandatory route_task routing • zero prompt bypass'
 				},
-				validator: {
-					title: 'Hierarchical Validator',
-					mode: 'tokio::sync::mpsc',
-					detail: 'Cycle detection: Tarjan SCC • schema conformance: strict protobuf v3 • validation overhead: 45μs'
+				knapsack: {
+					title: 'knapsack',
+					mode: 'dynamic token budget',
+					detail: 'Greedy token-envelope packer (~500 tokens) • injects verified skills & rules • prevents context bloat'
 				},
-				dispatcher: {
-					title: 'Tool Dispatcher',
-					mode: 'tonic::transport::Channel (gRPC)',
-					detail: 'Stream dispatch: Tokio worker thread affinity • IPC zero-copy memory ring • throughput: 110,000 req/s'
+				verify: {
+					title: 'verify',
+					mode: 'agent-brain verify ledger',
+					detail: 'Evidence recorder: runs checks via subshell • logs exit codes & hashes • ensures zero hallucinated test passes'
 				}
 			};
 
@@ -561,7 +573,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 					infoEl.innerHTML = `
 						<div class="flex justify-between text-text">
 							<span class="text-status-emerald font-semibold">Active Stage: ${stage.title}</span>
-							<span class="text-text-dim">IPC: zero-copy active</span>
+							<span class="text-text-dim">Hook: ${stage.mode}</span>
 						</div>
 						<div class="text-text-muted">
 							${stage.detail}
@@ -569,7 +581,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 					`;
 				}
 
-				['intent', 'validator', 'dispatcher'].forEach(k => {
+				['route_gate', 'knapsack', 'verify'].forEach(k => {
 					const node = document.getElementById('node-' + k);
 					if (node) {
 						if (k === stageKey) {

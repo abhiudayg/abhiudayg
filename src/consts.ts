@@ -31,38 +31,38 @@ export const SOCIAL_LINKS: ReadonlyArray<{
 export const BLOG_SERIES = {
 	'agent-brain': {
 		title: 'agent-brain',
-		description: 'Local MCP routing for agents, skills, rules, and memory under a token budget.',
+		description: 'Local-first cognitive governor, turn router & procedure graph for coding agents under token budgets.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/agent-brain',
 		tag: 'AI Agents',
 		badge: 'v1.0.0-rc3',
 	},
 	'dustmap': {
 		title: 'dustmap',
-		description: 'A blazing-fast, transparent macOS disk space analyzer and conservative cleaner in Rust and Tauri.',
+		description: 'A blazing-fast, transparent macOS disk space analyzer and conservative cleaner in Rust and Tauri 2.',
 		repoUrl: 'https://github.com/abhiudayg/dustmap',
 		tag: 'Systems',
 		badge: 'v1.0.1',
 	},
 	'agentrun': {
 		title: 'agentrun',
-		description: 'Isolated, recoverable coding agent runtimes with container sandboxing on your own machine.',
+		description: 'Isolated, recoverable coding agent jobs on your machine with container sandboxes and git worktrees.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/agentrun',
 		tag: 'Sandboxing',
-		badge: '4ms boot',
+		badge: 'Pre-alpha',
 	},
 	'agent-spine': {
 		title: 'agent-spine',
-		description: 'Deterministic multi-step DAG workflow engine with human-in-the-loop approval gates.',
+		description: 'Deterministic workflow DAG engine and cognitive state machine for coding agents.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/agent-spine',
 		tag: 'Orchestration',
 		badge: 'v1.0.0-rc3',
 	},
 	'harbor': {
 		title: 'harbor',
-		description: 'Headless browser execution engine and DOM inspection sandbox designed for autonomous agents.',
+		description: 'Agent-native, sidebar-first web browser for macOS built on WebKit with approval gates and local MCP.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/harbor',
 		tag: 'Agent Browser',
-		badge: 'CDP Engine',
+		badge: 'Pre-alpha',
 	},
 } as const;
 
