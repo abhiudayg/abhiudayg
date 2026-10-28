@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Abhiuday — Systems &amp; AI Engineer</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config verbatum -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-card": "#18181b",
+            "status-emerald": "#10b981",
+            "on-tertiary-fixed-variant": "#454747",
+            "surface-container-high": "#292931",
+            "on-surface": "#e3e1ec",
+            "secondary": "#4edea3",
+            "text-dim": "#52525b",
+            "text-primary": "#f4f4f5",
+            "surface-container-lowest": "#0d0e15",
+            "on-secondary-fixed-variant": "#005236",
+            "on-secondary": "#003824",
+            "tertiary-fixed-dim": "#c6c6c7",
+            "text-muted": "#a1a1aa",
+            "border-zinc": "#27272a",
+            "background": "#12131a",
+            "inverse-on-surface": "#2f3038",
+            "tertiary-fixed": "#e2e2e2",
+            "primary": "#ffffff",
+            "on-secondary-fixed": "#002113",
+            "on-secondary-container": "#00311f",
+            "primary-fixed-dim": "#c6c6c7",
+            "surface-container-low": "#1a1b22",
+            "tertiary": "#ffffff",
+            "primary-fixed": "#e2e2e2",
+            "inverse-primary": "#5d5f5f",
+            "surface-tint": "#c6c6c7",
+            "surface-variant": "#33343c",
+            "on-primary-fixed": "#1a1c1c",
+            "status-emerald-glow": "#059669",
+            "on-primary-fixed-variant": "#454747",
+            "canvas-base": "#09090b",
+            "on-background": "#e3e1ec",
+            "canvas-subtle": "#0c0a09",
+            "on-tertiary-container": "#636565",
+            "border-zinc-subtle": "#1e1e24",
+            "on-tertiary-fixed": "#1a1c1c",
+            "on-tertiary": "#2f3131",
+            "surface": "#12131a",
+            "secondary-container": "#00a572",
+            "on-error-container": "#ffdad6",
+            "outline-variant": "#444748",
+            "error": "#ffb4ab",
+            "on-primary": "#2f3131",
+            "on-primary-container": "#636565",
+            "error-container": "#93000a",
+            "secondary-fixed": "#6ffbbe",
+            "surface-bright": "#383941",
+            "inverse-surface": "#e3e1ec",
+            "tertiary-container": "#e2e2e2",
+            "secondary-fixed-dim": "#4edea3",
+            "primary-container": "#e2e2e2",
+            "on-surface-variant": "#c4c7c8",
+            "surface-dim": "#12131a",
+            "surface-container-highest": "#33343c",
+            "on-error": "#690005",
+            "outline": "#8e9192",
+            "surface-container": "#1e1f26"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "gutter-sm": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "margin-sm": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "2rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Geist"],
+            "label-mono": ["JetBrains Mono"],
+            "headline-lg": ["Geist"],
+            "display-hero-mobile": ["Geist"],
+            "display-hero": ["Geist"],
+            "body-md": ["Geist"],
+            "headline-sm": ["Geist"],
+            "headline-md": ["Geist"],
+            "code-block": ["JetBrains Mono"],
+            "body-sm": ["Geist"],
+            "body-lg": ["Geist"],
+            "code-inline": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "label-mono": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+            "display-hero-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+            "display-hero": ["56px", { "lineHeight": "64px", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.015em", "fontWeight": "500" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+            "code-block": ["12px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "code-inline": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .ambient-glow {
+      background-image: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.04), transparent 60%);
+    }
+
+    .bento-card-glow {
+      position: relative;
+      transition: border-color 0.15s ease-out, transform 0.15s ease-out;
+    }
+    .bento-card-glow:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .status-pulse {
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5), 0 0 2px rgba(16, 185, 129, 0.9);
+    }
+  </style>
+</head>
+<body class="bg-canvas-base text-text-primary selection:bg-surface-card selection:text-primary min-h-screen relative flex flex-col justify-between">
+<!-- TopNavBar (Shared Component JSON anchor) -->
+<header class="w-full bg-canvas-base border-b border-border-zinc sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center space-x-5">
+<a class="text-headline-sm font-headline-sm font-semibold tracking-tight text-text-primary flex items-center space-x-2" href="#">
+<span>Abhiuday</span>
+<span class="text-text-dim text-body-sm font-label-mono">.dev</span>
+</a>
+<!-- Live Telemetry Status Pill -->
+<div class="hidden sm:flex items-center space-x-2 px-2.5 py-1 rounded-full bg-surface-card border border-border-zinc text-label-mono font-label-mono">
+<span class="w-2 h-2 rounded-full bg-status-emerald status-pulse animate-pulse"></span>
+<span class="text-text-muted">Building Autonomous Systems</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="hidden md:flex items-center space-x-8 text-label-mono font-label-mono">
+<a class="text-text-muted transition-colors hover:text-text-primary" href="#essays">Essays</a>
+<a class="text-text-primary font-medium" href="#systems">Systems</a>
+<a class="text-text-muted transition-colors hover:text-text-primary" href="#notes">Notes</a>
+<a class="text-text-muted transition-colors hover:text-text-primary" href="#stack">Stack</a>
+<a class="text-text-muted transition-colors hover:text-text-primary" href="#rss">RSS</a>
+</nav>
+<!-- Trailing Action: Quick Search trigger & GitHub -->
+<div class="flex items-center space-x-3 text-label-mono font-label-mono">
+<button class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-surface-card border border-border-zinc text-text-dim hover:text-text-primary hover:border-outline-variant transition-colors duration-150 ease-out" onclick="triggerCmdK()">
+<span class="material-symbols-outlined text-body-sm" data-icon="search">search</span>
+<span class="text-body-sm font-body-sm">Search</span>
+<kbd class="px-1.5 py-0.5 rounded bg-canvas-base border border-border-zinc text-text-muted text-[10px]">⌘K</kbd>
+</button>
+<a class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-border-zinc text-text-muted hover:text-text-primary hover:border-outline-variant transition-colors duration-150 ease-out" href="https://github.com" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-body-sm" data-icon="code">code</span>
+<span class="text-label-mono font-label-mono">GitHub</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-low text-text-dim text-[10px] border border-border-zinc-subtle">★ 1.2k</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Ambient background subtle illumination -->
+<div class="ambient-glow absolute top-0 left-0 right-0 h-96 pointer-events-none"></div>
+<!-- Main Content Layout Container -->
+<main class="w-full max-w-7xl mx-auto px-6 py-12 md:py-16 space-y-24">
+<!-- 1. Hero Section -->
+<section class="relative space-y-8 max-w-4xl">
+<!-- Status Badge / Pill -->
+<div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-zinc text-label-mono font-label-mono text-text-muted">
+<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+<span>Systems &amp; AI Engineer • Open Source Craftsman</span>
+</div>
+<!-- Headline -->
+<div class="space-y-4">
+<h1 class="hidden md:block font-display-hero text-display-hero text-text-primary tracking-tight font-semibold">
+          Abhiuday — Systems &amp; AI Engineer. Documenting the build, one commit at a time.
+        </h1>
+<h1 class="md:hidden font-display-hero-mobile text-display-hero-mobile text-text-primary tracking-tight font-semibold">
+          Abhiuday — Systems &amp; AI Engineer. Documenting the build, one commit at a time.
+        </h1>
+<p class="font-body-lg text-body-lg text-text-muted leading-relaxed max-w-3xl">
+          Architecting autonomous agent runtimes, real-time distributed data pipelines, and low-latency infrastructure. Sharing raw notes, production benchmarks, and architecture post-mortems.
+        </p>
+</div>
+<!-- Hero Actions & Copyable Command -->
+<div class="flex flex-wrap items-center gap-4 pt-2">
+<a class="px-5 py-2.5 rounded-lg bg-primary text-canvas-base font-body-md text-body-md font-medium hover:bg-tertiary-fixed transition-colors duration-150 ease-out flex items-center space-x-2 shadow-sm" href="#essays">
+<span>Read Latest Dispatch</span>
+<span class="material-symbols-outlined text-body-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<a class="px-5 py-2.5 rounded-lg bg-surface-card border border-border-zinc text-text-primary font-body-md text-body-md hover:bg-border-zinc hover:border-outline-variant transition-colors duration-150 ease-out flex items-center space-x-2" href="https://github.com" rel="noreferrer" target="_blank">
+<span>View GitHub</span>
+<span class="material-symbols-outlined text-body-sm" data-icon="open_in_new">open_in_new</span>
+</a>
+<!-- Quick Copy Shell Pill -->
+<div class="cursor-pointer group flex items-center space-x-2.5 px-3.5 py-2.5 rounded-lg bg-canvas-subtle border border-border-zinc text-label-mono font-label-mono text-text-dim hover:text-text-primary hover:border-outline-variant transition-colors duration-150" id="copy-pill" onclick="copyNpx()">
+<span class="text-status-emerald">$</span>
+<span class="text-text-muted group-hover:text-text-primary">npx abhiuday</span>
+<span class="material-symbols-outlined text-body-sm text-text-dim group-hover:text-text-muted" data-icon="content_copy" id="copy-icon">content_copy</span>
+</div>
+</div>
+<!-- Metric Callout Bar -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-border-zinc">
+<div class="space-y-1">
+<div class="text-headline-md font-headline-md text-text-primary font-semibold">14+</div>
+<div class="text-label-mono font-label-mono text-text-dim">Repositories</div>
+</div>
+<div class="space-y-1">
+<div class="text-headline-md font-headline-md text-text-primary font-semibold">6</div>
+<div class="text-label-mono font-label-mono text-text-dim">Deep Dives</div>
+</div>
+<div class="space-y-1">
+<div class="text-headline-md font-headline-md text-text-primary font-semibold">100%</div>
+<div class="text-label-mono font-label-mono text-text-dim">Zero-tracker</div>
+</div>
+<div class="space-y-1">
+<div class="text-headline-md font-headline-md text-status-emerald font-semibold">99.98%</div>
+<div class="text-label-mono font-label-mono text-text-dim">Pipeline Reliability</div>
+</div>
+</div>
+</section>
+<!-- 2. Featured Systems Bento Grid -->
+<section class="space-y-6" id="systems">
+<div class="flex items-center justify-between">
+<div>
+<div class="text-label-mono font-label-mono text-text-dim uppercase tracking-wider">Engineered Artifacts</div>
+<h2 class="text-headline-lg font-headline-lg font-semibold text-text-primary">Featured Systems &amp; Runtimes</h2>
+</div>
+<div class="hidden sm:flex items-center space-x-2 text-label-mono font-label-mono text-text-dim">
+<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
+<span>production tested</span>
+</div>
+</div>
+<!-- Bento Grid (12 Columns) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Bento Card 1: Large Span (Col 12 md:8) agent-brain -->
+<div class="md:col-span-8 bg-surface-card border border-border-zinc rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6">
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-status-emerald text-headline-sm" data-icon="memory">memory</span>
+<span class="text-headline-sm font-headline-sm font-semibold text-text-primary">agent-brain</span>
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc text-label-mono font-label-mono text-text-muted">v0.9.4-rc</span>
+</div>
+<div class="flex items-center space-x-1.5 px-2 py-1 rounded bg-canvas-base border border-border-zinc text-label-mono font-label-mono text-text-muted">
+<span class="material-symbols-outlined text-body-sm" data-icon="star">star</span>
+<span>840</span>
+</div>
+</div>
+<p class="text-body-md font-body-md text-text-muted">
+              Autonomous hierarchical planning runtime for multi-agent swarms with low-latency Tokio channels and zero-copy gRPC serialization. Handles deterministic task breakdown, DAG validation, and cycle detection.
+            </p>
+</div>
+<!-- DAG State Engine Visualization Box -->
+<div class="bg-canvas-base border border-border-zinc rounded-lg p-4 font-code-block text-code-block overflow-x-auto space-y-3">
+<div class="flex items-center justify-between text-text-dim text-[11px] border-b border-border-zinc pb-2">
+<span class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
+<span>DAG State Engine (tokio::sync::broadcast)</span>
+</span>
+<span>zero-alloc dispatch</span>
+</div>
+<div class="text-text-muted text-xs font-mono space-y-1.5 py-1">
+<div class="flex items-center space-x-2 text-text-primary">
+<span class="text-status-emerald">▶</span>
+<span class="text-secondary">Intent Planner</span>
+<span class="text-text-dim">──(mpsc)──&gt;</span>
+<span class="text-text-primary font-medium">Hierarchical Validator</span>
+<span class="text-text-dim">──(gRPC)──&gt;</span>
+<span class="text-status-emerald font-medium">Tool Dispatcher</span>
+</div>
+<div class="text-text-dim text-[11px] pl-4">
+                [tokio::task-pool] pool_size: 64 • mean_queue_latency: 180μs • zero_copy: active
+              </div>
+</div>
+</div>
+<!-- Tags -->
+<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border-zinc text-label-mono font-label-mono">
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Rust</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Tokio</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">gRPC</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">SQLite WAL</span>
+<div class="ml-auto text-text-dim flex items-center space-x-1">
+<span>View Source</span>
+<span class="material-symbols-outlined text-body-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Bento Card 2: dustmap (Col 12 md:4) -->
+<div class="md:col-span-4 bg-surface-card border border-border-zinc rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6">
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-text-primary text-headline-sm" data-icon="radar">radar</span>
+<span class="text-headline-sm font-headline-sm font-semibold text-text-primary">dustmap</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-low border border-border-zinc text-label-mono font-label-mono text-status-emerald">&lt; 12ms</span>
+</div>
+<p class="text-body-md font-body-md text-text-muted">
+              Real-time atmospheric particulate matter telemetry ingestor via distributed Kafka brokers and WebGL deck rendering.
+            </p>
+</div>
+<div class="p-3 bg-canvas-base border border-border-zinc rounded-lg font-code-block text-code-block text-text-dim space-y-1">
+<div class="flex justify-between">
+<span>Ingest throughput:</span>
+<span class="text-text-primary">85,000 evt/s</span>
+</div>
+<div class="flex justify-between">
+<span>Shader buffers:</span>
+<span class="text-text-primary">Float32Array</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border-zinc text-label-mono font-label-mono">
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Go</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Kafka</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">WebGL</span>
+</div>
+</div>
+<!-- Bento Card 3: agentrun (Col 12 md:4) -->
+<div class="md:col-span-4 bg-surface-card border border-border-zinc rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-5">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-text-primary text-headline-sm" data-icon="terminal">terminal</span>
+<span class="text-headline-sm font-headline-sm font-semibold text-text-primary">agentrun</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-low border border-border-zinc text-label-mono font-label-mono text-status-emerald">4ms boot</span>
+</div>
+<p class="text-body-sm font-body-sm text-text-muted">
+              Sandboxed Linux microVM execution engine for isolated agent tool evaluation with custom eBPF filters.
+            </p>
+</div>
+<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border-zinc text-label-mono font-label-mono">
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Firecracker</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">C++</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">eBPF</span>
+</div>
+</div>
+<!-- Bento Card 4: pipeline-compose (Col 12 md:4) -->
+<div class="md:col-span-4 bg-surface-card border border-border-zinc rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-5">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-text-primary text-headline-sm" data-icon="account_tree">account_tree</span>
+<span class="text-headline-sm font-headline-sm font-semibold text-text-primary">pipeline-compose</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-low border border-border-zinc text-label-mono font-label-mono text-text-muted">v1.2.0</span>
+</div>
+<p class="text-body-sm font-body-sm text-text-muted">
+              Declarative streaming DAG orchestrator featuring zero-copy buffer handoff between consumer workers.
+            </p>
+</div>
+<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border-zinc text-label-mono font-label-mono">
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">TypeScript</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Apache Arrow</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Node.js</span>
+</div>
+</div>
+<!-- Bento Card 5: manga-cdc (Col 12 md:4) -->
+<div class="md:col-span-4 bg-surface-card border border-border-zinc rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-5">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-status-emerald text-headline-sm" data-icon="sync_alt">sync_alt</span>
+<span class="text-headline-sm font-headline-sm font-semibold text-text-primary">manga-cdc</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-low border border-border-zinc text-label-mono font-label-mono text-status-emerald">Live Ingest</span>
+</div>
+<p class="text-body-sm font-body-sm text-text-muted">
+              Real-time Change Data Capture engine syncing PostgreSQL WAL streams to local DuckDB and Redis search indices.
+            </p>
+</div>
+<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border-zinc text-label-mono font-label-mono">
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Python</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">DuckDB</span>
+<span class="px-2 py-1 rounded bg-canvas-base border border-border-zinc text-text-muted">Redis</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Recent Technical Essays & Dispatches -->
+<section class="space-y-6" id="essays">
+<div class="flex items-center justify-between">
+<div>
+<div class="text-label-mono font-label-mono text-text-dim uppercase tracking-wider">Publications &amp; Post-Mortems</div>
+<h2 class="text-headline-lg font-headline-lg font-semibold text-text-primary">Recent Engineering Dispatches</h2>
+</div>
+<a class="group flex items-center space-x-1.5 text-label-mono font-label-mono text-text-muted hover:text-text-primary transition-colors" href="#essays">
+<span>View Archive</span>
+<span class="material-symbols-outlined text-body-sm group-hover:translate-x-0.5 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<!-- Essay List -->
+<div class="border border-border-zinc rounded-xl bg-surface-card divide-y divide-border-zinc">
+<!-- Dispatch 1 -->
+<a class="p-6 md:p-7 block hover:bg-surface-container transition-colors duration-150 group" href="#">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div class="space-y-1.5">
+<div class="flex items-center space-x-3 text-label-mono font-label-mono">
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc text-secondary">Infrastructure</span>
+<span class="text-text-dim">Mar 2025</span>
+<span class="text-text-dim">•</span>
+<span class="text-text-dim">12 min read</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm font-medium text-text-primary group-hover:text-tertiary transition-colors">
+                Benchmarking Firecracker MicroVM Boot Latencies Under Memory Pressure
+              </h3>
+<p class="text-body-sm font-body-sm text-text-muted line-clamp-2">
+                Detailed breakdowns of kernel init times, rootfs block cache sizing, and how seccomp jail policies affect concurrent boots beyond 256 instances.
+              </p>
+</div>
+<div class="hidden md:flex items-center text-text-dim group-hover:text-text-primary group-hover:translate-x-1 transition-all">
+<span class="material-symbols-outlined" data-icon="north_east">north_east</span>
+</div>
+</div>
+</a>
+<!-- Dispatch 2 -->
+<a class="p-6 md:p-7 block hover:bg-surface-container transition-colors duration-150 group" href="#">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div class="space-y-1.5">
+<div class="flex items-center space-x-3 text-label-mono font-label-mono">
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc text-status-emerald">AI Agents</span>
+<span class="text-text-dim">Feb 2025</span>
+<span class="text-text-dim">•</span>
+<span class="text-text-dim">8 min read</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm font-medium text-text-primary group-hover:text-tertiary transition-colors">
+                Why We Ditched Distributed Consensus for Ephemeral Agent Coordination
+              </h3>
+<p class="text-body-sm font-body-sm text-text-muted line-clamp-2">
+                Evaluating the tradeoffs of Paxos and Raft when orchestrating non-stateful multi-agent planning loops. Replacing heavy election quorums with gossip lease tokens.
+              </p>
+</div>
+<div class="hidden md:flex items-center text-text-dim group-hover:text-text-primary group-hover:translate-x-1 transition-all">
+<span class="material-symbols-outlined" data-icon="north_east">north_east</span>
+</div>
+</div>
+</a>
+<!-- Dispatch 3 -->
+<a class="p-6 md:p-7 block hover:bg-surface-container transition-colors duration-150 group" href="#">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div class="space-y-1.5">
+<div class="flex items-center space-x-3 text-label-mono font-label-mono">
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc text-text-muted">Databases</span>
+<span class="text-text-dim">Jan 2025</span>
+<span class="text-text-dim">•</span>
+<span class="text-text-dim">15 min read</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm font-medium text-text-primary group-hover:text-tertiary transition-colors">
+                Implementing Zero-Copy Change Data Capture in Pure Rust
+              </h3>
+<p class="text-body-sm font-body-sm text-text-muted line-clamp-2">
+                Deciphering Postgres streaming replication protocol tuples directly into columnar Arrow memory buffers with zero intermediate heap allocations.
+              </p>
+</div>
+<div class="hidden md:flex items-center text-text-dim group-hover:text-text-primary group-hover:translate-x-1 transition-all">
+<span class="material-symbols-outlined" data-icon="north_east">north_east</span>
+</div>
+</div>
+</a>
+<!-- Dispatch 4 -->
+<a class="p-6 md:p-7 block hover:bg-surface-container transition-colors duration-150 group" href="#">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div class="space-y-1.5">
+<div class="flex items-center space-x-3 text-label-mono font-label-mono">
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc text-error">Security</span>
+<span class="text-text-dim">Dec 2024</span>
+<span class="text-text-dim">•</span>
+<span class="text-text-dim">10 min read</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm font-medium text-text-primary group-hover:text-tertiary transition-colors">
+                The Anatomy of an LLM Tool-Call Execution Sandbox
+              </h3>
+<p class="text-body-sm font-body-sm text-text-muted line-clamp-2">
+                Restricting arbitrary Python and Bash tool execution with landlock-lsm, namespaces, and strict ptrace interception before payloads hit production hardware.
+              </p>
+</div>
+<div class="hidden md:flex items-center text-text-dim group-hover:text-text-primary group-hover:translate-x-1 transition-all">
+<span class="material-symbols-outlined" data-icon="north_east">north_east</span>
+</div>
+</div>
+</a>
+</div>
+</section>
+<!-- 4. Deep Architectural Tracks & Curated Series -->
+<section class="space-y-6">
+<div class="space-y-1">
+<div class="text-label-mono font-label-mono text-text-dim uppercase tracking-wider">Curated Tracks</div>
+<h2 class="text-headline-lg font-headline-lg font-semibold text-text-primary">Deep Architectural Series</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Track 1 -->
+<div class="p-6 rounded-xl bg-surface-card border border-border-zinc space-y-4 bento-card-glow flex flex-col justify-between">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-label-mono font-label-mono text-status-emerald">
+<span>Track 01</span>
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc">5 Chapters</span>
+</div>
+<h4 class="text-headline-sm font-headline-sm font-semibold text-text-primary">Building Agent Runtimes from Scratch</h4>
+<p class="text-body-sm font-body-sm text-text-muted">
+              From raw AST execution to deterministic scheduling, memory isolation, and dynamic tool binding in Rust and C++.
+            </p>
+</div>
+<div class="pt-4 border-t border-border-zinc flex items-center justify-between text-label-mono font-label-mono text-text-muted hover:text-text-primary">
+<span>Read Series</span>
+<span class="material-symbols-outlined text-body-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Track 2 -->
+<div class="p-6 rounded-xl bg-surface-card border border-border-zinc space-y-4 bento-card-glow flex flex-col justify-between">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-label-mono font-label-mono text-secondary">
+<span>Track 02</span>
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc">4 Chapters</span>
+</div>
+<h4 class="text-headline-sm font-headline-sm font-semibold text-text-primary">Distributed Stream Processing Internals</h4>
+<p class="text-body-sm font-body-sm text-text-muted">
+              Watermarks, sliding time windows, backpressure algorithms, and state snapshot mechanisms in production topologies.
+            </p>
+</div>
+<div class="pt-4 border-t border-border-zinc flex items-center justify-between text-label-mono font-label-mono text-text-muted hover:text-text-primary">
+<span>Read Series</span>
+<span class="material-symbols-outlined text-body-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Track 3 -->
+<div class="p-6 rounded-xl bg-surface-card border border-border-zinc space-y-4 bento-card-glow flex flex-col justify-between">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-label-mono font-label-mono text-text-primary">
+<span>Track 03</span>
+<span class="px-2 py-0.5 rounded bg-canvas-base border border-border-zinc">3 Chapters</span>
+</div>
+<h4 class="text-headline-sm font-headline-sm font-semibold text-text-primary">Hardware-Aware Data Structures in Go &amp; Rust</h4>
+<p class="text-body-sm font-body-sm text-text-muted">
+              L1/L2 Cache line optimization, false sharing prevention, atomic pointer cascades, and memory alignment fundamentals.
+            </p>
+</div>
+<div class="pt-4 border-t border-border-zinc flex items-center justify-between text-label-mono font-label-mono text-text-muted hover:text-text-primary">
+<span>Read Series</span>
+<span class="material-symbols-outlined text-body-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Minimal Newsletter & RSS Subscription Section (Resend Inspired) -->
+<section class="relative rounded-2xl bg-surface-card border border-border-zinc p-8 md:p-12 overflow-hidden bento-card-glow" id="rss">
+<div class="max-w-2xl space-y-6 relative z-10">
+<div class="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-canvas-base border border-border-zinc text-label-mono font-label-mono text-text-muted">
+<span class="material-symbols-outlined text-status-emerald text-body-sm" data-icon="mail">mail</span>
+<span>Zero Spam • Terminal &amp; Inbox Friendly</span>
+</div>
+<div class="space-y-2">
+<h3 class="text-headline-lg font-headline-lg font-semibold text-text-primary">
+            Engineering Dispatches Directly to Your Inbox or Reader
+          </h3>
+<p class="text-body-md font-body-md text-text-muted leading-relaxed">
+            No marketing fluff, growth hacks, or sponsored clutter. Just detailed production post-mortems, systems source breakdowns, and benchmark release notes.
+          </p>
+</div>
+<!-- Input and RSS Action cluster -->
+<form class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3" onsubmit="handleSubscribe(event)">
+<div class="relative flex-grow">
+<input class="w-full px-4 py-2.5 bg-canvas-base border border-border-zinc rounded-lg text-body-md font-body-md text-text-primary placeholder:text-text-dim focus:outline-none focus:border-primary transition-colors" placeholder="engineer@domain.com" required="" type="email"/>
+</div>
+<button class="px-5 py-2.5 rounded-lg bg-primary text-canvas-base font-body-md text-body-md font-medium hover:bg-tertiary-fixed transition-colors duration-150 ease-out whitespace-nowrap" type="submit">
+            Subscribe via Email
+          </button>
+<a class="px-4 py-2.5 rounded-lg bg-canvas-base border border-border-zinc text-text-muted hover:text-text-primary hover:border-outline-variant font-label-mono text-label-mono transition-colors flex items-center justify-center space-x-1.5" href="/feed.xml">
+<span class="material-symbols-outlined text-body-sm" data-icon="rss_feed">rss_feed</span>
+<span>feed.xml</span>
+</a>
+</form>
+<div class="flex items-center space-x-4 text-label-mono font-label-mono text-text-dim text-xs">
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+<span>Unsubscribe in 1-click</span>
+</span>
+<span>•</span>
+<span class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="terminal">terminal</span>
+<span>CLI feeds supported</span>
+</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component JSON anchor) -->
+<footer class="w-full bg-canvas-base border-t border-border-zinc mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-8 max-w-7xl mx-auto gap-4">
+<div class="flex flex-col sm:flex-row items-center gap-3 text-label-mono font-label-mono">
+<span class="text-text-muted">© 2025 Abhiuday. Built with zero trackers. All systems operational.</span>
+<span class="hidden sm:inline text-text-dim">•</span>
+<span class="inline-flex items-center space-x-1 text-text-dim">
+<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+<span>100% uptime SLA</span>
+</span>
+</div>
+<div class="flex items-center space-x-6 text-label-mono font-label-mono">
+<a class="text-text-dim hover:text-text-primary transition-colors duration-150 ease-out" href="https://github.com" rel="noreferrer" target="_blank">GitHub</a>
+<a class="text-text-dim hover:text-text-primary transition-colors duration-150 ease-out" href="#essays">Essays</a>
+<a class="text-text-dim hover:text-text-primary transition-colors duration-150 ease-out" href="#systems">Systems</a>
+<a class="text-text-dim hover:text-text-primary transition-colors duration-150 ease-out" href="#stack">Stack</a>
+<a class="text-text-dim hover:text-text-primary transition-colors duration-150 ease-out" href="#rss">RSS</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+    function copyNpx() {
+      const text = "npx abhiuday";
+      navigator.clipboard.writeText(text);
+      const icon = document.getElementById("copy-icon");
+      if (icon) {
+        icon.textContent = "check";
+        icon.classList.add("text-status-emerald");
+        setTimeout(() => {
+          icon.textContent = "content_copy";
+          icon.classList.remove("text-status-emerald");
+        }, 1800);
+      }
+    }
+
+    function triggerCmdK() {
+      alert("Command Palette [⌘K]:\n\n• Search dispatches\n• Browse open-source crates\n• Filter by tags (eBPF, Rust, Kafka)\n• Trigger local benchmark profile");
+    }
+
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert("Verification dispatch scheduled. Check your terminal or reader inbox.");
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        triggerCmdK();
+      }
+    });
+  </script>
+</body></html>

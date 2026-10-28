@@ -1,0 +1,125 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { RSS_FEED_URL } from '../consts';
+
+const readers = [
+	{
+		name: 'Feedly',
+		href: `https://feedly.com/i/subscription/feed/${encodeURIComponent(RSS_FEED_URL)}`,
+	},
+	{
+		name: 'Inoreader',
+		href: `https://www.inoreader.com/?add_feed=${encodeURIComponent(RSS_FEED_URL)}`,
+	},
+	{
+		name: 'NewsBlur',
+		href: `https://newsblur.com/?url=${encodeURIComponent(RSS_FEED_URL)}`,
+	},
+];
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead
+			title="Subscribe via RSS"
+			description="Subscribe to the engineering journal RSS feed for immediate updates on software architecture, autonomous agents, and systems."
+		/>
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<!-- Subdued ambient dark radial halo -->
+		<div
+			class="pointer-events-none fixed top-0 left-1/2 -z-10 h-[500px] w-[950px] -translate-x-1/2 rounded-full ambient-glow blur-[120px]"
+			aria-hidden="true"
+		></div>
+
+		<Header />
+		<main class="layout-read py-12 md:py-16 space-y-10">
+			<header class="border-b border-border pb-8">
+				<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted mb-4">
+					<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+					<span>Open Syndication &bull; Zero Trackers</span>
+				</div>
+				<h1 class="text-3xl sm:text-4xl md:text-5xl font-sans font-semibold tracking-tight text-text">
+					Subscribe to Open Dispatches
+				</h1>
+				<p class="mt-3 text-base sm:text-lg text-text-muted leading-relaxed">
+					Follow every essay, systems architecture breakdown, and benchmark release note directly in your RSS reader.
+				</p>
+			</header>
+
+			<!-- Copyable RSS Box -->
+			<section class="rounded-xl border border-border bg-surface-card p-6 md:p-8 bento-card-glow space-y-4">
+				<label class="block font-mono text-xs text-text-muted uppercase tracking-wider" for="feed-url">
+					Raw RSS Feed URL
+				</label>
+				<div class="flex flex-col sm:flex-row gap-3">
+					<input
+						id="feed-url"
+						class="w-full rounded-lg border border-border bg-code-bg px-4 py-2.5 font-mono text-xs text-text outline-none focus:border-border-hover selection:bg-surface-card selection:text-text"
+						type="text"
+						value={RSS_FEED_URL}
+						readonly
+					/>
+					<button type="button" id="copy-feed-url" class="btn-primary shrink-0 cursor-pointer">
+						Copy Feed URL
+					</button>
+				</div>
+				<p class="mt-2 min-h-5 font-mono text-xs text-status-emerald" id="copy-status" aria-live="polite"></p>
+			</section>
+
+			<!-- Cloud Readers -->
+			<section class="space-y-4">
+				<h2 class="text-lg font-semibold text-text">Web &amp; Cloud Readers</h2>
+				<div class="flex flex-wrap gap-3">
+					{
+						readers.map((reader) => (
+							<a class="btn-secondary" href={reader.href} target="_blank" rel="noopener noreferrer">
+								<span>{reader.name}</span>
+								<span class="text-text-dim">&nearr;</span>
+							</a>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Desktop & Native Apps -->
+			<section class="rounded-xl border border-border bg-surface-card p-6 md:p-8 space-y-3">
+				<h2 class="text-lg font-semibold text-text">Native Desktop &amp; Terminal Readers</h2>
+				<p class="text-sm text-text-muted leading-relaxed">
+					Paste the feed URL into native clients like NetNewsWire, Reeder, ReadKit, or CLI readers like Newsboat and Tuir.
+				</p>
+				<p class="text-xs text-text-dim font-mono pt-2 border-t border-border">
+					Direct feed endpoint: <a class="text-text hover:underline" href={RSS_FEED_URL} target="_blank">{RSS_FEED_URL}</a>
+				</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<script is:inline>
+	(function () {
+		const input = document.getElementById('feed-url');
+		const button = document.getElementById('copy-feed-url');
+		const status = document.getElementById('copy-status');
+
+		if (!input || !button || !status) return;
+
+		button.addEventListener('click', async () => {
+			const url = input.value;
+			try {
+				await navigator.clipboard.writeText(url);
+				status.textContent = '✓ Feed URL copied to clipboard.';
+				setTimeout(() => { status.textContent = ''; }, 3000);
+			} catch {
+				input.select();
+				document.execCommand('copy');
+				status.textContent = '✓ Feed URL copied to clipboard.';
+				setTimeout(() => { status.textContent = ''; }, 3000);
+			}
+		});
+	})();
+</script>

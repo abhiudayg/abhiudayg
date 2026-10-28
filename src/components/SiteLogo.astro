@@ -1,0 +1,39 @@
+---
+interface Props {
+	size?: number;
+}
+
+const { size = 22 } = Astro.props;
+---
+
+<div class="flex items-center gap-2.5">
+	<svg
+		class="block shrink-0"
+		viewBox="0 0 24 24"
+		width={size}
+		height={size}
+		aria-hidden="true"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<!-- Vercel/Resend inspired geometric monogram -->
+		<rect x="2" y="2" width="20" height="20" rx="5" class="fill-surface-card stroke-border" stroke-width="1.2" />
+		<path
+			d="M7 17L12 7L17 17"
+			class="stroke-text"
+			stroke-width="1.8"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+		<path
+			d="M9 13.5H15"
+			class="stroke-status-emerald"
+			stroke-width="1.8"
+			stroke-linecap="round"
+		/>
+	</svg>
+	<span class="font-sans text-sm font-semibold tracking-tight text-text flex items-center gap-1">
+		<span>Abhiuday</span>
+		<span class="text-text-dim font-mono text-xs">.dev</span>
+	</span>
+</div>

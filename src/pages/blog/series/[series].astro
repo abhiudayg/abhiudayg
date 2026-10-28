@@ -1,0 +1,95 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import JsonLd from '../../../components/JsonLd.astro';
+import PostCard from '../../../components/PostCard.astro';
+import SeriesFilter from '../../../components/SeriesFilter.astro';
+import { BLOG_SERIES, BLOG_SERIES_SLUGS } from '../../../consts';
+import { getPostsBySeries, sortSeriesPosts } from '../../../utils/blog';
+import {
+	absoluteUrl,
+	breadcrumbJsonLd,
+	collectionPageJsonLd,
+	graphJsonLd,
+} from '../../../utils/seo';
+
+export async function getStaticPaths() {
+	return BLOG_SERIES_SLUGS.map((series) => ({
+		params: { series },
+	}));
+}
+
+const { series } = Astro.params;
+const meta = BLOG_SERIES[series as keyof typeof BLOG_SERIES];
+const posts = sortSeriesPosts(await getPostsBySeries(series as keyof typeof BLOG_SERIES));
+const pageUrl = absoluteUrl(`/blog/series/${series}/`, Astro.site);
+const schema = graphJsonLd(
+	collectionPageJsonLd({
+		name: `${meta.title} series`,
+		description: meta.description,
+		url: pageUrl,
+	}),
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'Blog', url: absoluteUrl('/blog/', Astro.site) },
+		{ name: meta.title, url: pageUrl },
+	]),
+);
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead title={`${meta.title} series`} description={meta.description} tags={[meta.title, series]} />
+		<JsonLd schema={schema} />
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<!-- Subdued ambient dark radial halo -->
+		<div
+			class="pointer-events-none fixed top-0 left-1/2 -z-10 h-[500px] w-[950px] -translate-x-1/2 rounded-full ambient-glow blur-[120px]"
+			aria-hidden="true"
+		></div>
+
+		<Header />
+		<main class="shell py-12 md:py-16 space-y-10">
+			<header class="border-b border-border pb-8">
+				<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted mb-4">
+					<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+					<span>Curated Architecture Track &bull; {meta.badge}</span>
+				</div>
+				<h1 class="text-3xl sm:text-4xl md:text-5xl font-sans font-semibold tracking-tight text-text">
+					#{meta.title}
+				</h1>
+				<p class="mt-3 text-base sm:text-lg text-text-muted leading-relaxed max-w-3xl">
+					{meta.description}
+				</p>
+				<div class="mt-6 flex flex-wrap gap-3">
+					{meta.repoUrl && (
+						<a class="btn-primary" href={meta.repoUrl} target="_blank" rel="noopener noreferrer">
+							<span>View Repository</span>
+							<span aria-hidden="true">&nearr;</span>
+						</a>
+					)}
+					<a class="btn-secondary" href="/blog">
+						<span>All Articles</span>
+						<span aria-hidden="true">&rarr;</span>
+					</a>
+				</div>
+			</header>
+
+			<SeriesFilter activeSeries={series} />
+
+			{
+				posts.length > 0 ? (
+					<ul class="post-grid">
+						{posts.map((post) => <PostCard post={post} showSeriesTag={false} />)}
+					</ul>
+				) : (
+					<p class="text-text-muted font-mono text-sm">No posts in this series yet.</p>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

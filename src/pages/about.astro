@@ -1,0 +1,78 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import JsonLd from '../components/JsonLd.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { AUTHOR_NAME, GITHUB_URL, SITE_DESCRIPTION } from '../consts';
+import { aboutPageJsonLd, graphJsonLd } from '../utils/seo';
+
+const description = `About ${AUTHOR_NAME} — Systems & AI Engineer, builder of autonomous agent runtimes, real-time distributed data pipelines, and developer infrastructure.`;
+const schema = graphJsonLd(aboutPageJsonLd(Astro.site));
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead title="About" description={description} />
+		<JsonLd schema={schema} />
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<!-- Subdued ambient dark radial halo -->
+		<div
+			class="pointer-events-none fixed top-0 left-1/2 -z-10 h-[500px] w-[950px] -translate-x-1/2 rounded-full ambient-glow blur-[120px]"
+			aria-hidden="true"
+		></div>
+
+		<Header />
+		<main class="layout-read py-12 md:py-16">
+			<article>
+				<header class="mb-10 border-b border-border pb-8">
+					<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted mb-4">
+						<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+						<span>Engineer &bull; Builder &bull; Open Source</span>
+					</div>
+					<h1 class="text-3xl sm:text-4xl md:text-5xl font-sans font-semibold tracking-tight text-text">
+						About {AUTHOR_NAME}
+					</h1>
+					<p class="mt-3 text-base sm:text-lg text-text-muted leading-relaxed">
+						{SITE_DESCRIPTION}
+					</p>
+				</header>
+
+				<div class="prose-content space-y-6">
+					<p>
+						Hi &mdash; I'm <strong>{AUTHOR_NAME}</strong>. I architect autonomous agent runtimes, real-time streaming data pipelines, and low-latency systems infrastructure. I started this space as an engineer's public lab: documenting internal designs, hard-learned production bugs, and open-source tooling as I build.
+					</p>
+
+					<h2 class="text-2xl font-semibold text-text pt-4">Engineering Focus</h2>
+					<p>
+						My day-to-day work centers on three complementary layers:
+					</p>
+					<ul class="list-disc pl-5 space-y-2 text-text-muted">
+						<li>
+							<strong class="text-text">Autonomous Agent Runtimes &amp; Tools:</strong> Hierarchical intent planning, DAG validation with approval gates, headless browser execution sandboxes, and local MCP routing under deterministic token constraints (e.g., <a href="/blog/series/agent-brain/">agent-brain</a>, <a href="/blog/series/agentrun/">agentrun</a>, <a href="/blog/series/agent-spine/">agent-spine</a>, <a href="/blog/series/harbor/">harbor</a>).
+						</li>
+						<li>
+							<strong class="text-text">Performance Systems &amp; Tooling:</strong> Blazing-fast desktop disk visualizers in Rust &amp; Tauri (<a href="/blog/series/dustmap/">dustmap</a>) with parallel Rayon file walks and minimal memory footprint.
+						</li>
+					</ul>
+
+					<h2 class="text-2xl font-semibold text-text pt-4">The Zero-Tracker Ethos</h2>
+					<p>
+						This site is built with pure web standards: zero client-side surveillance, zero marketing tracking pixels, and zero paywalls. Everything is syndicated transparently via <a href="/rss.xml">full-text RSS</a>.
+					</p>
+
+					<h2 class="text-2xl font-semibold text-text pt-4">Connect &amp; Collaborate</h2>
+					<p>
+						I share source code on GitHub, post technical musings on X, and publish technical write-ups here. Feel free to explore:
+					</p>
+					<div class="pt-2">
+						<SocialLinks class="justify-start" />
+					</div>
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

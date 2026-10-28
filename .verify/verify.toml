@@ -1,0 +1,11 @@
+[verify]
+commands = [
+  "bun test",
+  "bun run build",
+  "astro build",
+  ".verify/",
+]
+
+[verify.default]
+command = ["bun", "test"]
+timeout_secs = 300

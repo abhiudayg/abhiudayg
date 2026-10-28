@@ -1,0 +1,284 @@
+---
+import { BLOG_SERIES } from '../consts';
+import { getSortedPosts } from '../utils/blog';
+
+const allPosts = await getSortedPosts();
+const seriesEntries = Object.entries(BLOG_SERIES);
+---
+
+<!-- Global Command Palette Modal (Universal across all pages) -->
+<div
+	id="global-cmdk"
+	class="fixed inset-0 z-[9999] hidden items-start justify-center p-4 pt-16 sm:pt-24 bg-black/80 backdrop-blur-md transition-opacity duration-150"
+	role="dialog"
+	aria-modal="true"
+	aria-label="Command search palette"
+>
+	<div
+		class="w-full max-w-xl rounded-xl border border-border bg-surface-card shadow-card overflow-hidden transition-all transform scale-100 flex flex-col max-h-[80vh]"
+		id="cmdk-modal-content"
+	>
+		<!-- Input Bar -->
+		<div class="flex items-center gap-3 px-4 py-3.5 border-b border-border bg-bg-elevated shrink-0">
+			<svg class="w-4 h-4 text-text-dim shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+			</svg>
+			<input
+				type="text"
+				id="global-cmdk-input"
+				placeholder="Search essays, systems, or commands... (↑↓ to navigate, ↵ to select)"
+				class="w-full bg-transparent text-sm text-text outline-none placeholder:text-text-dim font-mono"
+				autocomplete="off"
+				spellcheck="false"
+			/>
+			<kbd
+				class="px-2 py-0.5 rounded bg-bg-subtle border border-border text-[11px] font-mono text-text-muted cursor-pointer hover:text-text"
+				id="global-cmdk-close"
+				title="Press ESC to close"
+			>
+				ESC
+			</kbd>
+		</div>
+
+		<!-- Scrollable Search Results -->
+		<div class="p-2 space-y-2 overflow-y-auto font-mono text-xs flex-1" id="global-cmdk-results">
+			<!-- Quick Navigation -->
+			<div class="cmdk-group" id="cmdk-quick-nav">
+				<div class="px-3 py-1.5 text-text-dim text-[10px] uppercase tracking-wider font-semibold">Navigation</div>
+				<a href="/" class="cmdk-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline">
+					<span>Home</span>
+					<span class="text-text-dim text-[10px]">&rarr;</span>
+				</a>
+				<a href="/blog" class="cmdk-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline">
+					<span>Essays &amp; Archive ({allPosts.length} posts)</span>
+					<span class="text-text-dim text-[10px]">&rarr;</span>
+				</a>
+				<a href="/#systems" class="cmdk-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline">
+					<span>Featured Systems &amp; Runtimes</span>
+					<span class="text-text-dim text-[10px]">&rarr;</span>
+				</a>
+				<a href="/about" class="cmdk-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline">
+					<span>About &amp; Manifesto</span>
+					<span class="text-text-dim text-[10px]">&rarr;</span>
+				</a>
+				<a href="/subscribe" class="cmdk-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline">
+					<span>RSS Syndication (/rss.xml)</span>
+					<span class="text-text-dim text-[10px]">&rarr;</span>
+				</a>
+			</div>
+
+			<!-- Systems -->
+			<div class="cmdk-group pt-1 border-t border-border" id="cmdk-systems-group">
+				<div class="px-3 py-1.5 text-text-dim text-[10px] uppercase tracking-wider font-semibold">Systems &amp; Repositories</div>
+				{seriesEntries.map(([slug, s]) => (
+					<a
+						href={s.repoUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="cmdk-item cmdk-searchable-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline"
+						data-keywords={`${s.title} ${s.description} ${s.badge} system repository github ${slug}`.toLowerCase()}
+					>
+						<div class="truncate mr-2">
+							<span class="text-text font-medium">{s.title}</span>
+							<span class="text-text-dim text-[11px] ml-1.5">&bull; {s.badge}</span>
+						</div>
+						<span class="text-text-dim text-[10px] shrink-0 font-mono">GitHub &nearr;</span>
+					</a>
+				))}
+			</div>
+
+			<!-- Technical Essays -->
+			<div class="cmdk-group pt-1 border-t border-border" id="cmdk-essays-group">
+				<div class="px-3 py-1.5 text-text-dim text-[10px] uppercase tracking-wider font-semibold">Technical Essays</div>
+				{allPosts.map((post) => (
+					<a
+						href={`/blog/${post.id}/`}
+						class="cmdk-item cmdk-searchable-item flex items-center justify-between px-3 py-2 rounded-lg text-text-muted hover:bg-bg-subtle hover:text-text no-underline"
+						data-keywords={`${post.data.title} ${post.data.description} ${post.data.series ?? ''} ${post.id}`.toLowerCase()}
+					>
+						<div class="truncate mr-2">
+							<span class="text-text font-medium">{post.data.title}</span>
+							{post.data.series && (
+								<span class="text-text-dim text-[10px] ml-1.5 font-mono">#{post.data.series}</span>
+							)}
+						</div>
+						<span class="text-text-dim text-[10px] shrink-0 font-mono">&rarr;</span>
+					</a>
+				))}
+			</div>
+
+			<!-- Empty Search Feedback -->
+			<div id="cmdk-no-results" class="hidden px-4 py-8 text-center text-text-dim">
+				<p class="m-0 text-xs">No matching dispatches, systems, or commands found.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script is:inline>
+	(function () {
+		let palette = document.getElementById('global-cmdk');
+		let input = document.getElementById('global-cmdk-input');
+		let closeBtn = document.getElementById('global-cmdk-close');
+		let quickNav = document.getElementById('cmdk-quick-nav');
+		let systemsGroup = document.getElementById('cmdk-systems-group');
+		let essaysGroup = document.getElementById('cmdk-essays-group');
+		let noResults = document.getElementById('cmdk-no-results');
+		let selectedIndex = -1;
+
+		function ensureInBody() {
+			if (!palette) palette = document.getElementById('global-cmdk');
+			if (palette && palette.parentElement !== document.body) {
+				document.body.appendChild(palette);
+			}
+		}
+
+		function getVisibleItems() {
+			const allItems = Array.from(document.querySelectorAll('#global-cmdk .cmdk-item'));
+			return allItems.filter(item => {
+				const isHidden = item.style.display === 'none' || item.closest('.cmdk-group')?.style.display === 'none';
+				return !isHidden;
+			});
+		}
+
+		function updateHighlight(items) {
+			items.forEach((item, idx) => {
+				if (idx === selectedIndex) {
+					item.classList.add('bg-bg-subtle', 'text-text', 'ring-1', 'ring-border-hover');
+					item.scrollIntoView({ block: 'nearest' });
+				} else {
+					item.classList.remove('bg-bg-subtle', 'text-text', 'ring-1', 'ring-border-hover');
+				}
+			});
+		}
+
+		function openPalette() {
+			ensureInBody();
+			if (!palette) return;
+			palette.classList.remove('hidden');
+			palette.classList.add('flex');
+			document.body.style.overflow = 'hidden';
+			if (input) {
+				input.value = '';
+				filterPalette('');
+				setTimeout(() => input.focus(), 60);
+			}
+		}
+
+		function closePalette() {
+			if (!palette) return;
+			palette.classList.add('hidden');
+			palette.classList.remove('flex');
+			document.body.style.overflow = '';
+			selectedIndex = -1;
+		}
+
+		function filterPalette(rawQuery) {
+			const query = rawQuery.trim().toLowerCase();
+			const searchableItems = document.querySelectorAll('.cmdk-searchable-item');
+			let systemMatches = 0;
+			let essayMatches = 0;
+
+			searchableItems.forEach((item) => {
+				const keywords = item.getAttribute('data-keywords') || '';
+				const isSystem = item.closest('#cmdk-systems-group') !== null;
+				const matches = !query || keywords.includes(query);
+
+				if (matches) {
+					item.style.display = '';
+					if (isSystem) systemMatches++;
+					else essayMatches++;
+				} else {
+					item.style.display = 'none';
+				}
+			});
+
+			if (quickNav) {
+				quickNav.style.display = query ? 'none' : '';
+			}
+
+			if (systemsGroup) {
+				systemsGroup.style.display = (!query || systemMatches > 0) ? '' : 'none';
+			}
+
+			if (essaysGroup) {
+				essaysGroup.style.display = (!query || essayMatches > 0) ? '' : 'none';
+			}
+
+			const totalMatches = (query ? 0 : 5) + systemMatches + essayMatches;
+			if (noResults) {
+				noResults.classList.toggle('hidden', totalMatches > 0);
+			}
+
+			selectedIndex = totalMatches > 0 ? 0 : -1;
+			updateHighlight(getVisibleItems());
+		}
+
+		// Mount setup
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', ensureInBody);
+		} else {
+			ensureInBody();
+		}
+
+		// Triggers on document & window
+		document.addEventListener('open-cmdk', openPalette);
+		window.addEventListener('open-cmdk', openPalette);
+
+		if (closeBtn) closeBtn.addEventListener('click', closePalette);
+
+		if (palette) {
+			palette.addEventListener('click', (e) => {
+				if (e.target === palette) closePalette();
+			});
+		}
+
+		if (input) {
+			input.addEventListener('input', (e) => {
+				filterPalette(e.target.value);
+			});
+
+			input.addEventListener('keydown', (e) => {
+				const visibleItems = getVisibleItems();
+				if (!visibleItems.length) return;
+
+				if (e.key === 'ArrowDown') {
+					e.preventDefault();
+					selectedIndex = (selectedIndex + 1) % visibleItems.length;
+					updateHighlight(visibleItems);
+				} else if (e.key === 'ArrowUp') {
+					e.preventDefault();
+					selectedIndex = (selectedIndex - 1 + visibleItems.length) % visibleItems.length;
+					updateHighlight(visibleItems);
+				} else if (e.key === 'Enter') {
+					e.preventDefault();
+					if (selectedIndex >= 0 && selectedIndex < visibleItems.length) {
+						visibleItems[selectedIndex].click();
+						closePalette();
+					}
+				}
+			});
+		}
+
+		// Keyboard Shortcuts (⌘K, Ctrl+K, /, or ESC)
+		window.addEventListener('keydown', (e) => {
+			const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+			const isCmdK = (e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K' || e.code === 'KeyK');
+			const isSlash = e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA';
+
+			if (isCmdK || isSlash) {
+				e.preventDefault();
+				if (palette && !palette.classList.contains('hidden')) {
+					closePalette();
+				} else {
+					openPalette();
+				}
+			}
+
+			if (e.key === 'Escape' && palette && !palette.classList.contains('hidden')) {
+				e.preventDefault();
+				closePalette();
+			}
+		});
+	})();
+</script>

@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { BLOG_SERIES, type BlogSeriesSlug } from '../consts';
+import FormattedDate from './FormattedDate.astro';
+import PartTag from './PartTag.astro';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	showSeriesTag?: boolean;
+}
+
+const { post, showSeriesTag = true } = Astro.props;
+const { title, description, pubDate, series, seriesPart } = post.data;
+const seriesMeta = series ? BLOG_SERIES[series as BlogSeriesSlug] : null;
+---
+
+<li>
+	<a class="post-card group bento-card-glow" href={`/blog/${post.id}/`} aria-label={`Read ${title}`}>
+		<div class="mb-3.5 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+			<p class="m-0 text-text-dim">
+				<FormattedDate date={pubDate} />
+			</p>
+			{showSeriesTag && seriesMeta && (
+				<span class="tag-pill text-text font-medium">
+					#{seriesMeta.title}
+				</span>
+			)}
+		</div>
+
+		<div class="post-card-body">
+			<h2 class="post-card-title group-hover:text-accent font-sans">
+				{title}
+			</h2>
+			<p class="post-card-description">
+				{description}
+			</p>
+		</div>
+
+		<div class="post-card-footer">
+			<span class="inline-flex items-center gap-1 font-mono text-xs text-text group-hover:translate-x-0.5 transition-transform">
+				<span>Read entry</span>
+				<span aria-hidden="true">&rarr;</span>
+			</span>
+			{seriesPart ? <PartTag part={seriesPart} /> : null}
+		</div>
+	</a>
+</li>

@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import Pagination from '../../../components/Pagination.astro';
+import PostCard from '../../../components/PostCard.astro';
+import SeriesFilter from '../../../components/SeriesFilter.astro';
+import { POSTS_PER_PAGE, SITE_TITLE } from '../../../consts';
+import { getExtraPaginationPages, getSortedPosts, paginatePosts } from '../../../utils/blog';
+
+export async function getStaticPaths() {
+	const posts = await getSortedPosts();
+	return getExtraPaginationPages(posts.length, POSTS_PER_PAGE).map((page) => ({
+		params: { page: String(page) },
+	}));
+}
+
+const page = Number(Astro.params.page);
+if (!Number.isInteger(page) || page < 2) {
+	return Astro.redirect('/blog/');
+}
+
+const posts = await getSortedPosts();
+const pagination = paginatePosts(posts, page, POSTS_PER_PAGE);
+
+if (pagination.currentPage !== page) {
+	return Astro.redirect('/blog/');
+}
+
+const description = `Older posts from the ${SITE_TITLE} archive — page ${pagination.currentPage} of ${pagination.totalPages}.`;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead title={`Blog — page ${pagination.currentPage}`} description={description} />
+		{
+			pagination.currentPage > 1 && (
+				<link rel="prev" href={pagination.currentPage === 2 ? '/blog/' : `/blog/page/${pagination.currentPage - 1}/`} />
+			)
+		}
+		{
+			pagination.currentPage < pagination.totalPages && (
+				<link rel="next" href={`/blog/page/${pagination.currentPage + 1}/`} />
+			)
+		}
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<div
+			class="pointer-events-none fixed top-0 left-1/2 -z-10 h-[500px] w-[950px] -translate-x-1/2 rounded-full ambient-glow blur-[120px]"
+			aria-hidden="true"
+		></div>
+
+		<Header />
+		<main class="shell py-12 md:py-16 space-y-10">
+			<header class="border-b border-border pb-8">
+				<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted mb-4">
+					<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+					<span>Archive &bull; Page {pagination.currentPage} of {pagination.totalPages}</span>
+				</div>
+				<h1 class="text-3xl sm:text-4xl md:text-5xl font-sans font-semibold tracking-tight text-text">
+					Technical Essays &amp; Archive
+				</h1>
+				<p class="mt-3 text-base sm:text-lg text-text-muted leading-relaxed">
+					{description}
+				</p>
+			</header>
+
+			<SeriesFilter />
+
+			<ul class="post-grid">
+				{pagination.items.map((post) => <PostCard post={post} />)}
+			</ul>
+
+			<Pagination
+				currentPage={pagination.currentPage}
+				totalPages={pagination.totalPages}
+				basePath="/blog"
+			/>
+		</main>
+		<Footer />
+	</body>
+</html>

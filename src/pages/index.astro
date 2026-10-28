@@ -1,0 +1,610 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { BLOG_SERIES, GITHUB_URL, RSS_FEED_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getSortedPosts } from '../utils/blog';
+import { graphJsonLd, websiteJsonLd } from '../utils/seo';
+
+const allPosts = await getSortedPosts();
+const schema = graphJsonLd(websiteJsonLd(Astro.site));
+
+const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
+	slug,
+	...meta,
+	count: allPosts.filter((p) => p.data.series === slug).length,
+}));
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<JsonLd schema={schema} />
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<!-- Framer-Style Animated Moving Gradient Grid Background -->
+		<div class="framer-grid-container" aria-hidden="true" id="framer-bg">
+			<div class="framer-orb-1"></div>
+			<div class="framer-orb-2"></div>
+			<div class="framer-spotlight" id="framer-spotlight"></div>
+			<div class="framer-grid-overlay"></div>
+		</div>
+
+		<Header />
+
+		<main class="shell py-10 sm:py-16 md:py-20 space-y-20 md:space-y-28">
+			<!-- 1. Hero Section -->
+			<section class="relative space-y-6 sm:space-y-8 max-w-4xl">
+				<!-- Status Badge / Pill (Resend style) -->
+				<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-[11px] sm:text-xs text-text-muted">
+					<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+					<span>Systems &amp; AI Engineer &bull; Open Source Craftsman</span>
+				</div>
+
+				<!-- Headline & Position -->
+				<div class="space-y-3 sm:space-y-4">
+					<h1 class="text-3xl sm:text-5xl md:text-6xl font-sans font-semibold tracking-[-0.035em] text-text leading-[1.12]">
+						Abhiuday &mdash; Systems &amp; AI Engineer. <span class="text-text-muted font-normal">Documenting the build, one commit at a time.</span>
+					</h1>
+
+					<p class="text-sm sm:text-base md:text-lg text-text-muted leading-relaxed max-w-2xl font-sans">
+						Architecting autonomous agent runtimes, deterministic DAG workflow engines, and low-latency sandboxing infrastructure. Documenting internal design decisions and production post-mortems.
+					</p>
+				</div>
+
+				<!-- Clean Action CTAs (Fluent Resend style) -->
+				<div class="flex flex-wrap items-center gap-3 pt-2">
+					<a class="btn-primary" href="#essays">
+						<span>Read Latest Dispatch</span>
+						<span aria-hidden="true">&rarr;</span>
+					</a>
+					<a class="btn-secondary" href="#systems">
+						<span>Explore Systems</span>
+						<span aria-hidden="true">&darr;</span>
+					</a>
+					<a class="btn-secondary" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+						<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+							<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+						</svg>
+						<span>GitHub (@abhiudayg)</span>
+					</a>
+					<a class="btn-secondary" href="/subscribe">
+						<svg class="w-3.5 h-3.5 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+						</svg>
+						<span>RSS Feed</span>
+					</a>
+				</div>
+
+				<!-- Resend-Style Capability Pills (Replaces fake vanity stats with authentic badges) -->
+				<div class="flex flex-wrap items-center gap-2 pt-6 border-t border-border font-mono text-xs text-text-dim">
+					<span class="tag-pill text-text">Autonomous Agent Runtimes</span>
+					<span class="text-border-hover">&bull;</span>
+					<span class="tag-pill text-text">Local MCP Routing</span>
+					<span class="text-border-hover">&bull;</span>
+					<span class="tag-pill text-text">MicroVM Sandboxing</span>
+					<span class="text-border-hover">&bull;</span>
+					<span class="tag-pill text-text">100% Zero-Tracker RSS</span>
+				</div>
+			</section>
+
+			<!-- 2. Featured Systems Bento Grid with GitHub Icons & Live Interactive DAG -->
+			<section class="space-y-6 scroll-mt-20" id="systems">
+				<div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-border pb-4 gap-3">
+					<div>
+						<span class="font-mono text-xs text-text-dim uppercase tracking-wider">// Engineered Artifacts</span>
+						<h2 class="text-2xl sm:text-3xl font-semibold text-text mt-1 tracking-tight">Featured Systems &amp; Runtimes</h2>
+					</div>
+
+					<!-- Interactive Category Filter Tabs -->
+					<div class="flex items-center gap-1.5 font-mono text-xs overflow-x-auto pb-1 sm:pb-0" id="system-filter-tabs">
+						<button type="button" class="system-tab-btn active px-2.5 py-1 rounded-md bg-surface-card border border-border text-text font-medium cursor-pointer transition-colors" data-filter="all">All (5)</button>
+						<button type="button" class="system-tab-btn px-2.5 py-1 rounded-md bg-transparent border border-transparent text-text-dim hover:text-text cursor-pointer transition-colors" data-filter="ai">AI Agents</button>
+						<button type="button" class="system-tab-btn px-2.5 py-1 rounded-md bg-transparent border border-transparent text-text-dim hover:text-text cursor-pointer transition-colors" data-filter="systems">Rust &amp; Sandboxing</button>
+					</div>
+				</div>
+
+				<!-- Bento Grid (Harmonic 12 Columns: Row 1 = 8+4, Row 2 = 4+4+4) -->
+				<div class="grid grid-cols-1 md:grid-cols-12 gap-5" id="bento-grid-container">
+					<!-- Bento Card 1: Large Span (Col 12 md:8) agent-brain -->
+					<div class="system-card md:col-span-8 bg-surface-card border border-border rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6" data-category="ai systems">
+						<div class="space-y-3">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg bg-bg-subtle border border-border flex items-center justify-center text-status-emerald shrink-0">
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+										</svg>
+									</div>
+									<h3 class="text-xl font-semibold text-text tracking-tight">agent-brain</h3>
+									<span class="px-2 py-0.5 rounded bg-bg border border-border font-mono text-[11px] text-text-muted">v0.9.4-rc</span>
+								</div>
+								
+								<!-- GitHub Direct Button -->
+								<a
+									class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text hover:border-border-hover transition-colors font-mono text-xs no-underline"
+									href="https://github.com/autonomic-ai-dev/agent-brain"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="View agent-brain on GitHub"
+								>
+									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+									</svg>
+									<span>GitHub</span>
+									<span aria-hidden="true">&nearr;</span>
+								</a>
+							</div>
+							<p class="text-sm text-text-muted leading-relaxed">
+								Autonomous hierarchical planning and memory runtime for multi-agent swarms with local MCP vector routing under token budget. Tokio channels, dynamic validation, and zero-copy gRPC serialization.
+							</p>
+						</div>
+
+						<!-- Interactive Live DAG Playground Visualizer -->
+						<div class="bg-code-bg border border-border rounded-lg p-4 font-mono text-xs space-y-3">
+							<div class="flex items-center justify-between text-text-dim text-[11px] border-b border-border pb-2">
+								<span class="flex items-center gap-1.5">
+									<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+									<span>Interactive DAG Engine &bull; Click nodes to inspect</span>
+								</span>
+								<span class="text-status-emerald font-medium" id="dag-mode-label">tokio::sync::broadcast</span>
+							</div>
+
+							<!-- Clickable Node Pipeline -->
+							<div class="overflow-x-auto py-1">
+								<div class="flex items-center gap-2 min-w-max text-xs">
+									<button
+										type="button"
+										class="dag-node-btn px-2.5 py-1 rounded bg-surface-card border border-status-emerald text-text cursor-pointer hover:border-border-hover transition-colors font-mono"
+										onclick="inspectDagStage('intent')"
+										id="node-intent"
+									>
+										<span class="text-status-emerald">&gt;</span> Intent Planner
+									</button>
+									<span class="text-text-dim">&mdash;(mpsc)&rarr;</span>
+									<button
+										type="button"
+										class="dag-node-btn px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted cursor-pointer hover:border-border-hover transition-colors font-mono"
+										onclick="inspectDagStage('validator')"
+										id="node-validator"
+									>
+										Hierarchical Validator
+									</button>
+									<span class="text-text-dim">&mdash;(gRPC)&rarr;</span>
+									<button
+										type="button"
+										class="dag-node-btn px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted cursor-pointer hover:border-border-hover transition-colors font-mono"
+										onclick="inspectDagStage('dispatcher')"
+										id="node-dispatcher"
+									>
+										Tool Dispatcher
+									</button>
+								</div>
+							</div>
+
+							<!-- Live Telemetry Terminal -->
+							<div class="p-2.5 rounded bg-bg border border-border text-[11px] font-mono text-text-dim space-y-1" id="dag-stage-info">
+								<div class="flex justify-between text-text">
+									<span class="text-status-emerald font-semibold">Active Stage: Intent Planner</span>
+									<span class="text-text-dim">IPC: zero-copy active</span>
+								</div>
+								<div class="text-text-muted">
+									Breakdown: decompose goal into acyclic task graphs &bull; mean latency: 120&mu;s &bull; memory: zero-alloc
+								</div>
+							</div>
+						</div>
+
+						<!-- Tags & Action -->
+						<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border font-mono text-xs">
+							<span class="tag-pill">Rust</span>
+							<span class="tag-pill">Tokio</span>
+							<span class="tag-pill">gRPC</span>
+							<span class="tag-pill">SQLite WAL</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline flex items-center gap-1" href="/blog/series/agent-brain/">
+								<span>Read series breakdown</span>
+								<span aria-hidden="true">&rarr;</span>
+							</a>
+						</div>
+					</div>
+
+					<!-- Bento Card 2: dustmap (Col 12 md:4) -->
+					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-5" data-category="systems">
+						<div class="space-y-3">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-2">
+									<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
+									<h3 class="text-lg font-semibold text-text tracking-tight">dustmap</h3>
+								</div>
+								
+								<a
+									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+									href="https://github.com/abhiudayg/dustmap"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="View dustmap on GitHub"
+								>
+									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+									</svg>
+									<span>&nearr;</span>
+								</a>
+							</div>
+							<p class="text-sm text-text-muted leading-relaxed">
+								Blazing-fast macOS disk space visualizer and conservative system cleaner in Rust &amp; Tauri.
+							</p>
+						</div>
+
+						<div class="p-3 bg-code-bg border border-border rounded-lg font-mono text-xs text-text-dim space-y-1.5">
+							<div class="flex justify-between">
+								<span>Scan speed:</span>
+								<span class="text-text font-medium">&lt; 12ms / 85k files</span>
+							</div>
+							<div class="flex justify-between">
+								<span>Memory footprint:</span>
+								<span class="text-text font-medium">&lt; 28MB RSS</span>
+							</div>
+							<div class="flex justify-between">
+								<span>Engine:</span>
+								<span class="text-status-emerald">Rayon parallel walk</span>
+							</div>
+						</div>
+
+						<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border font-mono text-xs">
+							<span class="tag-pill">Rust</span>
+							<span class="tag-pill">Tauri</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/dustmap/">
+								Series &rarr;
+							</a>
+						</div>
+					</div>
+
+					<!-- Bento Card 3: agentrun (Col 12 md:4) -->
+					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
+						<div class="space-y-2">
+							<div class="flex items-center justify-between">
+								<h3 class="text-base font-semibold text-text tracking-tight">agentrun</h3>
+								
+								<a
+									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+									href="https://github.com/autonomic-ai-dev/agentrun"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="View agentrun on GitHub"
+								>
+									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+									</svg>
+									<span>&nearr;</span>
+								</a>
+							</div>
+							<p class="text-xs text-text-muted leading-relaxed">
+								Isolated, recoverable coding agent runtimes with container sandboxing and strict eBPF syscall filtering (4ms boot).
+							</p>
+						</div>
+						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
+							<span class="tag-pill">Containers</span>
+							<span class="tag-pill">eBPF</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/agentrun/">
+								View &rarr;
+							</a>
+						</div>
+					</div>
+
+					<!-- Bento Card 4: agent-spine (Col 12 md:4) -->
+					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
+						<div class="space-y-2">
+							<div class="flex items-center justify-between">
+								<h3 class="text-base font-semibold text-text tracking-tight">agent-spine</h3>
+								
+								<a
+									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+									href="https://github.com/autonomic-ai-dev/agent-spine"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="View agent-spine on GitHub"
+								>
+									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+									</svg>
+									<span>&nearr;</span>
+								</a>
+							</div>
+							<p class="text-xs text-text-muted leading-relaxed">
+								Deterministic multi-step DAG workflow runner with approval gates, state machine orchestration, and deterministic replay.
+							</p>
+						</div>
+						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
+							<span class="tag-pill">Rust</span>
+							<span class="tag-pill">Tokio</span>
+							<span class="tag-pill">YAML DAG</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/agent-spine/">
+								View &rarr;
+							</a>
+						</div>
+					</div>
+
+					<!-- Bento Card 5: harbor (Col 12 md:4) -->
+					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
+						<div class="space-y-2">
+							<div class="flex items-center justify-between">
+								<h3 class="text-base font-semibold text-text tracking-tight">harbor</h3>
+								
+								<a
+									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+									href="https://github.com/autonomic-ai-dev/harbor"
+									target="_blank"
+									rel="noopener noreferrer"
+									aria-label="View harbor on GitHub"
+								>
+									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+									</svg>
+									<span>&nearr;</span>
+								</a>
+							</div>
+							<p class="text-xs text-text-muted leading-relaxed">
+								Headless browser execution engine and DOM inspection sandbox designed specifically for autonomous agents and verification.
+							</p>
+						</div>
+						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
+							<span class="tag-pill">TypeScript</span>
+							<span class="tag-pill">Playwright</span>
+							<span class="tag-pill">CDP</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/harbor/">
+								View &rarr;
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- 3. Recent Engineering Dispatches (Blog Section) -->
+			<section class="space-y-6 scroll-mt-20" id="essays">
+				<div class="flex items-end justify-between border-b border-border pb-3">
+					<div>
+						<span class="font-mono text-xs text-text-dim uppercase tracking-wider">// Publications &amp; Post-Mortems</span>
+						<h2 class="text-2xl sm:text-3xl font-semibold text-text mt-1 tracking-tight">Recent Engineering Dispatches</h2>
+					</div>
+					<a class="font-mono text-xs text-text-muted hover:text-text transition-colors no-underline flex items-center gap-1" href="/blog">
+						<span>View Archive ({allPosts.length} posts)</span>
+						<span aria-hidden="true">&rarr;</span>
+					</a>
+				</div>
+
+				<!-- Essay List (Vercel / Resend clean row design) -->
+				<div class="divide-y divide-border rounded-xl border border-border bg-surface-card overflow-hidden">
+					{allPosts.slice(0, 5).map((post) => (
+						<a class="p-5 sm:p-6 block hover:bg-bg-subtle transition-colors duration-150 no-underline text-inherit group" href={`/blog/${post.id}/`}>
+							<div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+								<div class="space-y-1.5 max-w-3xl">
+									<div class="flex items-center gap-2 font-mono text-xs">
+										{post.data.series && (
+											<span class="tag-pill text-text font-medium">
+												#{BLOG_SERIES[post.data.series as keyof typeof BLOG_SERIES]?.title ?? post.data.series}
+											</span>
+										)}
+										<span class="text-text-dim">
+											<FormattedDate date={post.data.pubDate} />
+										</span>
+									</div>
+									<h3 class="text-base sm:text-lg font-medium text-text group-hover:text-accent transition-colors">
+										{post.data.title}
+									</h3>
+									<p class="text-xs sm:text-sm text-text-muted line-clamp-2 m-0">
+										{post.data.description}
+									</p>
+								</div>
+								<div class="flex items-center gap-1 font-mono text-xs text-text-dim group-hover:text-text transition-colors shrink-0 pt-2 md:pt-0">
+									<span>Read dispatch</span>
+									<span class="group-hover:translate-x-0.5 transition-transform" aria-hidden="true">&rarr;</span>
+								</div>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- 4. Curated Architecture Tracks -->
+			<section class="space-y-6 scroll-mt-20" id="series">
+				<div class="border-b border-border pb-3">
+					<span class="font-mono text-xs text-text-dim uppercase tracking-wider">// Systems Engineering In-Depth</span>
+					<h2 class="text-2xl sm:text-3xl font-semibold text-text mt-1 tracking-tight">Deep Architectural Series</h2>
+					<p class="text-xs sm:text-sm text-text-muted mt-1">
+						Multi-part explorations tackling specific engineering challenges from architecture to production.
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+					{seriesList.map((series, idx) => (
+						<div class="series-card group bento-card-glow">
+							<div class="space-y-3">
+								<div class="flex items-center justify-between font-mono text-xs">
+									<span class="text-status-emerald font-semibold">Track 0{idx + 1}</span>
+									<span class="tag-pill">
+										{series.count} {series.count === 1 ? 'part' : 'parts'}
+									</span>
+								</div>
+
+								<h3 class="text-base sm:text-lg font-medium text-text group-hover:text-accent transition-colors">
+									<a class="text-inherit no-underline" href={`/blog/series/${series.slug}/`}>
+										{series.title}
+									</a>
+								</h3>
+
+								<p class="text-xs leading-relaxed text-text-muted">
+									{series.description}
+								</p>
+							</div>
+
+							<div class="mt-6 pt-4 border-t border-border flex items-center justify-between font-mono text-xs">
+								<a class="text-text hover:text-accent no-underline flex items-center gap-1" href={`/blog/series/${series.slug}/`}>
+									<span>Read track</span>
+									<span aria-hidden="true">&rarr;</span>
+								</a>
+								{series.repoUrl && (
+									<a class="text-text-dim hover:text-text no-underline" href={series.repoUrl} target="_blank" rel="noopener noreferrer">
+										GitHub &nearr;
+									</a>
+								)}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- 5. Resend-Inspired RSS & Syndication Banner -->
+			<section class="rounded-xl border border-border bg-surface-card p-6 sm:p-10 bento-card-glow relative overflow-hidden" id="rss">
+				<div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
+					<div class="space-y-3 md:col-span-7">
+						<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-bg border border-border font-mono text-xs text-text-muted">
+							<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+							<span>Zero Spam &bull; Terminal &amp; RSS Friendly</span>
+						</div>
+						<h2 class="text-2xl sm:text-3xl font-semibold text-text tracking-tight">
+							Open Syndication for Engineers
+						</h2>
+						<p class="text-xs sm:text-sm text-text-muted leading-relaxed max-w-xl">
+							No algorithmic feeds, paywalls, or tracking pixels. Subscribe via open RSS feed in your favorite reader (NetNewsWire, Feedly, Reeder, Readwise) to receive essays immediately when they ship.
+						</p>
+					</div>
+
+					<div class="space-y-3 md:col-span-5">
+						<div class="flex items-center gap-2 rounded-lg border border-border bg-code-bg p-2 font-mono text-xs">
+							<input
+								type="text"
+								readonly
+								value={RSS_FEED_URL}
+								class="w-full bg-transparent px-2 text-text outline-none selection:bg-surface-card selection:text-text"
+								aria-label="RSS Feed URL"
+								id="rss-input"
+							/>
+							<button
+								type="button"
+								class="shrink-0 rounded bg-surface-card border border-border px-3 py-1.5 text-xs text-text hover:border-border-hover transition-colors cursor-pointer"
+								id="rss-copy-btn"
+								onclick="copyRssUrl()"
+							>
+								Copy RSS
+							</button>
+						</div>
+						<div class="flex items-center justify-between text-xs text-text-dim font-mono">
+							<a class="text-text hover:underline" href="/subscribe">Feed guide &rarr;</a>
+							<a class="text-text-dim hover:text-text" href="/rss.xml" target="_blank">Direct XML link &nearr;</a>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<Footer />
+
+		<!-- Interactive Client-side Motion & DevEx Script -->
+		<script is:inline>
+			// Framer-style interactive mouse spotlight tracking
+			const bgContainer = document.getElementById('framer-bg');
+			if (bgContainer && window.matchMedia('(pointer: fine)').matches) {
+				window.addEventListener('mousemove', (e) => {
+					const x = (e.clientX / window.innerWidth) * 100;
+					const y = (e.clientY / window.innerHeight) * 100;
+					bgContainer.style.setProperty('--mouse-x', x + '%');
+					bgContainer.style.setProperty('--mouse-y', y + '%');
+				}, { passive: true });
+			}
+
+			function copyRssUrl() {
+				const input = document.getElementById('rss-input');
+				if (input) {
+					navigator.clipboard.writeText(input.value);
+					const btn = document.getElementById('rss-copy-btn');
+					if (btn) {
+						btn.textContent = 'Copied!';
+						setTimeout(() => {
+							btn.textContent = 'Copy RSS';
+						}, 2000);
+					}
+				}
+			}
+
+			// Interactive DAG Stage Inspector
+			const stages = {
+				intent: {
+					title: 'Intent Planner',
+					mode: 'tokio::sync::broadcast',
+					detail: 'Breakdown: decompose user goal into acyclic task graphs • mean latency: 120μs • memory: zero-alloc'
+				},
+				validator: {
+					title: 'Hierarchical Validator',
+					mode: 'tokio::sync::mpsc',
+					detail: 'Cycle detection: Tarjan SCC • schema conformance: strict protobuf v3 • validation overhead: 45μs'
+				},
+				dispatcher: {
+					title: 'Tool Dispatcher',
+					mode: 'tonic::transport::Channel (gRPC)',
+					detail: 'Stream dispatch: Tokio worker thread affinity • IPC zero-copy memory ring • throughput: 110,000 req/s'
+				}
+			};
+
+			function inspectDagStage(stageKey) {
+				const stage = stages[stageKey];
+				if (!stage) return;
+
+				document.getElementById('dag-mode-label').textContent = stage.mode;
+				const infoEl = document.getElementById('dag-stage-info');
+				if (infoEl) {
+					infoEl.innerHTML = `
+						<div class="flex justify-between text-text">
+							<span class="text-status-emerald font-semibold">Active Stage: ${stage.title}</span>
+							<span class="text-text-dim">IPC: zero-copy active</span>
+						</div>
+						<div class="text-text-muted">
+							${stage.detail}
+						</div>
+					`;
+				}
+
+				['intent', 'validator', 'dispatcher'].forEach(k => {
+					const node = document.getElementById('node-' + k);
+					if (node) {
+						if (k === stageKey) {
+							node.classList.add('border-status-emerald', 'text-text');
+							node.classList.remove('border-border', 'text-text-muted');
+						} else {
+							node.classList.remove('border-status-emerald', 'text-text');
+							node.classList.add('border-border', 'text-text-muted');
+						}
+					}
+				});
+			}
+
+			// Bento Grid Filter Tabs
+			const tabBtns = document.querySelectorAll('.system-tab-btn');
+			const cards = document.querySelectorAll('.system-card');
+
+			tabBtns.forEach(btn => {
+				btn.addEventListener('click', () => {
+					const filter = btn.getAttribute('data-filter');
+
+					tabBtns.forEach(b => {
+						b.classList.remove('active', 'bg-surface-card', 'border-border', 'text-text', 'font-medium');
+						b.classList.add('bg-transparent', 'border-transparent', 'text-text-dim');
+					});
+
+					btn.classList.add('active', 'bg-surface-card', 'border-border', 'text-text', 'font-medium');
+					btn.classList.remove('bg-transparent', 'border-transparent', 'text-text-dim');
+
+					cards.forEach(card => {
+						const categories = card.getAttribute('data-category') || '';
+						if (filter === 'all' || categories.includes(filter)) {
+							card.style.display = '';
+						} else {
+							card.style.display = 'none';
+						}
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
