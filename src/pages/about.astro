@@ -1,4 +1,5 @@
 ---
+import Analytics from '@vercel/analytics/astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -22,6 +23,7 @@ const schema = graphJsonLd(
 	<head>
 		<BaseHead title={`About & Engineering Manifesto — ${AUTHOR_NAME}`} description={description} />
 		<JsonLd schema={schema} />
+		<Analytics />
 	</head>
 	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
 		<!-- Subdued ambient dark radial halo -->

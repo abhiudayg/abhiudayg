@@ -1,4 +1,5 @@
 ---
+import Analytics from '@vercel/analytics/astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
@@ -23,6 +24,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<JsonLd schema={schema} />
+		<Analytics />
 	</head>
 	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
 		<!-- Framer-Style Animated Moving Gradient Grid Background -->
