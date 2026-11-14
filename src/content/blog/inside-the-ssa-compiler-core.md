@@ -4,6 +4,7 @@ description: 'why regex matching fails on real code, and how Anode uses Go SSA a
 pubDate: 2026-11-12
 series: anode
 seriesPart: 2
+tags: ['anode', 'golang', 'go-ssa', 'static-analysis', 'ast', 'compiler-design', 'variable-type-analysis', 'systems-programming']
 ---
 
 in [Part 1 of our Anode series](/blog/why-we-ditched-docker-for-go-backends/), we talked about how ditching docker daemons for Go backends dropped our service boot times from 450ms down to 8.2ms and gave our server memory a huge sigh of relief ✨.

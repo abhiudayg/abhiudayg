@@ -4,6 +4,7 @@ description: 'how i built a speedy Rust MCP server that routes each agent turn t
 pubDate: 2026-06-18
 series: agent-brain
 seriesPart: 1
+tags: ['agent-brain', 'model-context-protocol', 'mcp-routing', 'local-first-ai', 'context-budgeting', 'fast-embedding']
 ---
 
 every coding agent turn arrives with too much context and not enough signal ✨.

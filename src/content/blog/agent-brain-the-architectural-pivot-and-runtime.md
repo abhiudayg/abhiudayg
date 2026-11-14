@@ -4,6 +4,7 @@ description: 'Part 3 of our agent-brain series: why polite prompts fail in real 
 pubDate: 2026-10-28
 series: agent-brain
 seriesPart: 3
+tags: ['agent-brain', 'autonomous-agents', 'mcp', 'cognitive-architecture', 'token-budgets', 'rust', 'llm-orchestration']
 ---
 
 when we first started hacking on [agent-brain](https://github.com/autonomic-ai-dev/agent-brain) ([Part 1](/blog/agent-brain-local-mcp-routing/) and [Part 2](/blog/agent-brain-memory-scopes-and-reinforcement/)), our premise was so innocent and simple:  

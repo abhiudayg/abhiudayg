@@ -1,7 +1,8 @@
-export const SITE_TITLE = 'Abhiuday — Systems & AI Engineer';
+export const SITE_TITLE = 'Abhiuday Gupta — Systems & AI Engineer';
 export const SITE_DESCRIPTION =
 	'Architecting autonomous agent runtimes, real-time distributed systems, and low-latency developer tooling. Documenting the build, one commit at a time.';
-export const AUTHOR_NAME = 'Abhiuday';
+export const AUTHOR_NAME = 'Abhiuday Gupta';
+export const AUTHOR_HANDLE = 'abhiudayg';
 export const SITE_URL = 'https://www.abhiudayg.dev';
 export const RSS_FEED_URL = `${SITE_URL}/rss.xml`;
 

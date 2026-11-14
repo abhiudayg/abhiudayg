@@ -40,18 +40,30 @@ export function authorProfileUrl() {
 export function personJsonLd(site: URL | string = SITE_URL) {
 	return {
 		'@type': 'Person',
+		'@id': `${SITE_URL}/#person`,
 		name: AUTHOR_NAME,
+		alternateName: ['Abhiuday', 'aeswibon', 'abhiudayg'],
 		url: authorProfileUrl(),
 		sameAs: [GITHUB_URL, TWITTER_URL, LINKEDIN_URL, DEVTO_URL, HASHNODE_URL, REDDIT_URL].filter(Boolean),
-		jobTitle: 'Systems & AI Engineer',
+		jobTitle: 'Senior Software Development Engineer (SDE 2) & Systems Architect',
+		worksFor: {
+			'@type': 'Organization',
+			name: 'Zeta',
+			url: 'https://www.zeta.tech',
+		},
+		description:
+			'Systems & AI Engineer building Anode (Docker/Kubernetes alternative for Go backends), autonomous agent runtimes, and high-throughput fintech infrastructure.',
 		knowsAbout: [
-			'Autonomous Agents',
+			'Go (Golang)',
+			'Rust Systems Programming',
+			'Anode Orchestration Engine',
+			'Autonomous AI Agent Runtimes',
 			'Model Context Protocol (MCP)',
-			'Rust Runtimes',
-			'Distributed Systems',
-			'Developer Tooling',
-			'Astro',
-			'TypeScript',
+			'Linux Kernel Primitives & Systemd',
+			'SSA Compilers & Static Analysis',
+			'Distributed Systems & High-Throughput Fintech',
+			'Java Spring Boot Banking Architecture',
+			'Tauri 2 & Developer Tooling',
 		],
 	};
 }
@@ -59,12 +71,13 @@ export function personJsonLd(site: URL | string = SITE_URL) {
 export function websiteJsonLd(site: URL | string = SITE_URL) {
 	return {
 		'@type': 'WebSite',
+		'@id': `${SITE_URL}/#website`,
 		name: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		url: absoluteUrl('/', site),
 		inLanguage: 'en-US',
-		publisher: personJsonLd(site),
-		author: personJsonLd(site),
+		publisher: { '@id': `${SITE_URL}/#person` },
+		author: { '@id': `${SITE_URL}/#person` },
 		potentialAction: {
 			'@type': 'SearchAction',
 			target: {
@@ -79,23 +92,25 @@ export function websiteJsonLd(site: URL | string = SITE_URL) {
 export function blogJsonLd(site: URL | string = SITE_URL) {
 	return {
 		'@type': 'Blog',
+		'@id': `${SITE_URL}/blog/#blog`,
 		name: `${SITE_TITLE} Blog`,
 		description: SITE_DESCRIPTION,
 		url: absoluteUrl('/blog/', site),
 		inLanguage: 'en-US',
-		author: personJsonLd(site),
-		publisher: personJsonLd(site),
+		author: { '@id': `${SITE_URL}/#person` },
+		publisher: { '@id': `${SITE_URL}/#person` },
 	};
 }
 
 export function aboutPageJsonLd(site: URL | string = SITE_URL) {
 	return {
 		'@type': 'AboutPage',
+		'@id': `${SITE_URL}/about/#about`,
 		name: `About ${AUTHOR_NAME}`,
 		description: SITE_DESCRIPTION,
 		url: absoluteUrl('/about/', site),
 		inLanguage: 'en-US',
-		mainEntity: personJsonLd(site),
+		mainEntity: { '@id': `${SITE_URL}/#person` },
 	};
 }
 
@@ -110,12 +125,14 @@ export function collectionPageJsonLd({
 }) {
 	return {
 		'@type': 'CollectionPage',
+		'@id': `${url}#collection`,
 		name,
 		description,
 		url,
 		inLanguage: 'en-US',
 		isPartOf: {
 			'@type': 'Blog',
+			'@id': `${SITE_URL}/blog/#blog`,
 			url: absoluteUrl('/blog/'),
 		},
 	};
@@ -129,6 +146,7 @@ export function blogPostJsonLd({
 	pubDate,
 	updatedDate,
 	series,
+	tags = [],
 }: {
 	title: string;
 	description: string;
@@ -137,13 +155,20 @@ export function blogPostJsonLd({
 	pubDate: Date;
 	updatedDate?: Date;
 	series?: string;
+	tags?: string[];
 }) {
 	return {
-		'@type': 'BlogPosting',
+		'@type': ['BlogPosting', 'TechArticle'],
+		'@id': `${url}#article`,
 		headline: title,
 		description,
 		url,
-		image,
+		image: {
+			'@type': 'ImageObject',
+			url: image,
+			width: 1200,
+			height: 630,
+		},
 		datePublished: pubDate.toISOString(),
 		dateModified: (updatedDate ?? pubDate).toISOString(),
 		inLanguage: 'en-US',
@@ -151,20 +176,35 @@ export function blogPostJsonLd({
 			'@type': 'WebPage',
 			'@id': url,
 		},
-		author: personJsonLd(),
-		publisher: personJsonLd(),
+		author: {
+			'@type': 'Person',
+			'@id': `${SITE_URL}/#person`,
+			name: AUTHOR_NAME,
+			url: authorProfileUrl(),
+		},
+		publisher: {
+			'@type': 'Person',
+			'@id': `${SITE_URL}/#person`,
+			name: AUTHOR_NAME,
+			url: authorProfileUrl(),
+		},
 		isPartOf: {
 			'@type': 'Blog',
+			'@id': `${SITE_URL}/blog/#blog`,
 			name: `${SITE_TITLE} Blog`,
 			url: absoluteUrl('/blog/'),
 		},
-		...(series ? { articleSection: series, keywords: series } : {}),
+		proficiencyLevel: 'Expert',
+		...(series ? { articleSection: series } : {}),
+		keywords: tags.length > 0 ? tags.join(', ') : (series ?? 'systems engineering, go, rust, autonomous agents'),
 	};
 }
 
 export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
+	const lastItem = items[items.length - 1];
 	return {
 		'@type': 'BreadcrumbList',
+		'@id': `${lastItem ? lastItem.url : SITE_URL}#breadcrumb`,
 		itemListElement: items.map((item, index) => ({
 			'@type': 'ListItem',
 			position: index + 1,

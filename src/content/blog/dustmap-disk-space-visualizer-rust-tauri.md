@@ -4,6 +4,7 @@ description: 'why i built dustmap: parallel Rayon file walks, flat memory arrays
 pubDate: 2026-10-21
 series: dustmap
 seriesPart: 1
+tags: ['dustmap', 'rust', 'tauri-2', 'disk-analyzer', 'macos-app', 'tree-maps', 'systems-programming']
 ---
 
 every Mac user eventually hits the exact same hilarious wall 💀:

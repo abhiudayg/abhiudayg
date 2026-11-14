@@ -30,3 +30,4 @@ pnpm-debug.log*
 # vercel local link metadata (IDs are stored in GitHub secrets)
 .vercel/
 .vercel
+.env*

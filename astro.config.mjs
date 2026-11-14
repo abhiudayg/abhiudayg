@@ -17,6 +17,7 @@ export default defineConfig({
     sitemap({
       filter: (page) => !page.includes('/rss.xml'),
       serialize(item) {
+        item.lastmod = new Date();
         if (item.url === 'https://www.abhiudayg.dev/' || item.url === 'https://www.abhiudayg.dev') {
           item.priority = 1.0;
           item.changefreq = 'daily';

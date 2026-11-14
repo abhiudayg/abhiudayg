@@ -4,6 +4,7 @@ description: 'Part 2 of the agent-brain series: why static memory turns into a d
 pubDate: 2026-10-22
 series: agent-brain
 seriesPart: 2
+tags: ['agent-brain', 'memory-consolidation', 'vector-graph', 'reinforcement-learning', 'agent-memory', 'llm-agents']
 ---
 
 in [Part 1 of our agent-brain series](/blog/agent-brain-local-mcp-routing/), we built a neat local Rust MCP server to solve one simple question for coding agents: **what should the model see right now under a strict token budget?**

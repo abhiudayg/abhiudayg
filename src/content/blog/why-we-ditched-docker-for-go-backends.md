@@ -4,6 +4,7 @@ description: 'a fun deep dive into container memory bloat, containerd overhead, 
 pubDate: 2026-11-11
 series: anode
 seriesPart: 1
+tags: ['anode', 'golang', 'docker-alternative', 'cold-starts', 'linux-systemd', 'systems-programming', 'microservices']
 ---
 
 the joy of running Go straight on bare metal is honestly unmatched ✨

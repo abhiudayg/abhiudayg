@@ -5,11 +5,6 @@
   "installCommand": "bun install",
   "outputDirectory": "dist",
   "framework": "astro",
-  "git": {
-    "deploymentEnabled": {
-      "master": false
-    }
-  },
   "headers": [
     {
       "source": "/rss.xml",

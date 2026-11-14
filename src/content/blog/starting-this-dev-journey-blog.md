@@ -2,6 +2,7 @@
 title: 'starting this dev journey: building a cozy corner on the web ✨'
 description: 'why i built a small personal blog with RSS, and why sharing things as you build them makes engineering joyful 🤍'
 pubDate: 2026-06-17
+tags: ['engineering-manifesto', 'systems-engineering', 'open-source', 'dev-blog', 'architecture-notes']
 ---
 
 i wanted a cozy little corner of the internet that truly belongs to me — not an algorithmic feed, not a rented platform thread, and definitely not a corporate newsletter 🤍.

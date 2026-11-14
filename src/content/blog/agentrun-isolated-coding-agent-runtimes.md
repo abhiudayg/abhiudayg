@@ -4,6 +4,7 @@ description: 'why letting an LLM run raw terminal commands on your main branch i
 pubDate: 2026-10-22
 series: agentrun
 seriesPart: 1
+tags: ['agentrun', 'sandboxing', 'git-worktrees', 'container-isolation', 'autonomous-coding', 'developer-tooling']
 ---
 
 autonomous coding agents are so much fun to hack with, but letting an LLM run raw bash commands directly in your main project folder is a little wild 😂!

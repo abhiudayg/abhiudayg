@@ -21,11 +21,12 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, updatedDate, series, seriesPart, heroImage } = post.data;
+const { title, description, pubDate, updatedDate, series, seriesPart, heroImage, tags = [] } = post.data;
 const slug = post.id;
 const seriesMeta = series ? BLOG_SERIES[series] : null;
 const postUrl = absoluteUrl(`/blog/${slug}/`, Astro.site);
 const imageUrl = resolveImageUrl(heroImage, Astro.site);
+const allTags = Array.from(new Set([...(series ? [series, ...(seriesMeta ? [seriesMeta.title] : [])] : []), ...tags]));
 const breadcrumbItems = [
 	{ name: 'Home', url: absoluteUrl('/', Astro.site) },
 	{ name: 'Blog', url: absoluteUrl('/blog/', Astro.site) },
@@ -43,6 +44,7 @@ const schema = graphJsonLd(
 		pubDate,
 		updatedDate,
 		series,
+		tags: allTags,
 	}),
 	breadcrumbJsonLd(breadcrumbItems),
 );
@@ -58,7 +60,7 @@ const schema = graphJsonLd(
 			publishedTime={pubDate}
 			modifiedTime={updatedDate ?? pubDate}
 			section={seriesMeta?.title}
-			tags={series ? [series, ...(seriesMeta ? [seriesMeta.title] : [])] : []}
+			tags={allTags}
 		/>
 		<JsonLd schema={schema} />
 	</head>
@@ -93,6 +95,8 @@ const schema = graphJsonLd(
 							</a>
 						</>
 					)}
+					<span>/</span>
+					<span class="text-text font-medium truncate max-w-[200px] sm:max-w-xs" aria-current="page">{title}</span>
 				</nav>
 
 				<header class="mb-10 border-b border-border pb-8">
@@ -146,6 +150,21 @@ const schema = graphJsonLd(
 				<div class="prose-content" itemprop="articleBody">
 					<slot />
 				</div>
+
+				{
+					allTags.length > 0 && (
+						<footer class="mt-12 pt-6 border-t border-border">
+							<div class="flex flex-wrap items-center gap-2">
+								<span class="font-mono text-xs text-text-dim">Topics:</span>
+								{allTags.map((tag) => (
+									<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-surface-card border border-border text-text-muted">
+										#{tag}
+									</span>
+								))}
+							</div>
+						</footer>
+					)
+				}
 			</article>
 		</main>
 		<Footer />

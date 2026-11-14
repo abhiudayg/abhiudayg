@@ -51,7 +51,7 @@ describe('JSON-LD schema generators', () => {
 			series: 'agentrun',
 		});
 
-		expect(schema['@type']).toBe('BlogPosting');
+		expect(schema['@type']).toEqual(['BlogPosting', 'TechArticle']);
 		expect(schema.headline).toBe('Post Title');
 		expect(schema.datePublished).toBe('2026-10-22T00:00:00.000Z');
 		expect(schema.articleSection).toBe('agentrun');
@@ -78,9 +78,10 @@ describe('JSON-LD schema generators', () => {
 	it('generates rich Person schema with verified sameAs profiles', () => {
 		const person = personJsonLd();
 		expect(person['@type']).toBe('Person');
-		expect(person.name).toBe('Abhiuday');
+		expect(person.name).toBe('Abhiuday Gupta');
 		expect(person.sameAs.length).toBeGreaterThanOrEqual(4);
-		expect(person.jobTitle).toBe('Systems & AI Engineer');
+		expect(person.jobTitle).toContain('Senior Software Development Engineer');
+		expect(person.worksFor.name).toBe('Zeta');
 	});
 
 	it('generates WebSite schema with search action entry point', () => {
