@@ -48,30 +48,43 @@ const schema = graphJsonLd(
 
 				<div class="prose-content space-y-6">
 					<p>
-						Hi &mdash; I'm <strong>{AUTHOR_NAME}</strong>. I architect autonomous agent runtimes, real-time streaming data pipelines, and low-latency systems infrastructure. I started this space as an engineer's public lab: documenting internal designs, hard-learned production bugs, and open-source tooling as I build.
+						hey, i'm <strong>{AUTHOR_NAME}</strong> &mdash; a software engineer based in bengaluru, india 🤍. i started this site as a cozy, open engineering lab: sharing raw discoveries, fun weekend hacks, production post-mortems, and things that make programming joyful.
 					</p>
 
-					<h2 class="text-2xl font-semibold text-text pt-4">Engineering Focus</h2>
+					<h2 class="text-2xl font-semibold text-text pt-4">the living duality ☕🚀</h2>
 					<p>
-						My day-to-day work centers on three complementary layers:
+						my engineering life lives in a fun little duality:
 					</p>
 					<ul class="list-disc pl-5 space-y-2 text-text-muted">
 						<li>
-							<strong class="text-text">Autonomous Agent Runtimes &amp; Tools:</strong> Turn routing under dynamic token budgets, deterministic DAG workflows with approval gates, agent-native macOS WebKit browsing, and isolated container execution (e.g., <a href="/blog/series/agent-brain/">agent-brain</a>, <a href="/blog/series/agentrun/">agentrun</a>, <a href="/blog/series/agent-spine/">agent-spine</a>, <a href="/blog/series/harbor/">harbor</a>).
+							<strong class="text-text">by day:</strong> i'm an SDE 2 at <strong>Zeta</strong> (and previously built high-throughput UPI payment switches at <strong>BillDesk</strong>). wrangling enterprise <strong>Java, Spring Boot</strong>, PostgreSQL, Kafka, and distributed ledger systems where the golden rule is "never lose money or double-charge someone even if the network blinks mid-request" ☕.
 						</li>
 						<li>
-							<strong class="text-text">Performance Systems &amp; Tooling:</strong> Blazing-fast desktop disk visualizers in Rust &amp; Tauri (<a href="/blog/series/dustmap/">dustmap</a>) with parallel Rayon file walks and minimal memory footprint.
+							<strong class="text-text">by night:</strong> hacking in <strong>Go, Rust, and Linux kernel primitives</strong> (`cgroups v2`, `systemd`, dynamic loopback networking). building tools that compile in milliseconds, drink almost zero RAM, and make shipping feel like magic ✨.
 						</li>
 					</ul>
 
-					<h2 class="text-2xl font-semibold text-text pt-4">The Zero-Tracker Ethos</h2>
+					<h2 class="text-2xl font-semibold text-text pt-4">what i'm building &amp; exploring</h2>
+					<ul class="list-disc pl-5 space-y-2 text-text-muted">
+						<li>
+							<strong class="text-text">Bare-Metal Systems &amp; Orchestration:</strong> <a href="/blog/series/anode/">anode</a> &mdash; a proof-of-topology orchestrator for Go that deduces infrastructure from your raw source code using Go SSA analysis, booting your apps directly on Linux systemd in under 8ms with zero Docker daemons and zero YAML drift 🚀.
+						</li>
+						<li>
+							<strong class="text-text">Autonomous Agent Runtimes:</strong> <a href="/blog/series/agent-brain/">agent-brain</a> &mdash; a local-first cognitive governor and verification ledger that keeps AI coding agents honest, grounded in real test receipts, and strictly under token budgets.
+						</li>
+						<li>
+							<strong class="text-text">Sandboxing &amp; Native Utilities:</strong> <a href="/blog/series/agentrun/">agentrun</a> for container worktree isolation, <a href="/blog/series/harbor/">harbor</a> for agent-native browsing, <a href="/blog/series/dustmap/">dustmap</a> for sub-12ms macOS disk visualization in Rust &amp; Tauri, and <a href="/blog/series/shipnote/">shipnote</a> for commit-grounded technical drafting.
+						</li>
+					</ul>
+
+					<h2 class="text-2xl font-semibold text-text pt-4">the zero-tracker ethos</h2>
 					<p>
-						This site is built with pure web standards: zero client-side surveillance, zero marketing tracking pixels, and zero paywalls. Everything is syndicated transparently via <a href="/rss.xml">full-text RSS</a>.
+						this site is built with pure web standards: zero client-side surveillance, zero marketing tracking pixels, and zero paywalls. everything is syndicated transparently via <a href="/rss.xml">full-text RSS</a>. hope you enjoy poking around 🤍!
 					</p>
 
-					<h2 class="text-2xl font-semibold text-text pt-4">Connect &amp; Collaborate</h2>
+					<h2 class="text-2xl font-semibold text-text pt-4">connect &amp; say hi</h2>
 					<p>
-						I share source code on GitHub, post technical musings on X, and publish technical write-ups here. Feel free to explore:
+						i share open source code on GitHub, post daily technical thoughts on X, and write longer dispatches here. let me know your thoughts anytime:
 					</p>
 					<div class="pt-2">
 						<SocialLinks class="justify-start" />

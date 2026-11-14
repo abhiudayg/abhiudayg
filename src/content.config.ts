@@ -8,6 +8,8 @@ const seriesSlugs = [
 	'agentrun',
 	'agent-spine',
 	'harbor',
+	'anode',
+	'shipnote',
 ] as const;
 
 const blog = defineCollection({

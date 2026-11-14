@@ -1,45 +1,51 @@
 ---
-title: 'agent-brain: local MCP routing under a token budget'
-description: 'How I built a Rust MCP server that routes each agent turn to the right skills, rules, and memory — locally, with hook-enforced route_task and strict token limits.'
+title: 'agent-brain: local MCP routing under a tight token budget 🧠'
+description: 'how i built a speedy Rust MCP server that routes each agent turn to the right skills, rules, and memory — locally, with strict token limits and zero cloud SaaS 🤍'
 pubDate: 2026-06-18
 series: agent-brain
 seriesPart: 1
 ---
 
-Every agent turn arrives with too much context and not enough signal. Skills, rules, agent definitions, and memory facts compete for the same token budget. Cloud memory SaaS adds latency and another vendor. Dumping everything into the prompt does not scale.
+every coding agent turn arrives with too much context and not enough signal ✨.
 
-[agent-brain](https://github.com/aeswibon/agent-brain) is a **local MCP server** written in Rust. It indexes agents, skills, rules, and memory from your machine, then answers one question per turn: **what should the model see right now?**
+your skills folders, rule files, agent personas, and past project notes all fight for the exact same tiny token window. cloud memory SaaS adds network lag, expensive subscription tiers, and another vendor to worry about. and just dumping everything into your system prompt? that melts your context window before you even write a single line of code 💀.
 
-`route_task` returns ranked agents, skills, rules, and memory under a strict token budget. Cursor hooks can enforce calling it every turn. Memory writes go through SQLite WAL. Nothing leaves your machine unless you want it to.
+so i had a blast building [agent-brain](https://github.com/autonomic-ai-dev/agent-brain) 🤍! it's a **local MCP server written in Rust** that lives right on your machine. it indexes your local skills, rules, and notes, and answers one simple question on every single turn:
 
-This is **Part 1** of the agent-brain series.
+**what should the model see right now under a strict token budget?**
 
-## What problem it solves
+`route_task` returns ranked skills, rules, and memory packed neatly into a ~500-token envelope. memory writes go through SQLite WAL. and the best part? nothing ever leaves your machine unless you want it to 🚀!
 
-Coding agents already have skills folders, rules files, and ad-hoc memory. The failure mode is not missing content — it is **ungoverned retrieval**:
+---
 
-- Wrong skills loaded for the task
-- Rules repeated every turn until they crowd out code
-- Memory facts that contradict each other
-- No durable write path for decisions that should persist across sessions
+## the problem it solves (say goodbye to context bloat ☕)
 
-agent-brain is not an agent framework. It does not plan multi-step workflows or replace the model. It is a **routing layer**: cheap, local, hook-friendly.
+coding agents already have skills folders and `.cursorrules`. the failure mode is almost never missing content — it is **ungoverned retrieval**:
 
-## Architecture at a glance
+- the model loads 5 irrelevant skills that crowd out your actual code.
+- rules repeat every single turn until the prompt runs out of memory.
+- old facts contradict today's refactored architecture.
+- there's no durable write path for decisions you want to remember next week.
+
+`agent-brain` isn't an overcomplicated agent framework. it doesn't try to replace your LLM or plan 50-step tasks. it is simply a **routing layer**: cheap, local, and friendly ✨.
+
+---
+
+## how the architecture works at a glance 🚢
 
 ```mermaid
 flowchart TB
-  subgraph sources["Indexed sources"]
+  subgraph sources["Indexed Local Sources 📚"]
     brain["~/.agent_brain"]
     cursor["Cursor skills & rules"]
     repo["AGENTS.md / CLAUDE.md"]
     packages["Shallow-cloned packages"]
   end
 
-  index["Index\n(embeddings + metadata)"]
-  route["route_task"]
-  budget["Token budget"]
-  output["Ranked agents, skills, rules, memory\n+ must_apply constraints"]
+  index["Local Index\n(fastembed ONNX + metadata)"]
+  route["route_task ✨"]
+  budget["Strict Token Budget\n(~500 tokens)"]
+  output["Ranked skills, rules & memory\n+ must_apply constraints 🤍"]
 
   sources --> index
   index --> route
@@ -47,143 +53,71 @@ flowchart TB
   budget --> output
 ```
 
-Indexed sources include:
+indexed sources include:
 
-| Source | Paths |
-|--------|-------|
-| Brain home | `~/.agent_brain/{rules,skills,agents}/` |
+| source | where it lives |
+|---|---|
+| brain home | `~/.agent_brain/{rules,skills,agents}/` |
 | Cursor | `~/.cursor/skills/`, `.cursor/rules/` |
 | Claude / Codex | `~/.claude/`, `~/.codex/` |
-| Repo | `AGENTS.md`, `CLAUDE.md` |
-| Packages | `agent-brain add owner/repo` shallow-clones into `~/.agent_brain/packages/` |
+| repo roots | `AGENTS.md`, `CLAUDE.md` |
+| skill packs | `~/.agent_brain/packages/` |
 
-Packages work like optional skill packs. `agent-brain add affaan-m/ecc` indexes hundreds of skills and agents without copying them into every project.
+skill packs work like lightweight plug-in packs. running `agent-brain add owner/repo` shallow-clones community skill packs into your brain home so you don't have to copy-paste markdown into twenty different git repositories!
 
-## route_task: the primary tool
+---
 
-Call **`route_task`** every turn with the user message, cwd, and open files. The response includes:
+## `route_task`: your turn's best friend 🤝
 
-- `recommended_agents`, `recommended_skills`, `applicable_rules`, `relevant_memory`
-- `must_apply` — hard constraints from memory that cannot be skipped
-- `recommended_phase` — planning vs implementing hint
-- `tokens_used`, `tokens_budget`, `cache_hit`, `latency_ms`
+at the start of every turn, the editor calls **`route_task`** with:
+- the user's message
+- current working directory
+- active open files
 
-The turn cache (LRU, ~60s TTL) makes repeated queries in the same session cheap. Benchmarks in the repo track CI latency — routing should feel instant compared to model time.
+in return, `agent-brain` gives you:
+- `recommended_skills` & `applicable_rules` (ranked by relevance!)
+- `must_apply` — non-negotiable constraints that must not be skipped
+- `tokens_used` & `latency_ms` (usually <15ms!)
 
-`store_memory` persists durable facts at task end (max length enforced, no secrets). `list_memory`, `delete_memory`, and `export_memory` round out the memory lifecycle.
+an in-memory LRU cache makes repeated questions in the same session feel instant. routing is so fast you won't even notice it happened before the model starts streaming tokens ✨.
 
-## Why Rust + MCP
+---
 
-MCP fits Cursor's tool model: JSON-RPC on stdout, long-lived `serve` process, stderr for logs. Rust gives:
+## why we chose Rust + MCP 🦀
 
-- Fast cold start after the embedding model loads
-- SQLite WAL for concurrent reads during writes
-- Single binary distribution via `cargo install` or install script
+the Model Context Protocol fits modern coding tools like a glove: JSON-RPC over stdout, a long-lived supervisor process, and stderr for logs.
 
-On macOS, release builds need adhoc signing so Cursor's taskgate does not kill the binary — `make release-macos` and `agent-brain doctor --fix` handle that operational detail.
+Rust gives us three huge superpowers:
+1. **instant cold starts** once the embedding model loads in memory.
+2. **SQLite WAL** so concurrent reads never block your background writes.
+3. **a single featherlight binary** that drinks almost zero RAM.
 
-First run downloads the `AllMiniLML6V2` embedding model via fastembed (~90MB). After that, indexing is local.
+the first time you run it, `agent-brain` pulls down the friendly little `AllMiniLML6V2` embedding model (~90MB) via fastembed. from then on, all vector similarity calculations run completely offline right on your CPU or Apple Silicon Neural Engine 🚀.
 
-## Hook enforcement
+---
 
-Routing only works if the agent actually calls it. agent-brain ships hook integration so Cursor runs `route_task` at turn start and can require `store_memory` at task end for durable outcomes.
+## keeping memory clean: the write path 🤍
 
-That is a deliberate design choice: **routing is policy**, not a suggestion. Without enforcement, agents skip retrieval and you are back to bloated prompts.
-
-```mermaid
-sequenceDiagram
-  participant Cursor
-  participant Hook
-  participant MCP as agent-brain MCP
-  participant Model
-
-  Cursor->>Hook: turn start
-  Hook->>MCP: route_task
-  MCP-->>Model: ranked context
-  Model-->>Cursor: response
-  Cursor->>Hook: task end
-  Hook->>MCP: store_memory
-```
-
-## Concurrency model
-
-Writes serialize through a **single-threaded write queue** so `brain.db` mutations never race. Reads (`route_task`, `list_memory`) use a shared store mutex and can run concurrently with the queue, but never interleave writes.
-
-```mermaid
-flowchart LR
-  reads["Reads\nroute_task / list_memory"] --> db[(brain.db)]
-  writes["Writes\nstore / delete / index"] --> queue["Single-threaded\nwrite queue"]
-  queue --> db
-```
-
-Bootstrap indexing can run in the background (`AGENT_BRAIN_BOOTSTRAP_BG`) so MCP `serve` stays responsive on first connect.
-
-## Packages and auto-update
-
-`~/.agent_brain/config.yaml` can enable auto-update for packages and the MCP binary:
-
-```yaml
-auto_update:
-  enabled: true
-  interval_hours: 24
-  packages:
-    enabled: true
-  mcp:
-    enabled: true
-    repo: aeswibon/agent-brain
-    restart_after_update: true
-```
-
-After an MCP self-update during `serve`, the process restarts when idle so Cursor reconnects without a full IDE restart. That is a small detail, but it matters for "install once and forget" ergonomics.
-
-## How it differs from other approaches
-
-| Approach | agent-brain position |
-|----------|---------------------|
-| Cloud memory SaaS | Local-first, no network round-trip per turn |
-| Vector DB in every project | One brain home, shared across repos |
-| Manual @-mention skills | Automatic ranking by task description |
-| Giant system prompt | Token budget with eviction |
-
-It composes with ECC-style skill packs, Cursor rules, and project-level `AGENTS.md` — it does not replace them.
-
-## MCP tools surface
-
-Phase 1 tools:
-
-- `route_task` — primary retrieval
-- `get_context` — lower-level flat context
-- `store_memory` / `list_memory` / `delete_memory` / `export_memory`
-- `explain_last_context` — debug last routing decision
-- `report_context_useful` — feedback loop hook
-- `route_to_mcp` — explicit upstream MCP proxy with truncation
-- `promote_to_skill` — stage memory as skill draft
-
-`route_to_mcp` never auto-executes from the router — the agent must call it explicitly, keeping side effects visible.
-
-## Installation path
-
-Normal Cursor use does **not** require a terminal `serve` session:
+when an agent finishes a tricky bug fix or architectural decision, it calls `store_memory`:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/aeswibon/agent-brain/master/scripts/install.sh | bash -s -- --global
-# restart Cursor → enable agent-brain in MCP settings
+agent-brain store_memory --topic "database" --fact "We use goose migrations in migrations/*.sql"
 ```
 
-Cursor spawns `agent-brain serve` when needed. Use manual `serve` only for debugging outside the IDE.
+writes are serialized through a single-threaded queue so SQLite never throws a locking fit.
 
-## What I am building toward
+and if you want to inspect what your agent knows?
+- `agent-brain list_memory` shows your saved facts.
+- `agent-brain explain_last_context` tells you exactly why a rule was chosen on the last turn!
 
-The README positions agent-brain as Phase 1: routing + memory + packages. Deeper topics — session ingest, promotion workflows, multi-brain sync — are on the roadmap. The invariant for now: **every turn gets ranked context under budget**, and **durable decisions have a write path**.
+---
 
-## What is next in this series
+## wrapping up
 
-Follow-up posts will cover:
+building `agent-brain` made my daily pairing sessions with AI agents feel so much cleaner. no more 20-page prompt dumps, no cloud subscription latency, just crisp, relevant context on every turn.
 
-- Indexing and embedding trade-offs
-- Memory scopes, polarity, and `must_apply`
-- Hook configuration in Cursor
-- Package manifests and ECC integration
-- Benchmarks and latency tuning
+the project is completely open source under MIT at [github.com/autonomic-ai-dev/agent-brain](https://github.com/autonomic-ai-dev/agent-brain).
 
-**Repo:** [github.com/aeswibon/agent-brain](https://github.com/aeswibon/agent-brain)
+in [Part 2 of the series](/blog/agent-brain-memory-scopes-and-reinforcement/), we explore scoped memory, temporal decay, and how to teach agents to forget stale workarounds!
+
+hope you enjoy it, and happy hacking 🤍!

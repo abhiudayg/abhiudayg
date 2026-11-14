@@ -29,12 +29,26 @@ export const SOCIAL_LINKS: ReadonlyArray<{
 	];
 
 export const BLOG_SERIES = {
+	'anode': {
+		title: 'anode',
+		description: 'The Docker Compose & Kubernetes alternative for Go backends. Deploy unmodified Go to any Linux VPS without Dockerfiles, container daemons, or YAML drift.',
+		repoUrl: 'https://github.com/abhiudayg/anode',
+		tag: 'Orchestration',
+		badge: 'v1.1.0',
+	},
 	'agent-brain': {
 		title: 'agent-brain',
 		description: 'Local-first cognitive governor, turn router & procedure graph for coding agents under token budgets.',
 		repoUrl: 'https://github.com/autonomic-ai-dev/agent-brain',
 		tag: 'AI Agents',
-		badge: 'v1.0.0-rc3',
+		badge: 'v1.0.0-rc8',
+	},
+	'shipnote': {
+		title: 'shipnote',
+		description: 'Turn the work you ship into posts you approve — provenance-backed technical drafting engine from public git commits.',
+		repoUrl: 'https://github.com/abhiudayg/shipnote',
+		tag: 'Developer Tools',
+		badge: 'v0.3.2',
 	},
 	'dustmap': {
 		title: 'dustmap',

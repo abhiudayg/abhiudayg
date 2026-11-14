@@ -1,34 +1,41 @@
 ---
-title: 'agent-brain: memory scopes, temporal pruning, and cross-session routing'
-description: 'Part 2 of the agent-brain series: how we evolved local MCP routing with global vs project memory scopes, temporal fact decay, cross-session ingest, and circuit-broken upstream tools.'
+title: 'agent-brain: memory scopes, expiration dates, and teaching agents not to hoard context ✨'
+description: 'Part 2 of the agent-brain series: why static memory turns into a digital attic, how we split global vs project scopes, and teaching AI agents to forget stale facts 🤍'
 pubDate: 2026-10-22
 series: agent-brain
 seriesPart: 2
 ---
 
-In [Part 1 of this series](/blog/agent-brain-local-mcp-routing/), I introduced [agent-brain](https://github.com/abhiudayg/agent-brain): a local Rust MCP server designed to solve ungoverned context retrieval by answering one question per agent turn: **what should the model see right now?**
+in [Part 1 of our agent-brain series](/blog/agent-brain-local-mcp-routing/), we built a neat local Rust MCP server to solve one simple question for coding agents: **what should the model see right now under a strict token budget?**
 
-Over months of daily use across projects, our routing requirements matured. Storing flat memory facts in a single bucket created noise. Facts that were true yesterday became obsolete after an architectural refactor. And developers rarely work inside a single tool — context lives scattered across Cursor, OpenCode, Codex, Gemini, and Antigravity.
+and in the first few weeks, it was such a breath of fresh air!
 
-This is **Part 2**, focusing on how agent-brain handles **scoped memory**, **temporal pruning**, **cross-session ingestion**, and **upstream MCP routing**.
+but as we used it every day across dozens of different repos, our little memory store began acting like an overstuffed attic 💀.
+- facts that were true on Tuesday became completely wrong on Thursday after a dependency update.
+- a rule about `bun test` in our web frontend kept getting injected into our Python machine learning repos.
+- our poor agent was drowning in yesterday's temporary workarounds!
 
-## The Evolution of the Routing Loop
+so today, i wanted to share how we gave [agent-brain](https://github.com/autonomic-ai-dev/agent-brain) a clean memory taxonomy: **project vs global scopes**, **expiration dates for facts**, and **cross-client memory sharing** between Cursor, Antigravity, and Gemini ✨!
 
-Here is the expanded routing architecture in agent-brain today:
+---
+
+## the updated routing loop at a glance 🚢
+
+here's how `agent-brain` routes context today before any prompt hits the model:
 
 ```mermaid
 flowchart TB
-  turn["Agent Turn\n(user_message + cwd + open_files)"]
-  gate["Hard Read Gate\n(AGENT_BRAIN_READ_GATE=hard)"]
+  turn["Agent Turn\n(user_message + folder + open_files)"]
+  gate["Hard Read Gate 🛑\n(read_gate=hard)"]
   
-  subgraph routing["agent-brain Router"]
-    fastembed["Local ONNX Embeddings\n(FastEmbed Cache)"]
+  subgraph routing["agent-brain Router ✨"]
+    fastembed["Local ONNX Embeddings\n(FastEmbed on Apple Silicon)"]
     matcher["Ranked Matcher\n(Agents, Skills, Rules)"]
     mempool["Scoped Memory Pool\n(Global vs Project)"]
-    temporal["Temporal Pruner\n(valid_from / invalid_at)"]
+    temporal["Temporal Pruner ⏰\n(Auto-forgets expired facts!)"]
   end
 
-  subgraph upstream["Upstream MCP Gateway"]
+  subgraph upstream["Upstream MCP Gateway 🚀"]
     proxy["route_to_mcp\n(Token Budgeted)"]
     body["agent-body"]
     stitch["Stitch Design"]
@@ -40,17 +47,21 @@ flowchart TB
   fastembed --> matcher
   fastembed --> mempool
   mempool --> temporal
-  routing -->|Turn Context Bundle| model["LLM Response"]
+  routing -->|Tight ~500 Token Envelope| model["LLM Response 🤍"]
   model -.->|Explicit Tool Call| proxy
   proxy --> body
   proxy --> stitch
 ```
 
-## 1. Scoped Memory Taxonomy (`global` vs `project`)
+---
 
-Not all learned facts belong everywhere. If an agent discovers that a project uses `bun test` instead of `npm test`, injecting that fact into a Python data pipeline repository wastes tokens and confuses the model.
+## 1. scoped memory: global habits vs project secrets 🤍
 
-agent-brain partitions memory into two primary scopes:
+not every piece of advice belongs in every folder!
+
+if an agent figures out that our Astro blog needs `bun test`, injecting that into an enterprise Java Spring Boot backend just wastes precious prompt tokens and confuses the model.
+
+so we partitioned memory in Rust into two clean scopes:
 
 ```rust
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -71,15 +82,17 @@ pub struct MemoryFact {
 }
 ```
 
-- **`global`**: Architectural principles, personal coding style (immutability, error handling standards, preferred CLI tools). These surface across all workspaces.
-- **`project`**: Project-specific invariants (build scripts, test recipes, package versions, migration decisions). Keyed to the canonical repository root hash.
-- **`polarity`**: Distinguishes verified recipes from anti-patterns (`positive`, `negative`, `anti-pattern`). If an agent previously tried a command flag that caused a build failure, the router flags it as an anti-pattern to prevent repeating the mistake.
+- **`global`**: your universal developer preferences! things like *"prefer pure functions"*, *"handle errors with explicit enums"*, or *"never leave debugging print statements behind"*. these follow you across every workspace.
+- **`project`**: strictly tied to the unique Git root hash of the repository you're standing in right now. build flags, test commands, and specific file path conventions live here safely.
+- **`polarity`**: a fun little feature that flags anti-patterns! if an agent tries a CLI flag that blew up with a non-zero exit code yesterday, we record it with negative polarity: *"Don't try `--experimental-flag` here again; it fails on Node v22."* the agent never repeats the same mistake twice 🚀!
 
-## 2. Temporal Pruning: Expiration & Confidence Scoring
+---
 
-Static memory stores turn into digital landfills. Architectural decisions change, dependencies upgrade, and temporary workarounds become debt.
+## 2. temporal pruning: teaching agents to forget ⏰
 
-agent-brain implements millisecond-level temporal validity:
+static memory stores turn into messy junk drawers very quickly.
+
+temporary build workarounds (like *"pass `--legacy-peer-deps` until the upstream package updates next week"*) will haunt your agent for months if you don't give them an expiration date:
 
 ```json
 {
@@ -91,65 +104,42 @@ agent-brain implements millisecond-level temporal validity:
 }
 ```
 
-During each routing turn, the temporal evaluator prunes facts whose `invalid_at` timestamp has passed into an archive partition. High-confidence facts that are repeatedly reinforced by successful verification runs gain score boosts, while unverified assertions decay over time.
+on every single turn, `agent-brain` checks `invalid_at`. if the timestamp has passed, the fact gets gently archived. unverified claims decay naturally, while battle-tested recipes that repeatedly pass verification get a confidence boost ✨.
 
-## 3. Cross-Session Ingestion: Unifying Agent Silos
+---
 
-Modern engineering rarely happens in a single assistant. You might brainstorm architecture in Gemini, execute implementation in Cursor or Antigravity, and review pull requests in Codex.
+## 3. cross-session memory: jump between tools without losing context 🤝
 
-agent-brain periodically ingests session transcripts from each client's local storage:
+like most developers, i don't live in just one tool:
+- i might sketch an architecture plan with Gemini in the terminal.
+- jump into Cursor or Antigravity to write the implementation.
+- and do final review in a separate CLI session.
 
-| Environment | Ingest Path | Extracted Signal |
-|-------------|-------------|------------------|
-| Cursor | `~/.cursor/.../transcript.jsonl` | File edits, executed commands, turn intents |
-| Gemini / Antigravity | `~/.gemini/antigravity-cli/brain/...` | Plans, subagent trajectories, research digests |
-| OpenCode / Codex | Session JSON dumps | Task completions, error traces |
+`agent-brain` periodically reads session logs from local transcripts (`~/.cursor/.../transcript.jsonl` and `~/.gemini/antigravity-cli/...`), condenses the core actions into a 150-token summary, and makes it available immediately in your other windows:
 
-Session digests are condensed under a strict token budget. When you switch between tools, `route_task` immediately surfaces:
+> *"Retrieved via route_task (Gemini, 2 turns ago): Redesigned the blog navbar and bumped Node to v24.22.1."*
 
-> *"Retrieved via route_task. Session digest (Gemini, 2 turns ago): Redesigned blog with Stitch tokens and upgraded Node LTS to v24.22.1."*
+no more copy-pasting conversation summaries across chat windows 🤍!
 
-No manual copy-pasting of context across IDEs.
+---
 
-## 4. Upstream MCP Routing with `route_to_mcp`
+## 4. the `route_to_mcp` gateway 🌐
 
-As MCP servers proliferate (filesystem, GitHub, databases, UI design tools), connecting 20 distinct servers directly to an LLM blows through context limits before you write a single line of code.
+as the Model Context Protocol ecosystem exploded, connecting 15 different MCP servers directly to your editor became a recipe for token bankruptcy before you even started typing.
 
-agent-brain acts as an **MCP Gateway**:
+`agent-brain` acts as a calm gateway:
+- upstream tools (like `agent-body` for sandboxed commands or Google `stitch` for UI screens) register behind `agent-brain`.
+- the model calls `route_to_mcp` with an explicit `max_tokens` ceiling.
+- massive JSON payloads get trimmed before hitting your model's context window.
 
-- Upstream servers (such as `agent-body` for sandboxed bash execution, or Google `stitch` for generative UI design) register behind agent-brain.
-- Router suggestions tell the model which upstream tool is appropriate (`suggested_tools`).
-- The model calls `route_to_mcp` explicitly with a target server, tool name, arguments, and a `max_tokens` cap.
-- The response is semantically truncated, protecting the agent from massive JSON payloads.
+---
 
-```json
-// Example: Invoking Stitch through agent-brain
-{
-  "server": "stitch",
-  "tool": "generate_screen_from_text",
-  "arguments": {
-    "projectId": "14654054411761884985",
-    "prompt": "Modern engineering blog editorial hero"
-  },
-  "max_tokens": 500
-}
-```
+## wrapping up
 
-## 5. Autonomic Hard Read Gates
+giving agents a way to organize their thoughts and forget old mistakes turned our autonomous coding assistants from clumsy interns into sharp, reliable pairing buddies 🤍.
 
-To guarantee that agents do not bypass the routing system, we run with `AGENT_BRAIN_READ_GATE="hard"`.
+all the code is open source at [github.com/autonomic-ai-dev/agent-brain](https://github.com/autonomic-ai-dev/agent-brain).
 
-When this gate is active:
-1. Native file reading or grepping triggers a routing warning if `route_task` was not called at the start of the turn.
-2. Every durable outcome must conclude with `store_memory` recording the decision and verification outcome.
+in [Part 3](/blog/agent-brain-the-architectural-pivot-and-runtime/), we'll talk about the biggest pivot of all: why passive advice wasn't enough, and how hard execution gates made agent development reliable again!
 
-This turns agent context management from an unpredictable prompt-engineering trick into a disciplined, measurable runtime loop.
-
-## What is Next
-
-In Part 3, we will explore:
-- Vector indexing benchmarks comparing FastEmbed ONNX models on Apple Silicon
-- Multi-brain synchronisation via NATS and JetStream (`agent-nerves`)
-- Memory-to-skill promotion pipelines (`promote_to_skill`)
-
-**Repo:** [github.com/abhiudayg/agent-brain](https://github.com/abhiudayg/agent-brain)
+what's your favorite little memory trick for coding agents? let me know in the replies ✨!
