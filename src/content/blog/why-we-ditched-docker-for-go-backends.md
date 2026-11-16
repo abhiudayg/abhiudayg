@@ -141,19 +141,17 @@ every service gets its own ephemeral user ID with read-only access to `/usr` and
 
 ---
 
-## zero-downtime deploys with Caddy 🚢
+## deploys: restart in place, not zero-downtime 🚢
 
-a question friends often ask is: *"how do you roll out updates without kubernetes or docker swarm?"*
+a question friends often ask is: *"how do you roll out updates without kubernetes or docker swarm?"* the honest answer today is that anode restarts each service in place, and it does not yet do zero-downtime rollouts.
 
-Anode pairs systemd with Caddy's dynamic admin API:
+here is what `anode deploy` does, in order:
 
-1. Anode builds your static binary locally (`CGO_ENABLED=0 GOOS=linux`) and streams it over SSH to a new release directory.
-2. it starts the new version under a temporary systemd unit on a local loopback port.
-3. it pings your `/healthz` endpoint. once it returns 200 OK, the new version is considered healthy.
-4. Caddy swaps the reverse proxy route to the new version.
-5. the old version gets a `SIGTERM`, finishes serving its in-flight requests, and exits.
+1. it cross-compiles each service (`CGO_ENABLED=0 GOOS=linux`) and streams the binaries over SSH into a new release directory under `/var/lib/anode/releases/`.
+2. it restarts each service's systemd unit with the new binary, then checks the service on its loopback port.
+3. Caddy routes public traffic to that loopback port. with `--domain`, Caddy gets a Let's Encrypt certificate.
 
-we haven't measured the route-swap time or the number of dropped connections yet, so this post doesn't put a number on it.
+because old and new versions never run side by side, requests that are in flight during the restart can fail. we haven't measured how long that window is, or how many requests it drops, so this post doesn't put a number on it. the architecture page in the docs lists this as a known limitation.
 
 ---
 
