@@ -9,7 +9,7 @@
 const faqs = [
 	{
 		question: 'Why replace Docker Compose with Go SSA + Linux systemd in Anode?',
-		answer: 'Container daemons (dockerd and containerd) introduce ~210MB resident memory overhead, bridge NAT iptables latency, and slow cold boots (~450ms). Statically compiled Go binaries already include their runtime and system dependencies. By using Go SSA (Static Single Assignment) Variable Type Analysis to deduce database topology, routes, and ports directly from Go source code, Anode provisions native systemd service units, cgroups v2 slices, and Caddy reverse-proxy rules with cold boots under 8.2ms and 0 MB daemon RAM overhead.',
+		answer: 'Container daemons (dockerd and containerd) introduce ~100MB resident memory overhead, bridge NAT iptables latency, and slow cold boots (~450ms). Statically compiled Go binaries already include their runtime and system dependencies. By using Go SSA (Static Single Assignment) Variable Type Analysis to deduce database topology, routes, and ports directly from Go source code, Anode provisions native systemd service units, cgroups v2 slices, and Caddy reverse-proxy rules with cold boots under 8.2ms and 0 MB daemon RAM overhead.',
 	},
 	{
 		question: 'How does Tekmor prevent AI coding agents from faking test passes?',
@@ -17,7 +17,7 @@ const faqs = [
 	},
 	{
 		question: 'Why does Tekmor consume 0 model tokens for test verification?',
-		answer: 'Unlike cloud evaluator agents or LLM-as-a-judge approaches that burn metered API tokens on fuzzy text analysis, Tekmor runs deterministic local code via POSIX subshells and hashes the workspace using native SHA-256. Verification is 100% local, sub-second (0.38s for 14 checks), and costs exactly 0 model tokens.',
+		answer: 'Unlike cloud evaluator agents or LLM-as-a-judge approaches that burn metered API tokens on fuzzy text analysis, Tekmor runs deterministic local code via POSIX subshells and hashes the workspace using native SHA-256. Verification is 100% local, sub-second (0.34s for a one-test Go check, about 0.1s over running the test directly), and costs exactly 0 model tokens.',
 	},
 	{
 		question: 'Are these tools open source and production ready?',

@@ -207,11 +207,11 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						<div class="bg-code-bg border border-border rounded-lg p-3 font-mono text-xs space-y-1.5 text-text-dim">
 							<div class="flex justify-between">
 								<span>Cold boot:</span>
-								<span class="text-status-emerald font-medium">&lt; 8.2ms (55x faster than Docker)</span>
+								<span class="text-status-emerald font-medium">~35ms (17x faster than Docker)</span>
 							</div>
 							<div class="flex justify-between">
 								<span>Daemon RSS overhead:</span>
-								<span class="text-text font-medium">0 MB (eliminates ~210MB dockerd)</span>
+								<span class="text-text font-medium">0 daemons (Docker runtime uses ~100MB)</span>
 							</div>
 							<div class="flex justify-between">
 								<span>Supervisor &amp; Proxy:</span>
