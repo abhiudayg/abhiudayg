@@ -20,11 +20,9 @@ import ThemeToggle from './ThemeToggle.astro';
 		</div>
 
 		<!-- Center Navigation Links (Desktop) -->
-		<nav class="hidden lg:flex items-center gap-6 font-mono text-xs whitespace-nowrap">
+		<nav class="hidden md:flex items-center gap-6 sm:gap-8 font-mono text-xs whitespace-nowrap">
 			<HeaderLink href="/blog">Essays</HeaderLink>
-			<HeaderLink href="/#systems">Systems</HeaderLink>
-			<HeaderLink href="/#benchmarks">Benchmarks</HeaderLink>
-			<HeaderLink href="/#boundaries">Boundaries</HeaderLink>
+			<HeaderLink href="/scripts">Scripts</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 		</nav>
 
@@ -87,12 +85,7 @@ import ThemeToggle from './ThemeToggle.astro';
 		</div>
 		<div class="flex flex-col space-y-2">
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/blog">Essays &amp; Archive</a>
-			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#systems">Systems &amp; Runtimes</a>
-			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#benchmarks">Empirical Benchmarks</a>
-			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#evidence-inspector">Evidence Inspector</a>
-			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#boundaries">Honest Boundaries</a>
-			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#faq">FAQ</a>
-			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#series">Deep Series</a>
+			<a class="text-accent hover:text-accent/90 py-1 no-underline transition-colors font-semibold" href="/scripts">Bare-Metal Scripts &nearr;</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/about">About &amp; Manifesto</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/subscribe">RSS Syndication</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href={GITHUB_URL} target="_blank">GitHub &nearr;</a>

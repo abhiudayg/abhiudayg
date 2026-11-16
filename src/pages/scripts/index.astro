@@ -6,7 +6,7 @@ import JsonLd from '../../components/JsonLd.astro';
 import { AUTHOR_NAME } from '../../consts';
 import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
 
-const title = "Bare-Metal Systems Scripts & Kernel Primitives";
+const title = "Bare-Metal Systems Scripts & Automation Directory";
 const description = "Production-grade, zero-dependency bash scripts to eliminate cloud bloat, manage bare-metal processes, and optimize local networking.";
 
 const schema = graphJsonLd(
@@ -16,25 +16,60 @@ const schema = graphJsonLd(
 	]),
 );
 
+// Featured Series Categories
+const SERIES_LIST = [
+	{
+		id: "bare-metal-stack",
+		title: "The Bare-Metal Stack",
+		handle: "@baremetal.dev",
+		desc: "Replacing heavy cloud and container daemons with native Linux kernel primitives, systemd, 16.7M loopback IPs, and cgroups v2.",
+		episodesCount: 3,
+		status: "ACTIVE SERIES",
+		href: "/scripts/bare-metal-stack",
+		badgeColor: "status-emerald",
+		tags: ["Networking", "systemd", "cgroups v2", "Bare-Metal"],
+	},
+	{
+		id: "autonomous-agents",
+		title: "Autonomous Agent Runtimes",
+		handle: "Verification & Sandboxes",
+		desc: "Deterministic execution harnesses, micro-VM sandboxing, and cryptographic tree-sha validation for autonomous coding agents.",
+		episodesCount: 2,
+		status: "CURATED PIPELINE",
+		href: "/blog/series/agentrun",
+		badgeColor: "accent",
+		tags: ["Micro-VMs", "AST Gates", "Cryptographic Verification"],
+	},
+];
+
+// All Scripts Directory
 const SCRIPTS = [
 	{
 		id: "loopback",
-		title: "Loopback Subnet Engine (loopback.sh)",
-		series: "The Bare-Metal Stack #02",
+		title: "The 16.7 Million Local IP Hack (RFC 1122)",
+		scriptName: "loopback.sh",
+		series: "The Bare-Metal Stack",
+		episode: "#02",
 		status: "LIVE",
 		badgeColor: "status-emerald",
+		duration: "0:32",
+		reelUrl: "https://instagram.com/baremetal.dev",
 		desc: "Binds the 16.7M RFC 1122 127.0.0.0/8 loopback subnet, maps clean .local domains in /etc/hosts, and configures Caddy on port 80/443 with 0 port collisions.",
 		curlCmd: "curl -fsSL https://abhiudayg.dev/scripts/loopback.sh | sudo bash",
 		href: "/scripts/loopback",
-		tags: ["Networking", "RFC 1122", "Caddy", "Zero-Bloat"],
+		tags: ["Networking", "RFC 1122", "127.0.0.0/8", "Caddy"],
 	},
 	{
 		id: "systemd-unit",
-		title: "Native systemd Go/Rust Supervisor",
-		series: "The Bare-Metal Stack #01",
+		title: "Stop Declaring Go Infrastructure Twice",
+		scriptName: "anode deploy",
+		series: "The Bare-Metal Stack",
+		episode: "#01",
 		status: "RELEASED",
 		badgeColor: "accent",
-		desc: "Auto-generates hardened Linux systemd service units with automatic restart, journald streaming, and zero-downtime socket handoffs for static binaries.",
+		duration: "0:42",
+		reelUrl: "https://www.instagram.com/reel/DfkXP6RjOzx/",
+		desc: "Inspects Go AST to auto-detect routes and database connections. Auto-generates hardened Linux systemd service units with 18MB RAM footprint vs. 500MB Docker daemon.",
 		curlCmd: "brew install abhiudayg/tap/anode",
 		href: "https://github.com/abhiudayg/anode",
 		tags: ["systemd", "Go", "Process Management", "18MB Footprint"],
@@ -42,13 +77,17 @@ const SCRIPTS = [
 	{
 		id: "cgroups-sandbox",
 		title: "Linux cgroups v2 Memory Jail",
-		series: "The Bare-Metal Stack #04",
-		status: "COMING SOON",
+		scriptName: "cgroups-jail.sh",
+		series: "The Bare-Metal Stack",
+		episode: "#03",
+		status: "IN PRODUCTION",
 		badgeColor: "text-dim",
-		desc: "Hard limit local dev processes to strictly 128MB RAM and 20% CPU without installing Docker, containerd, or Kubernetes.",
-		curlCmd: "Coming in Episode #04",
-		href: "#",
-		tags: ["cgroups v2", "Linux Kernel", "Memory Limits"],
+		duration: "0:35",
+		reelUrl: "https://instagram.com/baremetal.dev",
+		desc: "Hard limit local dev processes to strictly 128MB RAM and 20% CPU using native Linux kernel cgroups v2 slices without installing Docker, containerd, or Kubernetes.",
+		curlCmd: "Coming in Episode #03",
+		href: "/scripts/bare-metal-stack",
+		tags: ["cgroups v2", "Linux Kernel", "Memory Limits", "Isolation"],
 	},
 ];
 ---
@@ -58,6 +97,27 @@ const SCRIPTS = [
 	<head>
 		<BaseHead title={`${title} — ${AUTHOR_NAME}`} description={description} />
 		<JsonLd schema={schema} />
+		<style>
+			/* Seamless Infinite Looping Marquee */
+			@keyframes infinite-scroll {
+				0% {
+					transform: translateX(0);
+				}
+				100% {
+					transform: translateX(-50%);
+				}
+			}
+
+			.infinite-ticker-track {
+				display: flex;
+				width: max-content;
+				animation: infinite-scroll 24s linear infinite;
+			}
+
+			.infinite-ticker-track:hover {
+				animation-play-state: paused;
+			}
+		</style>
 	</head>
 	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
 		<!-- Framer-Style Animated Background -->
@@ -70,55 +130,202 @@ const SCRIPTS = [
 
 		<Header />
 
-		<main class="shell relative py-12 sm:py-16 md:py-20 space-y-12 max-w-4xl animate-fade-in">
+		<!-- Infinite Looping Runner Marquee Banner -->
+		<div class="w-full overflow-hidden border-b border-border/60 bg-surface-card/40 py-2.5 backdrop-blur-sm">
+			<div class="infinite-ticker-track font-mono text-xs text-text-dim items-center">
+				<!-- Sequence 1 -->
+				<div class="flex items-center gap-8 px-4 shrink-0">
+					<span class="flex items-center gap-2 text-text font-semibold">
+						<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+						THE BARE-METAL STACK #01 &bull; ANODE DEPLOY (18MB RAM)
+					</span>
+					<span class="text-accent">&bull;</span>
+					<span class="flex items-center gap-2 text-text font-semibold">
+						<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+						THE BARE-METAL STACK #02 &bull; 16.7M LOOPBACK IPS (RFC 1122)
+					</span>
+					<span class="text-accent">&bull;</span>
+					<span class="flex items-center gap-2 text-text-muted">
+						<span class="w-1.5 h-1.5 rounded-full bg-text-dim"></span>
+						THE BARE-METAL STACK #03 &bull; CGROUPS V2 MEMORY JAIL
+					</span>
+					<span class="text-accent">&bull;</span>
+					<span class="flex items-center gap-2 text-text font-semibold">
+						ZERO CLOUD BLOAT &bull; EXCALIDRAW &bull; TERMINALS &bull; BARE METAL
+					</span>
+					<span class="text-accent">&bull;</span>
+				</div>
+				<!-- Duplicate for continuous infinite wrap -->
+				<div class="flex items-center gap-8 px-4 shrink-0" aria-hidden="true">
+					<span class="flex items-center gap-2 text-text font-semibold">
+						<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+						THE BARE-METAL STACK #01 &bull; ANODE DEPLOY (18MB RAM)
+					</span>
+					<span class="text-accent">&bull;</span>
+					<span class="flex items-center gap-2 text-text font-semibold">
+						<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+						THE BARE-METAL STACK #02 &bull; 16.7M LOOPBACK IPS (RFC 1122)
+					</span>
+					<span class="text-accent">&bull;</span>
+					<span class="flex items-center gap-2 text-text-muted">
+						<span class="w-1.5 h-1.5 rounded-full bg-text-dim"></span>
+						THE BARE-METAL STACK #03 &bull; CGROUPS V2 MEMORY JAIL
+					</span>
+					<span class="text-accent">&bull;</span>
+					<span class="flex items-center gap-2 text-text font-semibold">
+						ZERO CLOUD BLOAT &bull; EXCALIDRAW &bull; TERMINALS &bull; BARE METAL
+					</span>
+					<span class="text-accent">&bull;</span>
+				</div>
+			</div>
+		</div>
+
+		<main class="shell relative py-12 sm:py-16 md:py-20 space-y-14 max-w-4xl animate-fade-in">
 			<!-- Header Banner -->
 			<header class="space-y-4 border-b border-border pb-10">
 				<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted">
 					<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
-					<span class="text-accent font-semibold">The Bare-Metal Stack</span>
-					<span>&bull; Automation Scripts Directory</span>
+					<span class="text-accent font-semibold">Bare-Metal Hub</span>
+					<span>&bull; Automation Scripts &amp; Systems Curriculum</span>
 				</div>
 				<h1 class="text-3xl sm:text-5xl font-sans font-bold tracking-[-0.035em] text-text leading-[1.15]">
-					Bare-Metal Systems Scripts
+					Systems Engineering Scripts
 				</h1>
-				<p class="text-base sm:text-lg text-text-muted leading-relaxed max-w-2xl">
+				<p class="text-base sm:text-lg text-text-muted leading-relaxed max-w-3xl">
 					Single, zero-dependency, copy-pasteable bash scripts designed to eliminate cloud bloat, bypass heavy container daemons, and squeeze native performance out of your local machine.
 				</p>
 			</header>
 
-			<!-- Scripts List -->
-			<section class="space-y-6">
+			<!-- 1. Featured Content Series (Multiple Series Hub) -->
+			<section class="space-y-5">
+				<div class="flex items-center justify-between border-b border-border pb-3">
+					<span class="font-mono text-xs uppercase tracking-wider text-text-dim">// CONTENT SERIES CURRICULUM</span>
+					<span class="font-mono text-xs text-status-emerald">Continuous Updates</span>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+					{SERIES_LIST.map((series) => (
+						<a
+							href={series.href}
+							class="caveman-panel p-6 bento-card-glow rounded-xl border border-border bg-surface-card space-y-4 transition-all hover:border-accent block no-underline group"
+						>
+							<div class="flex items-center justify-between">
+								<span class="font-mono text-xs text-accent font-bold uppercase tracking-wider">{series.handle}</span>
+								<span class={`font-mono text-[11px] px-2 py-0.5 rounded bg-surface-card border border-border text-${series.badgeColor}`}>
+									{series.status}
+								</span>
+							</div>
+
+							<div class="space-y-1">
+								<h2 class="text-xl font-bold text-text group-hover:text-accent transition-colors flex items-center justify-between">
+									<span>{series.title}</span>
+									<span class="text-text-dim group-hover:text-accent group-hover:translate-x-1 transition-all">→</span>
+								</h2>
+								<p class="text-xs sm:text-sm text-text-muted leading-relaxed">
+									{series.desc}
+								</p>
+							</div>
+
+							<div class="pt-2 border-t border-border/50 flex items-center justify-between font-mono text-xs text-text-dim">
+								<span>{series.episodesCount} Episodes Available</span>
+								<span class="text-accent group-hover:underline">Explore Series →</span>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+
+			<!-- 2. Universal Search & Filter Bar -->
+			<section class="space-y-4">
+				<div class="flex items-center justify-between border-b border-border pb-3">
+					<span class="font-mono text-xs uppercase tracking-wider text-text-dim">// SCRIPTS DIRECTORY &bull; LIVE SEARCH</span>
+					<span id="scripts-match-count" class="font-mono text-xs text-accent">
+						{SCRIPTS.length} scripts available
+					</span>
+				</div>
+
+				<div class="relative">
+					<input
+						type="text"
+						id="hub-search-input"
+						placeholder="Search scripts by title, command, tag, episode #, or keyword... (e.g. 'loopback', 'anode', 'cgroups', '80')"
+						class="w-full bg-surface-card border border-border focus:border-accent rounded-xl px-4 py-3 pl-10 font-mono text-xs sm:text-sm text-text placeholder:text-text-dim outline-none transition-all shadow-inner"
+						autocomplete="off"
+					/>
+					<svg class="w-4 h-4 text-text-dim absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+					</svg>
+				</div>
+			</section>
+
+			<!-- 3. All Scripts List -->
+			<section class="space-y-6" id="scripts-container">
 				{SCRIPTS.map((script) => (
-					<div class="caveman-panel p-6 sm:p-7 bento-card-glow rounded-xl border border-border bg-surface-card space-y-4 transition-all hover:border-accent/40">
+					<div
+						class="script-card caveman-panel p-6 sm:p-7 bento-card-glow rounded-xl border border-border bg-surface-card space-y-4 transition-all hover:border-accent/40"
+						data-search={`${script.episode} ${script.title} ${script.scriptName} ${script.series} ${script.desc} ${script.tags.join(' ')}`.toLowerCase()}
+					>
+						<!-- Card Header -->
 						<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/50 pb-3">
 							<div class="space-y-1">
-								<span class="font-mono text-xs text-accent uppercase tracking-wider">{script.series}</span>
-								<h2 class="text-xl font-bold text-text">
+								<div class="flex items-center gap-2">
+									<span class="font-mono text-xs px-2 py-0.5 rounded bg-accent/15 border border-accent/40 text-accent font-bold">
+										{script.series} {script.episode}
+									</span>
+									<span class="font-mono text-xs text-text-dim">{script.scriptName}</span>
+								</div>
+								<h3 class="text-xl font-bold text-text">
 									<a href={script.href} class="hover:text-accent transition-colors flex items-center gap-2">
 										{script.title}
 										<span class="text-sm">→</span>
 									</a>
-								</h2>
+								</h3>
 							</div>
 
-							<span class={`font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-${script.badgeColor} shrink-0`}>
-								{script.status}
-							</span>
+							<!-- Badges: Duration Timer + Reel Link + Status -->
+							<div class="flex flex-wrap items-center gap-2 shrink-0">
+								<!-- Duration Timer -->
+								<span class="font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted flex items-center gap-1.5">
+									<span>⏱</span>
+									<span>{script.duration}</span>
+								</span>
+
+								<!-- Instagram Reel Link -->
+								{script.reelUrl && (
+									<a
+										href={script.reelUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="font-mono text-xs px-2.5 py-1 rounded bg-pink-500/10 border border-pink-500/30 text-pink-400 hover:bg-pink-500/20 transition-colors flex items-center gap-1.5"
+									>
+										<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+											<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+										</svg>
+										<span>Reel</span>
+									</a>
+								)}
+
+								<!-- Status Pill -->
+								<span class={`font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-${script.badgeColor}`}>
+									{script.status}
+								</span>
+							</div>
 						</div>
 
+						<!-- Description -->
 						<p class="text-sm text-text-muted leading-relaxed">
 							{script.desc}
 						</p>
 
-						<!-- Command Box -->
-						<div class="caveman-panel p-3 bg-bg border border-border/60 rounded-lg font-mono text-xs flex items-center justify-between gap-2 overflow-x-auto text-text">
+						<!-- Command Box & Action Link -->
+						<div class="caveman-panel p-3 bg-bg border border-border/60 rounded-lg font-mono text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 overflow-x-auto text-text">
 							<div class="flex items-center gap-2">
 								<span class="text-accent">❯</span>
 								<span>{script.curlCmd}</span>
 							</div>
-							{script.status === "LIVE" && (
-								<a href={script.href} class="text-accent hover:underline text-xs shrink-0">
-									Inspect &amp; Evidence →
+							{script.href !== "#" && (
+								<a href={script.href} class="text-accent hover:underline text-xs shrink-0 font-semibold">
+									Inspect Script &amp; Telemetry →
 								</a>
 							)}
 						</div>
@@ -135,7 +342,7 @@ const SCRIPTS = [
 				))}
 			</section>
 
-			<!-- Footer Links -->
+			<!-- Footer -->
 			<footer class="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-text-dim">
 				<div>The Bare-Metal Stack by <a href="/" class="text-text underline hover:text-accent">Abhiuday</a> &bull; Bengaluru</div>
 				<div class="flex items-center gap-4">
@@ -146,5 +353,33 @@ const SCRIPTS = [
 		</main>
 
 		<Footer />
+
+		<script>
+			// Universal Realtime Search Filter
+			const searchInput = document.getElementById('hub-search-input') as HTMLInputElement | null;
+			const matchCount = document.getElementById('scripts-match-count');
+			const cards = document.querySelectorAll('.script-card');
+
+			if (searchInput && cards.length > 0) {
+				searchInput.addEventListener('input', () => {
+					const query = searchInput.value.toLowerCase().trim();
+					let visible = 0;
+
+					cards.forEach((card) => {
+						const searchData = card.getAttribute('data-search') || '';
+						if (!query || searchData.includes(query)) {
+							(card as HTMLElement).style.display = 'block';
+							visible++;
+						} else {
+							(card as HTMLElement).style.display = 'none';
+						}
+					});
+
+					if (matchCount) {
+						matchCount.innerText = `${visible} of ${cards.length} scripts found`;
+					}
+				});
+			}
+		</script>
 	</body>
 </html>
