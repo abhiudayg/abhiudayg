@@ -68,6 +68,16 @@ const EPISODES = [
 	<head>
 		<BaseHead title={`${title} — ${AUTHOR_NAME}`} description={description} />
 		<JsonLd schema={schema} />
+		<style>
+			.episode-card {
+				transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+			}
+			.episode-card:hover {
+				transform: translateY(-2px);
+				border-color: rgba(249, 115, 22, 0.45);
+				box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(249, 115, 22, 0.15);
+			}
+		</style>
 	</head>
 	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
 		<!-- Framer-Style Animated Background -->
@@ -104,26 +114,30 @@ const EPISODES = [
 			</header>
 
 			<!-- Live Search & Filter Bar -->
-			<section class="space-y-4">
+			<section class="space-y-4 animate-fade-in stagger-1">
+				<div class="flex items-center justify-between border-b border-border pb-3">
+					<span class="font-mono text-xs uppercase tracking-wider text-text-dim">// EPISODES TIMELINE &bull; LIVE SEARCH</span>
+					<span id="series-match-count" class="font-mono text-xs text-accent">
+						{EPISODES.length} episodes available
+					</span>
+				</div>
+
 				<div class="relative">
 					<input
 						type="text"
 						id="series-search-input"
 						placeholder="Search episodes by keyword, tool, port, or tag... (e.g. 'cgroups', 'loopback', '80')"
-						class="w-full bg-surface-card border border-border focus:border-accent rounded-xl px-4 py-3 pl-10 font-mono text-xs sm:text-sm text-text placeholder:text-text-dim outline-none transition-all shadow-inner"
+						class="w-full bg-surface-card border border-border focus:border-accent rounded-xl px-4 py-3 pl-10 pr-4 font-mono text-xs sm:text-sm text-text placeholder:text-text-dim outline-none transition-all shadow-inner"
 						autocomplete="off"
 					/>
 					<svg class="w-4 h-4 text-text-dim absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
 					</svg>
-					<span id="series-match-count" class="absolute right-3.5 top-3.5 font-mono text-xs text-text-dim">
-						3 episodes
-					</span>
 				</div>
 			</section>
 
 			<!-- Episode Timeline List -->
-			<section class="space-y-6" id="episodes-container">
+			<section class="space-y-6 animate-fade-in stagger-2" id="episodes-container">
 				{EPISODES.map((ep) => (
 					<div class="episode-card caveman-panel p-6 sm:p-7 bento-card-glow rounded-xl border border-border bg-surface-card space-y-4 transition-all hover:border-accent/40" data-search={`${ep.episode} ${ep.title} ${ep.tool} ${ep.summary} ${ep.tags.join(' ')}`.toLowerCase()}>
 						<!-- Episode Header -->
