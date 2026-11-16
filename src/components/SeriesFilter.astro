@@ -1,110 +1,254 @@
 ---
-import { BLOG_SERIES, BLOG_SERIES_SLUGS } from '../consts';
+import { BLOG_SERIES, BLOG_SERIES_SLUGS, type BlogSeriesSlug } from '../consts';
+import { getSortedPosts } from '../utils/blog';
 
 interface Props {
 	activeSeries?: string | null;
+	activeTag?: string | null;
 }
 
-const { activeSeries = null } = Astro.props;
+const { activeSeries = null, activeTag = null } = Astro.props;
 const basePath = '/blog';
-const activeLabel = activeSeries ? BLOG_SERIES[activeSeries as keyof typeof BLOG_SERIES].title : 'All posts';
+
+const allPosts = await getSortedPosts();
+const totalPostsCount = allPosts.length;
+const seriesCounts = BLOG_SERIES_SLUGS.reduce((acc, slug) => {
+	acc[slug] = allPosts.filter((p) => p.data.series === slug).length;
+	return acc;
+}, {} as Record<string, number>);
+
+// Curated popular tags across dispatches
+const popularTags = [
+	'rust',
+	'golang',
+	'autonomous-agents',
+	'mcp',
+	'systems-programming',
+	'sandboxing',
+	'token-budgets',
+	'compiler-design',
+];
 ---
 
-<div class="series-filter">
-	<label class="series-filter-label" for="series-search">Series</label>
-	<details class="series-filter-menu">
-		<summary class="series-filter-trigger">
-			<span class="series-filter-current">{activeLabel}</span>
-			<svg class="series-filter-chevron" viewBox="0 0 20 20" aria-hidden="true" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75">
-				<path d="m6 8 4 4 4-4"></path>
-			</svg>
-		</summary>
+<div class="unified-blog-filter space-y-4 font-mono text-xs" data-active-series={activeSeries ?? ''} data-active-tag={activeTag ?? ''}>
+	<!-- 1. Centered Track Filter Rail (Anode Style) -->
+	<div class="flex flex-wrap items-center justify-center gap-2 pt-1">
+		<a
+			href={basePath}
+			class:list={[
+				'filter-pill-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all no-underline cursor-pointer',
+				!activeSeries && !activeTag
+					? 'bg-white/[0.08] text-neutral-200 border border-white/[0.12] shadow-none font-semibold'
+					: 'bg-white/[0.03] text-neutral-400 border border-white/[0.08] hover:text-white hover:bg-white/[0.06]'
+			]}
+			data-filter-type="all"
+		>
+			<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+			<span>All Essays</span>
+			<span class:list={[
+				'text-[10px] px-1.5 py-0.2 rounded-full font-mono',
+				!activeSeries && !activeTag ? 'bg-white/[0.08] text-neutral-300' : 'bg-white/[0.06] text-neutral-500'
+			]}>
+				{totalPostsCount}
+			</span>
+		</a>
 
-		<div class="series-filter-panel">
-			<input
-				id="series-search"
-				class="series-filter-search"
-				type="search"
-				placeholder="Search series..."
-				autocomplete="off"
-				spellcheck="false"
-			/>
+		{BLOG_SERIES_SLUGS.map((slug) => {
+			const s = BLOG_SERIES[slug];
+			const count = seriesCounts[slug] || 0;
+			const isActive = activeSeries === slug;
+			return (
+				<a
+					href={`${basePath}/series/${slug}/`}
+					class:list={[
+						'filter-pill-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all no-underline cursor-pointer',
+						isActive
+							? 'bg-white/[0.08] text-neutral-200 border border-white/[0.12] shadow-none font-semibold'
+							: 'bg-white/[0.03] text-neutral-400 border border-white/[0.08] hover:text-white hover:bg-white/[0.06]'
+					]}
+					data-filter-type="series"
+					data-filter-val={slug}
+				>
+					<span>#{s.title}</span>
+					<span class:list={[
+						'text-[10px] px-1.5 py-0.2 rounded-full font-mono',
+						isActive ? 'bg-white/[0.08] text-neutral-300' : 'bg-white/[0.06] text-neutral-500'
+					]}>
+						{count}
+					</span>
+				</a>
+			);
+		})}
+	</div>
 
-			<ul class="series-filter-list" role="list">
-				<li class="series-filter-item" data-series-label="all posts">
-					<a
-						class:list={['series-filter-option', { 'series-filter-option-active': !activeSeries }]}
-						href={basePath}
-					>
-						All posts
-					</a>
-				</li>
-				{
-					BLOG_SERIES_SLUGS.map((slug) => (
-						<li class="series-filter-item" data-series-label={BLOG_SERIES[slug].title.toLowerCase()}>
-							<a
-								class:list={['series-filter-option', { 'series-filter-option-active': activeSeries === slug }]}
-								href={`${basePath}/series/${slug}/`}
-							>
-								{BLOG_SERIES[slug].title}
-							</a>
-						</li>
-					))
-				}
-			</ul>
+	<!-- 2. Centered Secondary Topic Tag Filter Rail -->
+	<div class="flex flex-wrap items-center justify-center gap-1.5 pt-1 text-[11px]">
+		<span class="text-neutral-500 shrink-0 font-mono text-xs pr-1">Topic:</span>
+		{popularTags.map((tag) => {
+			const isActive = activeTag === tag;
+			return (
+				<button
+					type="button"
+					class:list={[
+						'filter-tag-pill px-2.5 py-1 rounded-full border transition-all cursor-pointer font-mono text-[11px]',
+						isActive
+							? 'bg-white/[0.1] text-white border-white/[0.2] font-semibold'
+							: 'bg-white/[0.02] border-white/[0.06] text-neutral-400 hover:text-white hover:bg-white/[0.05]'
+					]}
+					data-filter-type="tag"
+					data-filter-val={tag}
+				>
+					#{tag}
+				</button>
+			);
+		})}
+	</div>
 
-			<p class="series-filter-empty" hidden>No series match your search.</p>
+	<!-- 3. Active Status & Reset Line -->
+	<div id="filter-status-bar" class="flex items-center justify-between pt-2 border-t border-white/[0.06] text-[11px] text-neutral-400 font-mono max-w-4xl mx-auto">
+		<div class="flex items-center gap-3">
+			<span id="filter-match-count">All {totalPostsCount} technical essays</span>
+			<button
+				type="button"
+				id="clear-filter-btn"
+				class="hidden text-emerald-400 hover:underline cursor-pointer"
+			>
+				Reset filter &times;
+			</button>
 		</div>
-	</details>
+		<span class="text-neutral-500">Continuous feed &bull; 100% zero-tracker RSS</span>
+	</div>
 </div>
 
 <script>
-	function initSeriesFilter(root) {
-		if (root.dataset.seriesFilterInit === 'true') return;
-		root.dataset.seriesFilterInit = 'true';
-		const menu = root.querySelector('.series-filter-menu');
-		const search = root.querySelector('.series-filter-search');
-		const items = root.querySelectorAll('.series-filter-item');
-		const empty = root.querySelector('.series-filter-empty');
-		if (!menu || !search || !empty) return;
+	function setupUnifiedFilter() {
+		const filterContainer = document.querySelector('.unified-blog-filter');
+		if (!filterContainer) return;
 
-		const filterItems = () => {
-			const query = search.value.trim().toLowerCase();
-			let visibleCount = 0;
+		const filterButtons = filterContainer.querySelectorAll('[data-filter-type]');
+		const matchCount = document.getElementById('filter-match-count');
+		const clearBtn = document.getElementById('clear-filter-btn');
+		const isMainBlogPage = window.location.pathname.replace(/\/$/, '') === '/blog';
 
-			items.forEach((item) => {
-				const label = item.getAttribute('data-series-label') ?? '';
-				const matches = !query || label.includes(query);
-				item.hidden = !matches;
-				if (matches) visibleCount += 1;
+		let currentSeries = filterContainer.getAttribute('data-active-series') || '';
+		let currentTag = filterContainer.getAttribute('data-active-tag') || '';
+
+		function applyFilter(series: string, tag: string) {
+			currentSeries = series;
+			currentTag = tag;
+
+			// Update button UI
+			filterButtons.forEach((btn) => {
+				const type = btn.getAttribute('data-filter-type');
+				const val = btn.getAttribute('data-filter-val') || '';
+
+				let isActive = false;
+				if (type === 'all' && !currentSeries && !currentTag) isActive = true;
+				if (type === 'series' && currentSeries === val) isActive = true;
+				if (type === 'tag' && currentTag === val) isActive = true;
+
+				if (type === 'tag') {
+					if (isActive) {
+						btn.className = 'filter-tag-pill px-2.5 py-1 rounded-full border transition-all cursor-pointer font-mono text-[11px] bg-white/[0.1] text-white border-white/[0.2] font-semibold';
+					} else {
+						btn.className = 'filter-tag-pill px-2.5 py-1 rounded-full border transition-all cursor-pointer font-mono text-[11px] bg-white/[0.02] border-white/[0.06] text-neutral-400 hover:text-white hover:bg-white/[0.05]';
+					}
+				} else {
+					const badge = btn.querySelector('span:last-child');
+					if (isActive) {
+						btn.className = 'filter-pill-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all no-underline cursor-pointer bg-white/[0.08] text-neutral-200 border border-white/[0.12] shadow-none font-semibold';
+						if (badge) badge.className = 'text-[10px] px-1.5 py-0.2 rounded-full font-mono bg-white/[0.08] text-neutral-300';
+					} else {
+						btn.className = 'filter-pill-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all no-underline cursor-pointer bg-white/[0.03] text-neutral-400 border border-white/[0.08] hover:text-white hover:bg-white/[0.06]';
+						if (badge) badge.className = 'text-[10px] px-1.5 py-0.2 rounded-full font-mono bg-white/[0.06] text-neutral-500';
+					}
+				}
 			});
 
-			empty.hidden = visibleCount > 0;
-		};
-
-		search.addEventListener('input', filterItems);
-
-		root.querySelectorAll('.series-filter-option').forEach((link) => {
-			link.addEventListener('click', () => {
-				menu.removeAttribute('open');
-			});
-		});
-
-		document.addEventListener('click', (event) => {
-			if (!menu.hasAttribute('open') || !(event.target instanceof Node)) return;
-			if (!root.contains(event.target)) menu.removeAttribute('open');
-		});
-
-		document.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape' && menu.hasAttribute('open')) {
-				menu.removeAttribute('open');
-				search.blur();
+			// If on main blog page, emit event for in-page infinite scroll filtering
+			if (isMainBlogPage) {
+				window.dispatchEvent(
+					new CustomEvent('blog-filter-change', {
+						detail: { series: currentSeries, tag: currentTag },
+					})
+				);
 			}
+
+			// Update status bar
+			if (currentSeries || currentTag) {
+				if (clearBtn) clearBtn.classList.remove('hidden');
+			} else {
+				if (clearBtn) clearBtn.classList.add('hidden');
+			}
+		}
+
+		filterButtons.forEach((btn) => {
+			(btn as HTMLElement).onclick = (e) => {
+				const type = btn.getAttribute('data-filter-type');
+				const val = btn.getAttribute('data-filter-val') || '';
+
+				// If on /blog, intercept navigation to filter in-page instantly
+				if (isMainBlogPage) {
+					e.preventDefault();
+					if (type === 'all') {
+						applyFilter('', '');
+					} else if (type === 'series') {
+						if (currentSeries === val) {
+							applyFilter('', currentTag);
+						} else {
+							applyFilter(val, '');
+						}
+					} else if (type === 'tag') {
+						if (currentTag === val) {
+							applyFilter(currentSeries, '');
+						} else {
+							applyFilter('', val);
+						}
+					}
+				}
+			};
+		});
+
+		if (clearBtn) {
+			clearBtn.onclick = (e) => {
+				e.preventDefault();
+				if (isMainBlogPage) {
+					applyFilter('', '');
+				} else {
+					window.location.href = '/blog';
+				}
+			};
+		}
+
+		// Listen to external tag clicks from PostCards
+		window.addEventListener('filter-tag', ((e: CustomEvent) => {
+			const tag = e.detail?.tag;
+			if (tag) {
+				if (isMainBlogPage) {
+					applyFilter('', tag);
+				} else {
+					window.location.href = `/blog?tag=${encodeURIComponent(tag)}`;
+				}
+			}
+		}) as EventListener);
+
+		// Post tag button clicks on cards
+		document.querySelectorAll('.post-tag-btn').forEach((tagBtn) => {
+			(tagBtn as HTMLElement).onclick = (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				const tag = tagBtn.getAttribute('data-tag');
+				if (tag) {
+					if (isMainBlogPage) {
+						applyFilter('', tag);
+					} else {
+						window.location.href = `/blog`;
+					}
+				}
+			};
 		});
 	}
 
-	document.querySelectorAll('.series-filter').forEach(initSeriesFilter);
-	document.addEventListener('astro:page-load', () => {
-		document.querySelectorAll('.series-filter').forEach(initSeriesFilter);
-	});
+	setupUnifiedFilter();
+	document.addEventListener('astro:page-load', setupUnifiedFilter);
 </script>

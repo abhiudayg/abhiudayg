@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Project verification entrypoint executed by `agent-brain verify -- .verify/run.sh`
+# Project verification entrypoint executed by `tekmor verify -- .verify/run.sh`
 echo "==> Running verification suite..."
 
-if [ -f Cargo.toml ]; then
+if [ -f bun.lock ] || [ -f bun.lockb ]; then
+  bun test
+elif [ -f Cargo.toml ]; then
   cargo test
 elif [ -f package.json ]; then
   npm test

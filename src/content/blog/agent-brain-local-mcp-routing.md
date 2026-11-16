@@ -1,17 +1,17 @@
 ---
-title: 'agent-brain: local MCP routing under a tight token budget 🧠'
+title: 'tekmor: local MCP routing under a tight token budget 🧠'
 description: 'how i built a speedy Rust MCP server that routes each agent turn to the right skills, rules, and memory — locally, with strict token limits and zero cloud SaaS 🤍'
 pubDate: 2026-06-18
-series: agent-brain
+series: tekmor
 seriesPart: 1
-tags: ['agent-brain', 'model-context-protocol', 'mcp-routing', 'local-first-ai', 'context-budgeting', 'fast-embedding']
+tags: ['tekmor', 'model-context-protocol', 'mcp-routing', 'local-first-ai', 'context-budgeting', 'fast-embedding']
 ---
 
 every coding agent turn arrives with too much context and not enough signal ✨.
 
 your skills folders, rule files, agent personas, and past project notes all fight for the exact same tiny token window. cloud memory SaaS adds network lag, expensive subscription tiers, and another vendor to worry about. and just dumping everything into your system prompt? that melts your context window before you even write a single line of code 💀.
 
-so i had a blast building [agent-brain](https://github.com/autonomic-ai-dev/agent-brain) 🤍! it's a **local MCP server written in Rust** that lives right on your machine. it indexes your local skills, rules, and notes, and answers one simple question on every single turn:
+so i had a blast building [tekmor](https://github.com/autonomic-ai-dev/tekmor) 🤍! it's a **local MCP server written in Rust** that lives right on your machine. it indexes your local skills, rules, and notes, and answers one simple question on every single turn:
 
 **what should the model see right now under a strict token budget?**
 
@@ -28,7 +28,7 @@ coding agents already have skills folders and `.cursorrules`. the failure mode i
 - old facts contradict today's refactored architecture.
 - there's no durable write path for decisions you want to remember next week.
 
-`agent-brain` isn't an overcomplicated agent framework. it doesn't try to replace your LLM or plan 50-step tasks. it is simply a **routing layer**: cheap, local, and friendly ✨.
+`tekmor` isn't an overcomplicated agent framework. it doesn't try to replace your LLM or plan 50-step tasks. it is simply a **routing layer**: cheap, local, and friendly ✨.
 
 ---
 
@@ -37,7 +37,7 @@ coding agents already have skills folders and `.cursorrules`. the failure mode i
 ```mermaid
 flowchart TB
   subgraph sources["Indexed Local Sources 📚"]
-    brain["~/.agent_brain"]
+    brain["~/.tekmor"]
     cursor["Cursor skills & rules"]
     repo["AGENTS.md / CLAUDE.md"]
     packages["Shallow-cloned packages"]
@@ -58,13 +58,13 @@ indexed sources include:
 
 | source | where it lives |
 |---|---|
-| brain home | `~/.agent_brain/{rules,skills,agents}/` |
+| brain home | `~/.tekmor/{rules,skills,agents}/` |
 | Cursor | `~/.cursor/skills/`, `.cursor/rules/` |
 | Claude / Codex | `~/.claude/`, `~/.codex/` |
 | repo roots | `AGENTS.md`, `CLAUDE.md` |
-| skill packs | `~/.agent_brain/packages/` |
+| skill packs | `~/.tekmor/packages/` |
 
-skill packs work like lightweight plug-in packs. running `agent-brain add owner/repo` shallow-clones community skill packs into your brain home so you don't have to copy-paste markdown into twenty different git repositories!
+skill packs work like lightweight plug-in packs. running `tekmor add owner/repo` shallow-clones community skill packs into your brain home so you don't have to copy-paste markdown into twenty different git repositories!
 
 ---
 
@@ -75,7 +75,7 @@ at the start of every turn, the editor calls **`route_task`** with:
 - current working directory
 - active open files
 
-in return, `agent-brain` gives you:
+in return, `tekmor` gives you:
 - `recommended_skills` & `applicable_rules` (ranked by relevance!)
 - `must_apply` — non-negotiable constraints that must not be skipped
 - `tokens_used` & `latency_ms` (usually <15ms!)
@@ -93,7 +93,7 @@ Rust gives us three huge superpowers:
 2. **SQLite WAL** so concurrent reads never block your background writes.
 3. **a single featherlight binary** that drinks almost zero RAM.
 
-the first time you run it, `agent-brain` pulls down the friendly little `AllMiniLML6V2` embedding model (~90MB) via fastembed. from then on, all vector similarity calculations run completely offline right on your CPU or Apple Silicon Neural Engine 🚀.
+the first time you run it, `tekmor` pulls down the friendly little `AllMiniLML6V2` embedding model (~90MB) via fastembed. from then on, all vector similarity calculations run completely offline right on your CPU or Apple Silicon Neural Engine 🚀.
 
 ---
 
@@ -102,22 +102,22 @@ the first time you run it, `agent-brain` pulls down the friendly little `AllMini
 when an agent finishes a tricky bug fix or architectural decision, it calls `store_memory`:
 
 ```bash
-agent-brain store_memory --topic "database" --fact "We use goose migrations in migrations/*.sql"
+tekmor store_memory --topic "database" --fact "We use goose migrations in migrations/*.sql"
 ```
 
 writes are serialized through a single-threaded queue so SQLite never throws a locking fit.
 
 and if you want to inspect what your agent knows?
-- `agent-brain list_memory` shows your saved facts.
-- `agent-brain explain_last_context` tells you exactly why a rule was chosen on the last turn!
+- `tekmor list_memory` shows your saved facts.
+- `tekmor explain_last_context` tells you exactly why a rule was chosen on the last turn!
 
 ---
 
 ## wrapping up
 
-building `agent-brain` made my daily pairing sessions with AI agents feel so much cleaner. no more 20-page prompt dumps, no cloud subscription latency, just crisp, relevant context on every turn.
+building `tekmor` made my daily pairing sessions with AI agents feel so much cleaner. no more 20-page prompt dumps, no cloud subscription latency, just crisp, relevant context on every turn.
 
-the project is completely open source under MIT at [github.com/autonomic-ai-dev/agent-brain](https://github.com/autonomic-ai-dev/agent-brain).
+the project is completely open source under MIT at [github.com/autonomic-ai-dev/tekmor](https://github.com/autonomic-ai-dev/tekmor).
 
 in [Part 2 of the series](/blog/agent-brain-memory-scopes-and-reinforcement/), we explore scoped memory, temporal decay, and how to teach agents to forget stale workarounds!
 

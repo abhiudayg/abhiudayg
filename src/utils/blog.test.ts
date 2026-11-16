@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import {
 	getExtraPaginationPages,
+	getReadingTime,
 	paginatePosts,
 	paginationHref,
 	sortSeriesPosts,
@@ -93,5 +94,20 @@ describe('sortSeriesPosts utility', () => {
 		const sorted = sortSeriesPosts(posts);
 		expect(sorted[0].id).toBe('newer');
 		expect(sorted[1].id).toBe('older');
+	});
+});
+
+describe('getReadingTime utility', () => {
+	it('returns default fallback when text is empty or missing', () => {
+		expect(getReadingTime('')).toBe('5 min read');
+		expect(getReadingTime(undefined)).toBe('5 min read');
+	});
+
+	it('calculates reading time based on word count', () => {
+		const shortText = Array.from({ length: 100 }, () => 'word').join(' ');
+		expect(getReadingTime(shortText)).toBe('1 min read');
+
+		const longText = Array.from({ length: 660 }, () => 'word').join(' ');
+		expect(getReadingTime(longText)).toBe('3 min read');
 	});
 });

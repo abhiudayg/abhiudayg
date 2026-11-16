@@ -3,13 +3,12 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 const seriesSlugs = [
-	'agent-brain',
-	'dustmap',
-	'agentrun',
-	'agent-spine',
-	'harbor',
 	'anode',
+	'tekmor',
 	'shipnote',
+	'agentrun',
+	'thesmos',
+	'harbor',
 ] as const;
 
 const blog = defineCollection({

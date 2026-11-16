@@ -35,6 +35,21 @@
       "source": "/rss",
       "destination": "/rss.xml",
       "permanent": true
+    },
+    {
+      "source": "/blog/series/agent-brain/:path*",
+      "destination": "/blog/series/tekmor/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/blog/series/agent-spine/:path*",
+      "destination": "/blog/series/thesmos/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/blog/series/dustmap/:path*",
+      "destination": "/blog",
+      "permanent": true
     }
   ]
 }

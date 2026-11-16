@@ -1,0 +1,98 @@
+# Abhiuday Gupta — Comprehensive Systems & Architecture Index (llms-full.txt)
+
+> This document contains detailed technical architecture, design invariants, performance telemetry, and engineering references for all systems and publications by Abhiuday Gupta.
+
+## 1. Engineering Philosophy & Invariants
+
+1. **Verification as an Invariant:**
+   Every test, build, and claim requires real execution evidence recorded via local POSIX subshells into cryptographic receipts (`.verify/receipt.json`). Zero hallucinated test passes or subjective grading.
+
+2. **Token Budget Discipline:**
+   High-signal, byte-capped context envelopes (~500 tokens) over noisy multi-thousand-token prompt dumps. AI models degrade when overloaded with unstructured context.
+
+3. **Bare-Metal Simplicity:**
+   Embrace native Linux and macOS kernel primitives (`systemd`, `cgroups v2`, socket activation, POSIX subshells, Rayon parallel walks) when static compiled binaries (Go, Rust) make virtualized container daemons redundant.
+
+4. **Zero-Tracker Ethos:**
+   100% pure web standards, zero client-side tracking pixels, zero analytics scripts, and 100% full-text RSS syndication.
+
+5. **Visual Systems Education (@baremetal.dev):**
+   Educational video channel on Instagram (https://www.instagram.com/baremetal.dev/) explaining systems engineering without cloud bloat via Excalidraw architectural diagrams, terminals, and bare-metal primitives from Bengaluru, India.
+
+---
+
+## 2. Systems & Tools Directory
+
+### anode (v1.1.0)
+- **Role:** Docker Compose & Kubernetes alternative for Go backends.
+- **Mechanism:** Deduces infrastructure topology directly from Go source code using Go SSA (Static Single Assignment) Variable Type Analysis. Auto-generates systemd unit files, cgroups v2 resource slices, and Caddy reverse-proxy rules.
+- **Invariants:**
+  - Cold Boot: < 8.2 ms (55x faster than Docker Compose).
+  - Overhead: 0 MB daemon RSS (eliminates ~210MB dockerd daemon memory).
+  - Topology Discovery: ~60ms static analysis pass.
+  - Zero Dockerfiles, zero container daemons, zero YAML drift.
+- **Stack:** Go 1.27, Go SSA, Linux systemd, cgroups v2, Caddy.
+- **Website:** https://anode.abhiudayg.dev
+- **Repository:** https://github.com/abhiudayg/anode
+
+### tekmor (v1.0.0)
+- **Role:** Hard-gate verification engine & cryptographic test ledger for coding agents.
+- **Mechanism:** Intercepts agent turns via native host stop hooks in Claude Code and agent environments. Executes allowlisted test suites in isolated POSIX subshells, hashes workspace files with SHA-256, and issues cryptographic receipts (.verify/receipt.json) binding test passes to exact git-tree SHAs.
+- **Invariants:**
+  - Zero model tokens spent on test verification assertions.
+  - 100% deterministic local execution via POSIX subshell.
+  - Cryptographic git-tree matching prevents stale passes when files are touched post-test.
+- **Stack:** Rust, POSIX Subshell, SHA-256, Claude Code Stop Hooks.
+- **Repository:** https://github.com/autonomic-ai-dev/tekmor
+
+### shipnote (v0.3.2)
+- **Role:** Provenance-backed technical drafting engine turning shipped work into human-approved release dispatches.
+- **Mechanism:** Reads public git commits and diffs, verifies claim grounding against exact code changes, and drafts release posts awaiting human one-click signoff.
+- **Invariants:**
+  - 100% commit diff citation grounding.
+  - Zero hallucinated feature announcements.
+- **Stack:** TypeScript, Bun, GitHub Actions.
+- **Website:** https://shipnote.abhiudayg.dev
+- **Repository:** https://github.com/abhiudayg/shipnote
+
+### agentrun (Pre-alpha)
+- **Role:** Isolated coding agent environments on macOS.
+- **Mechanism:** Executes agent jobs in isolated Apple container sandboxes and dedicated git worktrees with automatic rollback capability.
+- **Stack:** Go, Apple Containers, Git Worktrees.
+- **Repository:** https://github.com/autonomic-ai-dev/agentrun
+
+### thesmos (v1.0.0)
+- **Role:** Deterministic workflow DAG engine and cognitive state machine for coding agents.
+- **Mechanism:** Validates declarative YAML workflow graphs (`workflows/*.yaml`) with Tarjan's Strongly Connected Components (SCC) acyclicity validation and human approval checkpoints.
+- **Stack:** Rust, Tokio, YAML DAGs.
+- **Repository:** https://github.com/autonomic-ai-dev/thesmos
+
+### harbor (Pre-alpha)
+- **Role:** Agent-native, sidebar-first browser for macOS.
+- **Mechanism:** WebKit browser with explicit fine-grained permission engines, human approval gates for destructive web actions, and local MCP server interface.
+- **Stack:** Swift, WebKit, macOS APIs.
+- **Repository:** https://github.com/autonomic-ai-dev/harbor
+
+---
+
+## 3. Selected Publications & Technical Dispatches
+
+1. **Why We Ditched Docker for Go Backends (The Magic of 8ms Cold Starts)**
+   - URL: https://www.abhiudayg.dev/blog/why-we-ditched-docker-for-go-backends/
+   - Analysis of containerd runtime overhead, iptables virtualization penalty, and benchmark comparisons showing systemd + cgroups v2 achieving 8.2ms boot times vs 450ms Docker Compose.
+
+2. **Inside the SSA Compiler Core: How Go Reads Its Own Infrastructure Topology**
+   - URL: https://www.abhiudayg.dev/blog/inside-the-ssa-compiler-core/
+   - Why regex and AST parsing fail on real Go codebases, and how Go SSA + Variable Type Analysis statically infers database connections, HTTP handler routes, and network ports in ~60ms.
+
+3. **Tekmor: The Architectural Pivot (Why Gentle Suggestions Don't Stop AI Chaos)**
+   - URL: https://www.abhiudayg.dev/blog/agent-brain-the-architectural-pivot-and-runtime/
+   - Why prompt-based guardrails fail under token load, and how host pre-tool hooks enforce hard process gates with zero prompt bypass.
+
+4. **Tekmor: Memory Scopes, Expiration Dates, and Teaching Agents Not to Hoard Context**
+   - URL: https://www.abhiudayg.dev/blog/agent-brain-memory-scopes-and-reinforcement/
+   - The failure modes of unmanaged vector memory stores and how hierarchical scoping (global vs project) prevents context corruption.
+
+5. **Building Dustmap: A Sub-12ms Mac Disk Visualizer in Rust and Tauri**
+   - URL: https://www.abhiudayg.dev/blog/dustmap-disk-space-visualizer-rust-tauri/
+   - Eliminating heap allocations and pointer chasing using contiguous arena buffers and Rayon parallel threadpools.
