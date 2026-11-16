@@ -1,39 +1,34 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# The Bare-Metal Stack #02: Class A Loopback Engine (loopback.sh)
+# Bare-Metal Logs #02: Loopback Sharding (loopback.sh)
 # https://abhiudayg.dev/scripts/loopback
 #
-# Eliminates local port collision hell (:8080, :8081, :8082) by binding
-# local services to separate 127.0.0.X IP addresses on standard port 80/443.
+# Binds two shard IPs (127.0.0.2 and 127.0.0.3) on the loopback interface,
+# maps auth.test and api.test to 127.0.0.1, and writes a Caddyfile that routes
+# http://auth.test and http://api.test on 127.0.0.1:80.
 #
 # Usage:
-#   sudo bash loopback.sh             # Setup loopbacks, hosts, and Caddyfile
-#   sudo bash loopback.sh --status    # Inspect active loopback aliases
-#   sudo bash loopback.sh --uninstall # Cleanly remove aliases & hosts entries
+#   sudo bash loopback.sh             # set up aliases, hosts, and Caddyfile
+#   sudo bash loopback.sh --status    # show alias and hosts state
+#   sudo bash loopback.sh --uninstall # remove aliases and the hosts block
 # ==============================================================================
-
 set -euo pipefail
 
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-DIM='\033[0;90m'
-BOLD='\033[1m'
-NC='\033[0m' # No Color
+HOSTS_START="# BEGIN BARE_METAL_LOOPBACKS"
+HOSTS_END="# END BARE_METAL_LOOPBACKS"
+SHARD_PORT=8080
 
-HOSTS_MARKER_START="# BEGIN BARE_METAL_LOOPBACKS"
-HOSTS_MARKER_END="# END BARE_METAL_LOOPBACKS"
-
-# Default domain mapping array: IP -> Domain -> Port
-SERVICES=(
-  "127.0.0.2:auth.local:80"
-  "127.0.0.3:db.local:5432"
-  "127.0.0.4:api.local:80"
-  "127.0.0.5:worker.local:80"
-  "127.0.0.6:frontend.local:80"
+# "ip hostname" pairs. Each shard listens on SHARD_PORT at its own IP.
+SHARDS=(
+  "127.0.0.2 auth.test"
+  "127.0.0.3 api.test"
 )
 
-detect_os() {
+usage() {
+  echo "Usage: sudo bash $0 [--status | --uninstall]"
+}
+
+os_type() {
   case "$OSTYPE" in
     darwin*) echo "macos" ;;
     linux*)  echo "linux" ;;
@@ -41,187 +36,187 @@ detect_os() {
   esac
 }
 
-check_root() {
+require_root() {
   if [[ $EUID -ne 0 ]]; then
-    echo -e "${RED}[✕] Error:${NC} This script must be run with sudo to modify loopback interfaces and /etc/hosts."
-    echo -e "    Run: ${BOLD}sudo bash $0${NC}"
+    echo "[error] Run with sudo: sudo bash $0" >&2
     exit 1
   fi
 }
 
-bind_loopback() {
-  local ip="$1"
-  local os="$2"
-
+alias_active() {
+  local ip="$1" os="$2" out
   if [[ "$os" == "macos" ]]; then
-    if ! ifconfig lo0 | grep -q "$ip"; then
-      ifconfig lo0 alias "$ip" 255.0.0.0
-      echo -e "${GREEN}[✓]${NC} Bound ${CYAN}${ip}${NC} to ${BOLD}lo0${NC} (macOS loopback alias)"
-    else
-      echo -e "${DIM}[-] ${ip} already active on lo0${NC}"
-    fi
-  elif [[ "$os" == "linux" ]]; then
-    if ! ip addr show dev lo | grep -q "$ip"; then
-      ip addr add "${ip}/8" dev lo
-      echo -e "${GREEN}[✓]${NC} Bound ${CYAN}${ip}/8${NC} to ${BOLD}lo${NC} (Linux loopback)"
-    else
-      echo -e "${DIM}[-] ${ip} already active on lo${NC}"
-    fi
+    out=$(ifconfig lo0)
+    grep -qF "inet $ip " <<< "$out"
+  else
+    out=$(ip -4 addr show dev lo)
+    grep -qF "inet ${ip}/8" <<< "$out"
   fi
 }
 
-unbind_loopback() {
-  local ip="$1"
-  local os="$2"
-
-  if [[ "$os" == "macos" ]]; then
-    if ifconfig lo0 | grep -q "$ip"; then
-      ifconfig lo0 -alias "$ip" 2>/dev/null || true
-      echo -e "${GREEN}[✓]${NC} Removed ${ip} from lo0"
-    fi
-  elif [[ "$os" == "linux" ]]; then
-    if ip addr show dev lo | grep -q "$ip"; then
-      ip addr del "${ip}/8" dev lo 2>/dev/null || true
-      echo -e "${GREEN}[✓]${NC} Removed ${ip} from lo"
-    fi
-  fi
-}
-
-update_hosts() {
-  echo -e "\n${BOLD}Updating /etc/hosts with clean local domains...${NC}"
-  
-  # Strip any previous block first to ensure idempotency
-  if grep -q "$HOSTS_MARKER_START" /etc/hosts; then
-    sed -i.bak "/$HOSTS_MARKER_START/,/$HOSTS_MARKER_END/d" /etc/hosts
-  fi
-
-  # Write fresh block
-  {
-    echo "$HOSTS_MARKER_START"
-    for item in "${SERVICES[@]}"; do
-      IFS=":" read -r ip domain port <<< "$item"
-      printf "%-16s %s\n" "$ip" "$domain"
-    done
-    echo "$HOSTS_MARKER_END"
-  } >> /etc/hosts
-
-  echo -e "${GREEN}[✓]${NC} Local domains written to ${BOLD}/etc/hosts${NC}"
-}
-
-remove_hosts() {
-  if grep -q "$HOSTS_MARKER_START" /etc/hosts; then
-    sed -i.bak "/$HOSTS_MARKER_START/,/$HOSTS_MARKER_END/d" /etc/hosts
-    echo -e "${GREEN}[✓]${NC} Removed loopback domains from /etc/hosts"
-  fi
-}
-
-generate_caddyfile() {
-  local caddy_file="Caddyfile"
-  if [[ -f "$caddy_file" ]]; then
-    echo -e "${DIM}[-] Existing Caddyfile found. Skipping overwrite.${NC}"
+bind_alias() {
+  local ip="$1" os="$2"
+  if alias_active "$ip" "$os"; then
+    echo "  [-] $ip already bound"
     return
   fi
-
-  echo -e "\n${BOLD}Generating local reverse-proxy Caddyfile...${NC}"
-  cat << 'EOF' > "$caddy_file"
-# Caddyfile — Generated by The Bare-Metal Stack (loopback.sh)
-# Run: caddy run (standard port 80/443 with auto-TLS)
-
-auth.local {
-    reverse_proxy 127.0.0.2:80
+  if [[ "$os" == "macos" ]]; then
+    ifconfig lo0 alias "$ip" 255.0.0.0
+  else
+    ip addr add "${ip}/8" dev lo
+  fi
+  echo "  [ok] bound $ip"
 }
 
-api.local {
-    reverse_proxy 127.0.0.4:80
+unbind_alias() {
+  local ip="$1" os="$2"
+  if ! alias_active "$ip" "$os"; then
+    echo "  [-] $ip not bound"
+    return
+  fi
+  if [[ "$os" == "macos" ]]; then
+    ifconfig lo0 -alias "$ip" || true
+  else
+    ip addr del "${ip}/8" dev lo || true
+  fi
+  echo "  [ok] removed $ip"
 }
 
-worker.local {
-    reverse_proxy 127.0.0.5:80
+backup_hosts() {
+  # One-time backup, so --uninstall can be checked against the original file.
+  [[ -f /etc/hosts.bare-metal-backup ]] || cp /etc/hosts /etc/hosts.bare-metal-backup
 }
 
-frontend.local {
-    reverse_proxy 127.0.0.6:80
+remove_hosts_block() {
+  if grep -qF "$HOSTS_START" /etc/hosts; then
+    sed -i.tmp "/$HOSTS_START/,/$HOSTS_END/d" /etc/hosts
+    rm -f /etc/hosts.tmp
+  fi
+}
+
+write_hosts() {
+  remove_hosts_block
+  # Make sure the last line of /etc/hosts ends with a newline before appending.
+  if [[ -n "$(tail -c1 /etc/hosts)" ]]; then
+    echo >> /etc/hosts
+  fi
+  {
+    echo "$HOSTS_START"
+    echo "127.0.0.1 auth.test api.test"
+    echo "$HOSTS_END"
+  } >> /etc/hosts
+  echo "  [ok] auth.test and api.test point to 127.0.0.1"
+}
+
+write_caddyfile() {
+  if [[ -f Caddyfile ]]; then
+    cp Caddyfile Caddyfile.bak
+    echo "  [!] existing Caddyfile saved as Caddyfile.bak"
+  fi
+  cat > Caddyfile << 'EOF'
+http://auth.test {
+    bind 127.0.0.1
+    reverse_proxy 127.0.0.2:8080
+}
+
+http://api.test {
+    bind 127.0.0.1
+    reverse_proxy 127.0.0.3:8080
 }
 EOF
-  echo -e "${GREEN}[✓]${NC} Created ${BOLD}Caddyfile${NC} for port 80/443 routing"
+  echo "  [ok] Caddyfile written"
 }
 
 show_status() {
-  local os
-  os=$(detect_os)
-  echo -e "${BOLD}Checking Loopback Aliases (${os}):${NC}"
-  for item in "${SERVICES[@]}"; do
-    IFS=":" read -r ip domain port <<< "$item"
-    local active="INACTIVE"
-    if [[ "$os" == "macos" ]] && ifconfig lo0 | grep -q "$ip"; then
-      active="ACTIVE"
-    elif [[ "$os" == "linux" ]] && ip addr show dev lo | grep -q "$ip"; then
-      active="ACTIVE"
-    fi
-
-    if [[ "$active" == "ACTIVE" ]]; then
-      echo -e "  ${GREEN}●${NC} ${BOLD}${ip}${NC} -> ${CYAN}${domain}:${port}${NC} [ACTIVE]"
+  local os ip name
+  os=$(os_type)
+  echo "Loopback aliases ($os):"
+  for item in "${SHARDS[@]}"; do
+    read -r ip name <<< "$item"
+    if alias_active "$ip" "$os"; then
+      echo "  [ACTIVE]   $ip -> $name:$SHARD_PORT"
     else
-      echo -e "  ${DIM}○ ${ip} -> ${domain}:${port} [NOT BOUND]${NC}"
+      echo "  [INACTIVE] $ip -> $name:$SHARD_PORT"
     fi
   done
+  if grep -qF "$HOSTS_START" /etc/hosts; then
+    echo "Hosts block: present"
+  else
+    echo "Hosts block: not present"
+  fi
 }
 
-uninstall() {
-  check_root
-  local os
-  os=$(detect_os)
-  echo -e "${BOLD}Reverting Bare-Metal Loopback Setup...${NC}"
-  for item in "${SERVICES[@]}"; do
-    IFS=":" read -r ip domain port <<< "$item"
-    unbind_loopback "$ip" "$os"
-  done
-  remove_hosts
-  echo -e "\n${GREEN}[✓] Revert complete. All aliases and /etc/hosts entries removed.${NC}"
-}
-
-# Main Execution Flow
-main() {
-  if [[ "${1:-}" == "--status" ]]; then
-    show_status
-    exit 0
-  fi
-
-  if [[ "${1:-}" == "--uninstall" || "${1:-}" == "--undo" ]]; then
-    uninstall
-    exit 0
-  fi
-
-  check_root
-  local os
-  os=$(detect_os)
+setup() {
+  require_root
+  local os ip name
+  os=$(os_type)
   if [[ "$os" == "unsupported" ]]; then
-    echo -e "${RED}[✕] Unsupported operating system: $OSTYPE${NC}"
+    echo "[error] Unsupported OS: $OSTYPE" >&2
     exit 1
   fi
 
-  echo -e "${CYAN}======================================================${NC}"
-  echo -e "${BOLD}   The Bare-Metal Stack #02: Loopback Engine          ${NC}"
-  echo -e "${DIM}   RFC 1122 Class A (127.0.0.0/8) Setup Automation    ${NC}"
-  echo -e "${CYAN}======================================================${NC}\n"
-
-  echo -e "${BOLD}1. Binding Local IP Aliases on ${os} loopback interface...${NC}"
-  for item in "${SERVICES[@]}"; do
-    IFS=":" read -r ip domain port <<< "$item"
-    bind_loopback "$ip" "$os"
+  echo "Bare-Metal Logs #02: Loopback Sharding"
+  echo
+  echo "1. Binding shard IPs on the loopback interface ($os)"
+  for item in "${SHARDS[@]}"; do
+    read -r ip name <<< "$item"
+    bind_alias "$ip" "$os"
   done
 
-  update_hosts
-  generate_caddyfile
+  echo
+  echo "2. Updating /etc/hosts"
+  backup_hosts
+  write_hosts
 
-  echo -e "\n${CYAN}======================================================${NC}"
-  echo -e "${GREEN}${BOLD}✓ SETUP COMPLETE!${NC}"
-  echo -e "• Available IPs : ${BOLD}127.0.0.2 → 127.0.0.6${NC}"
-  echo -e "• Standard Ports: ${BOLD}Port 80 & 443 (Zero Collisions)${NC}"
-  echo -e "• Docker Daemon : ${BOLD}0 MB RAM overhead (Native Kernel)${NC}"
-  echo -e "• To check status: ${DIM}sudo bash $0 --status${NC}"
-  echo -e "• To uninstall   : ${DIM}sudo bash $0 --uninstall${NC}"
-  echo -e "${CYAN}======================================================${NC}\n"
+  echo
+  echo "3. Writing Caddyfile"
+  write_caddyfile
+
+  echo
+  echo "Setup done. Aliases do not survive a reboot, so re-run this script after restarting."
+  echo
+  echo "Next steps:"
+  echo "  1. Start each service on its shard IP and port:"
+  echo "       ./auth --listen 127.0.0.2:$SHARD_PORT"
+  echo "       ./api  --listen 127.0.0.3:$SHARD_PORT"
+  echo "  2. Start Caddy on 127.0.0.1:80 (needs root for port 80):"
+  echo "       sudo caddy run --config Caddyfile"
+  echo "  3. Test:"
+  echo "       curl -i http://auth.test"
+  echo "       curl -i http://api.test"
+  echo
+  echo "Check state anytime: sudo bash $0 --status"
+  echo "Revert anytime:      sudo bash $0 --uninstall"
+}
+
+uninstall() {
+  require_root
+  local os ip name
+  os=$(os_type)
+  if [[ "$os" == "unsupported" ]]; then
+    echo "[error] Unsupported OS: $OSTYPE" >&2
+    exit 1
+  fi
+
+  echo "Reverting loopback setup"
+  for item in "${SHARDS[@]}"; do
+    read -r ip name <<< "$item"
+    unbind_alias "$ip" "$os"
+  done
+  remove_hosts_block
+  echo "  [ok] removed the hosts block"
+  echo
+  echo "Done. The Caddyfile was left in place. Delete it yourself if you no longer need it."
+}
+
+main() {
+  case "${1:-}" in
+    "")                  setup ;;
+    --status)            show_status ;;
+    --uninstall|--undo)  uninstall ;;
+    -h|--help)           usage ;;
+    *)                   usage; exit 1 ;;
+  esac
 }
 
 main "$@"

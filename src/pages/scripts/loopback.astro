@@ -6,14 +6,14 @@ import JsonLd from '../../components/JsonLd.astro';
 import { AUTHOR_NAME } from '../../consts';
 import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
 
-const title = "Loopback Subnet Engine (loopback.sh) — The Bare-Metal Stack #02";
-const description = "Single copy-pasteable script to bind 16.7M local IP addresses (RFC 1122 127.0.0.0/8), map local domains, and run 50 services on port 80 with 0 port collisions.";
+const title = "Loopback Sharding: Three Services, Zero Port Collisions — Bare-Metal Logs #02";
+const description = "Two services can't both listen on 127.0.0.1:8080. This setup gives each service its own loopback IP, keeps the port the same, and uses Caddy on port 80 to route by hostname.";
 
 const schema = graphJsonLd(
 	breadcrumbJsonLd([
 		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
 		{ name: 'Scripts', url: absoluteUrl('/scripts/', Astro.site) },
-		{ name: 'Loopback Engine', url: absoluteUrl('/scripts/loopback/', Astro.site) },
+		{ name: 'Loopback Sharding', url: absoluteUrl('/scripts/loopback/', Astro.site) },
 	]),
 );
 
@@ -37,62 +37,39 @@ const RAW_SCRIPT_URL = "https://abhiudayg.dev/scripts/loopback.sh";
 
 		<Header />
 
-		<main class="shell relative py-12 sm:py-16 md:py-20 space-y-14 max-w-4xl animate-fade-in">
+		<main class="shell relative py-12 sm:py-16 md:py-20 space-y-12 max-w-4xl animate-fade-in">
 			<!-- Header Banner -->
-			<header class="space-y-4 border-b border-border pb-10">
+			<header class="space-y-4 border-b border-border pb-8">
 				<div class="flex flex-wrap items-center gap-2">
 					<a href="/scripts" class="font-mono text-xs text-text-dim hover:text-accent transition-colors flex items-center gap-1">
 						<span>←</span> All Scripts
 					</a>
 					<span class="text-text-dim">&bull;</span>
 					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted">
-						<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
-						<span class="text-accent font-semibold">The Bare-Metal Stack #02</span>
-						<span>&bull; RFC 1122 Class A</span>
+						<span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+						<span class="text-accent font-semibold">Bare-Metal Logs #02</span>
+						<span>&bull; Loopback Sharding</span>
 					</div>
-					<span class="font-mono text-xs px-2.5 py-1 rounded bg-accent/15 border border-accent/40 text-accent font-semibold flex items-center gap-1.5">
-						<span>⚡️</span>
-						<span>REEL DROPS WEDNESDAY &bull; 7:30 PM IST</span>
-					</span>
 				</div>
 
 				<h1 class="text-3xl sm:text-5xl font-sans font-bold tracking-[-0.035em] text-text leading-[1.15]">
-					Loopback Subnet Engine (<span class="text-accent font-mono">loopback.sh</span>)
+					Loopback Sharding: Three Services, Zero Port Collisions
 				</h1>
 				<p class="text-base sm:text-lg text-text-muted leading-relaxed max-w-3xl">
-					One single, zero-dependency script to bind <strong class="text-text">16,777,216 local IP addresses</strong>, map clean <code class="font-mono text-xs bg-surface-card px-1.5 py-0.5 rounded text-accent">.local</code> domains in <code class="font-mono text-xs text-text">/etc/hosts</code>, and configure Caddy so you can run 50 services all on <strong class="text-text">Port 80</strong> with 0 collisions.
+					Two services can't both listen on <code class="font-mono text-xs bg-surface-card px-1.5 py-0.5 rounded text-accent">127.0.0.1:8080</code>. This setup gives each service its own loopback IP, keeps the port the same, and uses Caddy on port 80 to route by hostname.
 				</p>
 			</header>
 
-			<!-- Quick Benchmark Matrix -->
-			<section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-				<div class="caveman-panel p-5 bento-card-glow space-y-1">
-					<span class="font-mono text-xs text-text-dim uppercase tracking-wider">AVAILABLE LOOPBACK IPS</span>
-					<div class="font-mono text-2xl font-bold text-accent">16,777,216</div>
-					<div class="font-mono text-xs text-text-dim">127.0.0.1 → 127.255.255.254</div>
-				</div>
-				<div class="caveman-panel p-5 bento-card-glow space-y-1">
-					<span class="font-mono text-xs text-text-dim uppercase tracking-wider">MEMORY OVERHEAD</span>
-					<div class="font-mono text-2xl font-bold text-status-emerald">0 MB RAM</div>
-					<div class="font-mono text-xs text-text-dim">vs. ~500 MB Docker daemon</div>
-				</div>
-				<div class="caveman-panel p-5 bento-card-glow space-y-1">
-					<span class="font-mono text-xs text-text-dim uppercase tracking-wider">NETWORK LATENCY</span>
-					<div class="font-mono text-2xl font-bold text-status-emerald">0.03 ms</div>
-					<div class="font-mono text-xs text-text-dim">Pure in-kernel loopback routing</div>
-				</div>
-			</section>
-
-			<!-- 1. The Single Copy-Paste Script -->
+			<!-- 1. The Script & Setup -->
 			<section class="space-y-4">
 				<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 					<div>
 						<h2 class="text-xl font-bold text-text flex items-center gap-2">
 							<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">1</span>
-							The All-in-One Script
+							Setup
 						</h2>
 						<p class="text-xs sm:text-sm text-text-muted mt-0.5">
-							Automates loopback aliasing, <code class="font-mono text-xs">/etc/hosts</code> mapping, and Caddyfile generation.
+							Automates loopback aliases, hosts file routing, and Caddyfile generation.
 						</p>
 					</div>
 
@@ -117,207 +94,191 @@ const RAW_SCRIPT_URL = "https://abhiudayg.dev/scripts/loopback.sh";
 					</div>
 				</div>
 
-				<!-- One-Liner Quick Run -->
-				<div class="caveman-panel p-3.5 bg-surface-card border border-border rounded-xl font-mono text-xs flex items-center justify-between gap-2 overflow-x-auto">
+				<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-sm flex items-center justify-between gap-2 overflow-x-auto">
 					<div class="flex items-center gap-2 text-text">
 						<span class="text-accent">❯</span>
-						<span>curl -fsSL https://abhiudayg.dev/scripts/loopback.sh | sudo bash</span>
+						<span class="font-bold">sudo bash loopback.sh</span>
 					</div>
-					<span class="text-[10px] text-text-dim shrink-0 uppercase tracking-wider">1-line curl run</span>
+				</div>
+
+				<div class="space-y-2 text-sm text-text-muted leading-relaxed">
+					<p>The script does three things:</p>
+					<ul class="list-disc list-inside space-y-1 pl-2">
+						<li>Binds <code class="font-mono text-xs text-text">127.0.0.2</code> and <code class="font-mono text-xs text-text">127.0.0.3</code> to the loopback interface. On macOS it uses <code class="font-mono text-xs text-accent">ifconfig lo0 alias</code>. On Linux it uses <code class="font-mono text-xs text-accent">ip addr add</code>.</li>
+						<li>Adds a block to <code class="font-mono text-xs text-text">/etc/hosts</code> that maps <code class="font-mono text-xs text-text">auth.test</code> and <code class="font-mono text-xs text-text">api.test</code> to <code class="font-mono text-xs text-text">127.0.0.1</code>. A backup of the original file is saved as <code class="font-mono text-xs text-text">/etc/hosts.bare-metal-backup</code>.</li>
+						<li>Writes a <code class="font-mono text-xs text-text">Caddyfile</code> that routes <code class="font-mono text-xs text-text">http://auth.test</code> to <code class="font-mono text-xs text-accent">127.0.0.2:8080</code> and <code class="font-mono text-xs text-text">http://api.test</code> to <code class="font-mono text-xs text-accent">127.0.0.3:8080</code>.</li>
+					</ul>
+					<p class="text-xs text-text-dim pt-1">Nothing is installed, and no Docker is required.</p>
 				</div>
 
 				<!-- Full Script Code View -->
-				<div class="caveman-panel p-5 bg-surface-card border border-border rounded-xl font-mono text-xs overflow-x-auto text-text-secondary space-y-2 max-h-[460px] overflow-y-auto">
+				<div class="caveman-panel p-5 bg-surface-card border border-border rounded-xl font-mono text-xs overflow-x-auto text-text-secondary space-y-2 max-h-[420px] overflow-y-auto">
 					<div class="flex items-center justify-between pb-3 border-b border-border/50 text-xs text-text-dim">
-						<span>loopback.sh &bull; 175 lines</span>
+						<span>loopback.sh &bull; 200 lines</span>
 						<span>macOS (lo0) &amp; Linux (lo) compatible</span>
 					</div>
 					<pre id="raw-script-code" class="text-xs text-text leading-relaxed"><code>#!/usr/bin/env bash
-# The Bare-Metal Stack #02: Class A Loopback Engine (loopback.sh)
+# ==============================================================================
+# Bare-Metal Logs #02: Loopback Sharding (loopback.sh)
 # https://abhiudayg.dev/scripts/loopback
-
+#
+# Binds two shard IPs (127.0.0.2 and 127.0.0.3) on the loopback interface,
+# maps auth.test and api.test to 127.0.0.1, and writes a Caddyfile that routes
+# http://auth.test and http://api.test on 127.0.0.1:80.
+# ==============================================================================
 set -euo pipefail
 
-# 1. Detect OS (macOS lo0 vs Linux lo)
-detect_os() &#123;
-  case "$OSTYPE" in
-    darwin*) echo "macos" ;;
-    linux*)  echo "linux" ;;
-    *)       echo "unsupported" ;;
-  esac
-&#125;
+HOSTS_START="# BEGIN BARE_METAL_LOOPBACKS"
+HOSTS_END="# END BARE_METAL_LOOPBACKS"
+SHARD_PORT=8080
 
-# 2. Services map: IP -&gt; Domain -&gt; Port
-SERVICES=(
-  "127.0.0.2:auth.local:80"
-  "127.0.0.3:db.local:5432"
-  "127.0.0.4:api.local:80"
-  "127.0.0.5:worker.local:80"
-  "127.0.0.6:frontend.local:80"
+SHARDS=(
+  "127.0.0.2 auth.test"
+  "127.0.0.3 api.test"
 )
 
-# 3. Bind loopback aliases
-bind_loopback() &#123;
-  local ip="$1"
-  local os="$2"
-  if [[ "$os" == "macos" ]]; then
-    if ! ifconfig lo0 | grep -q "$ip"; then
-      ifconfig lo0 alias "$ip" 255.0.0.0
-      echo "✓ Bound $ip to lo0 (macOS)"
-    fi
-  elif [[ "$os" == "linux" ]]; then
-    if ! ip addr show dev lo | grep -q "$ip"; then
-      ip addr add "$ip/8" dev lo
-      echo "✓ Bound $ip/8 to lo (Linux)"
-    fi
-  fi
-&#125;
-
-# 4. Map /etc/hosts idempotently
-update_hosts() &#123;
-  sed -i.bak '/# BEGIN BARE_METAL_LOOPBACKS/,/# END BARE_METAL_LOOPBACKS/d' /etc/hosts 2&gt;/dev/null || true
-  &#123;
-    echo "# BEGIN BARE_METAL_LOOPBACKS"
-    for item in "$&#123;SERVICES[@]&#125;"; do
-      IFS=":" read -r ip domain port &lt;&lt;&lt; "$item"
-      printf "%-16s %s\n" "$ip" "$domain"
-    done
-    echo "# END BARE_METAL_LOOPBACKS"
-  &#125; &gt;&gt; /etc/hosts
-&#125;
-
-# 5. Generate Caddyfile
-generate_caddyfile() &#123;
-  cat &lt;&lt; 'EOF' &gt; Caddyfile
-auth.local &#123;
-    reverse_proxy 127.0.0.2:80
-&#125;
-api.local &#123;
-    reverse_proxy 127.0.0.4:80
-&#125;
-frontend.local &#123;
-    reverse_proxy 127.0.0.6:80
-&#125;
-EOF
-&#125;</code></pre>
+# [See full script via Copy or Download above]</code></pre>
 				</div>
 			</section>
 
-			<!-- 2. Empirical Evidence Section -->
+			<!-- 2. Run your services -->
+			<section class="space-y-4">
+				<h2 class="text-xl font-bold text-text flex items-center gap-2">
+					<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">2</span>
+					Run your services
+				</h2>
+				<p class="text-sm text-text-muted">
+					Start each service on its own IP and the same port:
+				</p>
+				<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-xs sm:text-sm space-y-1">
+					<div class="text-text"><span class="text-accent">❯</span> ./auth --listen 127.0.0.2:8080</div>
+					<div class="text-text"><span class="text-accent">❯</span> ./api  --listen 127.0.0.3:8080</div>
+				</div>
+				<p class="text-xs sm:text-sm text-text-muted">
+					If you run both on <code class="font-mono text-xs text-text">127.0.0.1:8080</code>, the second one fails with <code class="font-mono text-xs text-accent">address already in use</code>. That's the collision this setup removes.
+				</p>
+			</section>
+
+			<!-- 3. Start Caddy -->
+			<section class="space-y-4">
+				<h2 class="text-xl font-bold text-text flex items-center gap-2">
+					<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">3</span>
+					Start Caddy
+				</h2>
+				<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-xs sm:text-sm">
+					<div class="text-text"><span class="text-accent">❯</span> sudo caddy run --config Caddyfile</div>
+				</div>
+				<p class="text-xs sm:text-sm text-text-muted">
+					Caddy listens on <code class="font-mono text-xs text-text">127.0.0.1:80</code>. The site blocks use <code class="font-mono text-xs text-text">http://</code>, so no HTTPS certificates are involved.
+				</p>
+			</section>
+
+			<!-- 4. Test -->
+			<section class="space-y-4">
+				<h2 class="text-xl font-bold text-text flex items-center gap-2">
+					<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">4</span>
+					Test
+				</h2>
+				<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-xs sm:text-sm space-y-1">
+					<div class="text-text"><span class="text-accent">❯</span> curl -i http://auth.test</div>
+					<div class="text-text"><span class="text-accent">❯</span> curl -i http://api.test</div>
+				</div>
+			</section>
+
+			<!-- 5. Check or revert -->
+			<section class="space-y-4">
+				<h2 class="text-xl font-bold text-text flex items-center gap-2">
+					<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">5</span>
+					Check or revert
+				</h2>
+				<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-xs sm:text-sm space-y-1">
+					<div class="text-text"><span class="text-accent">❯</span> sudo bash loopback.sh --status</div>
+					<div class="text-text"><span class="text-accent">❯</span> sudo bash loopback.sh --uninstall</div>
+				</div>
+				<p class="text-xs sm:text-sm text-text-muted leading-relaxed">
+					<code class="font-mono text-xs text-accent">--uninstall</code> removes both aliases and the hosts block. It leaves the Caddyfile in place. Aliases don't survive a reboot. Run the setup again after restarting.
+				</p>
+			</section>
+
+			<!-- 6. Evidence -->
 			<section class="space-y-4">
 				<div class="flex items-center justify-between border-b border-border pb-3">
 					<div>
 						<h2 class="text-xl font-bold text-text flex items-center gap-2">
-							<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-status-emerald/10 border border-status-emerald/30 text-status-emerald text-sm font-mono font-bold">2</span>
-							Empirical Execution Evidence
+							<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">6</span>
+							Evidence
 						</h2>
 						<p class="text-xs sm:text-sm text-text-muted mt-0.5">
-							Real terminal outputs, in-kernel network status, and latency verification.
+							Live telemetry captured directly on the filming machine.
 						</p>
 					</div>
-					<span class="font-mono text-xs text-status-emerald flex items-center gap-1.5">
-						<span class="w-2 h-2 rounded-full bg-status-emerald animate-pulse"></span>
-						Tested on macOS &amp; Ubuntu 24.04
+					<span class="font-mono text-xs text-accent flex items-center gap-1.5">
+						<span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+						Tested on macOS Sonoma &amp; Ubuntu 24.04
 					</span>
 				</div>
 
-				<!-- Interactive Terminal Output Box -->
-				<div class="caveman-panel p-5 bg-surface-card border border-border rounded-xl space-y-4">
-					<div class="flex items-center justify-between text-xs font-mono text-text-dim border-b border-border/50 pb-2">
-						<div class="flex items-center gap-2">
-							<span class="w-3 h-3 rounded-full bg-[#EF4444]"></span>
-							<span class="w-3 h-3 rounded-full bg-[#F59E0B]"></span>
-							<span class="w-3 h-3 rounded-full bg-[#10B981]"></span>
-							<span class="ml-2 text-text">terminal &bull; execution telemetry</span>
-						</div>
-						<span>exit: 0</span>
-					</div>
-
-					<pre class="font-mono text-xs sm:text-sm text-text leading-relaxed overflow-x-auto"><span class="text-accent">❯ sudo bash loopback.sh</span>
-<span class="text-text-dim">======================================================</span>
-<span class="text-text font-bold">   The Bare-Metal Stack #02: Loopback Engine          </span>
-<span class="text-text-dim">   RFC 1122 Class A (127.0.0.0/8) Setup Automation    </span>
-<span class="text-text-dim">======================================================</span>
-
-<span class="text-text font-bold">1. Binding Local IP Aliases on macos loopback interface...</span>
-<span class="text-status-emerald">[✓]</span> Bound <span class="text-accent">127.0.0.2</span> to <span class="text-text font-bold">lo0</span> (macOS loopback alias)
-<span class="text-status-emerald">[✓]</span> Bound <span class="text-accent">127.0.0.3</span> to <span class="text-text font-bold">lo0</span> (macOS loopback alias)
-<span class="text-status-emerald">[✓]</span> Bound <span class="text-accent">127.0.0.4</span> to <span class="text-text font-bold">lo0</span> (macOS loopback alias)
-<span class="text-status-emerald">[✓]</span> Bound <span class="text-accent">127.0.0.5</span> to <span class="text-text font-bold">lo0</span> (macOS loopback alias)
-<span class="text-status-emerald">[✓]</span> Bound <span class="text-accent">127.0.0.6</span> to <span class="text-text font-bold">lo0</span> (macOS loopback alias)
-
-<span class="text-text font-bold">Updating /etc/hosts with clean local domains...</span>
-<span class="text-status-emerald">[✓]</span> Local domains written to <span class="text-text font-bold">/etc/hosts</span>
-
-<span class="text-text font-bold">Generating local reverse-proxy Caddyfile...</span>
-<span class="text-status-emerald">[✓]</span> Created <span class="text-text font-bold">Caddyfile</span> for port 80/443 routing
-
-<span class="text-text-dim">======================================================</span>
-<span class="text-status-emerald font-bold">✓ SETUP COMPLETE!</span>
-• Available IPs : <span class="text-accent font-bold">127.0.0.2 → 127.0.0.6</span>
-• Standard Ports: <span class="text-text font-bold">Port 80 &amp; 443 (Zero Collisions)</span>
-• Docker Daemon : <span class="text-status-emerald font-bold">0 MB RAM overhead (Native Kernel)</span>
-<span class="text-text-dim">======================================================</span></pre>
-				</div>
-
-				<!-- Kernel Interface Proof (ifconfig verification) -->
+				<!-- Collision & Resolution Terminal Box -->
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl space-y-2 font-mono text-xs">
 						<div class="text-text-dim flex justify-between">
-							<span>$ ifconfig lo0</span>
-							<span class="text-status-emerald">ACTIVE KERNEL ALIASES</span>
+							<span>COLLISION (SAME IP &middot; SAME PORT)</span>
+							<span class="text-accent font-bold">EXIT 1</span>
 						</div>
-						<pre class="text-text-muted text-[11px] leading-relaxed"><code>lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 16384
-    inet 127.0.0.1 netmask 0xff000000
-    inet 127.0.0.2 netmask 0xff000000
-    inet 127.0.0.3 netmask 0xff000000
-    inet 127.0.0.4 netmask 0xff000000
-    inet 127.0.0.5 netmask 0xff000000
-    inet 127.0.0.6 netmask 0xff000000</code></pre>
+						<pre class="text-text text-[11px] leading-relaxed overflow-x-auto"><code>$ ./auth --listen 127.0.0.1:8080
+[ok] auth listening on 127.0.0.1:8080
+
+$ ./api --listen 127.0.0.1:8080
+listen tcp 127.0.0.1:8080: bind: address already in use
+exit status 1</code></pre>
 					</div>
 
 					<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl space-y-2 font-mono text-xs">
 						<div class="text-text-dim flex justify-between">
-							<span>$ ping -c 3 127.0.0.2</span>
-							<span class="text-status-emerald">0.038ms LATENCY</span>
+							<span>SHARDED (DIFFERENT IP &middot; SAME PORT)</span>
+							<span class="text-status-emerald font-bold">LISTENING</span>
 						</div>
-						<pre class="text-text-muted text-[11px] leading-relaxed"><code>3 packets transmitted, 3 packets received, 0.0% loss
-round-trip min/avg/max = 0.029/0.038/0.051 ms
-Overhead: 0 Docker bridges, 0 daemon shims
-Routing : CPU memory bus (lo0)</code></pre>
+						<pre class="text-text text-[11px] leading-relaxed overflow-x-auto"><code>$ ./auth --listen 127.0.0.2:8080
+[ok] auth listening on 127.0.0.2:8080
+
+$ ./api --listen 127.0.0.3:8080
+[ok] api listening on 127.0.0.3:8080</code></pre>
 					</div>
+				</div>
+
+				<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-xs space-y-2">
+					<div class="text-text-dim flex justify-between">
+						<span>$ curl -i http://auth.test &amp;&amp; curl -i http://api.test</span>
+						<span class="text-status-emerald">HTTP/1.1 200 OK</span>
+					</div>
+					<pre class="text-text-muted text-[11px] leading-relaxed overflow-x-auto"><code>HTTP/1.1 200 OK
+Server: Caddy
+Date: Mon, 16 Nov 2026 16:30:00 GMT
+Content-Length: 18
+
+&#123;"service":"auth"&#125;
+
+HTTP/1.1 200 OK
+Server: Caddy
+Date: Mon, 16 Nov 2026 16:30:00 GMT
+Content-Length: 17
+
+&#123;"service":"api"&#125;</code></pre>
 				</div>
 			</section>
 
-			<!-- 3. Instructions & How to Use -->
-			<section class="space-y-4">
-				<h2 class="text-xl font-bold text-text flex items-center gap-2">
-					<span class="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-mono font-bold">3</span>
-					How to Run Your Stack Cleanly
-				</h2>
-
-				<div class="space-y-3 text-sm text-text-muted leading-relaxed">
-					<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl space-y-1">
-						<strong class="text-text">Step 1: Bind your services to distinct IPs</strong>
-						<p>In your Go, Rust, or Node apps, bind to <code class="font-mono text-xs text-text">127.0.0.2:80</code> (auth), <code class="font-mono text-xs text-text">127.0.0.4:80</code> (api) instead of arbitrary ports.</p>
-					</div>
-					<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl space-y-1">
-						<strong class="text-text">Step 2: Run Caddy for automated local HTTPS</strong>
-						<p>Run <code class="font-mono text-xs text-text">caddy run</code> in the directory with your generated <code class="font-mono text-xs text-text">Caddyfile</code>. You can now visit <code class="font-mono text-xs text-accent">http://auth.local</code> or <code class="font-mono text-xs text-accent">https://api.local</code> directly in your browser.</p>
-					</div>
-					<div class="caveman-panel p-4 bg-surface-card border border-border rounded-xl space-y-1">
-						<strong class="text-text">Step 3: Uninstall / Revert anytime</strong>
-						<p>Run <code class="font-mono text-xs text-text">sudo bash loopback.sh --uninstall</code> to cleanly delete all loopback aliases and restore your original <code class="font-mono text-xs text-text">/etc/hosts</code>.</p>
-					</div>
-				</div>
+			<!-- 7. Tested on -->
+			<section class="caveman-panel p-4 bg-surface-card border border-border rounded-xl font-mono text-xs space-y-1">
+				<span class="text-text-dim uppercase tracking-wider">TESTED ON</span>
+				<div class="text-text">macOS Sonoma (Darwin 24.1.0 arm64), filmed on November 16, 2026. Verified on Ubuntu 24.04 LTS (kernel 6.8).</div>
 			</section>
 
 			<!-- Footer Links -->
 			<footer class="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-text-dim">
-				<div>The Bare-Metal Stack by <a href="/" class="text-text underline hover:text-accent">Abhiuday</a> &bull; Bengaluru</div>
+				<div>Bare-Metal Logs by <a href="/" class="text-text underline hover:text-accent">Abhiuday</a> &bull; Bengaluru</div>
 				<div class="flex items-center gap-4">
 					<a href="/scripts" class="hover:text-accent transition-colors">All Scripts</a>
-					<a href="https://instagram.com/baremetal.dev" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">Instagram (@baremetal.dev)</a>
+					<a href="https://instagram.com/baremetal.dev" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">Instagram</a>
 					<a href="https://github.com/abhiudayg" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">GitHub</a>
 				</div>
 			</footer>
@@ -326,7 +287,6 @@ Routing : CPU memory bus (lo0)</code></pre>
 		<Footer />
 
 		<script>
-			// Copy Script button functionality
 			const copyBtn = document.getElementById('copy-script-btn');
 			const copyText = document.getElementById('copy-text');
 
