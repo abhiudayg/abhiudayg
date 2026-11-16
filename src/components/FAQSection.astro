@@ -1,0 +1,121 @@
+---
+/**
+ * FAQSection.astro
+ * Homepage Technical FAQ Section (Homepage Exclusivity)
+ * 
+ * Provides evidence-grounded answers to developer and platform engineering questions.
+ */
+
+const faqs = [
+	{
+		question: 'Why replace Docker Compose with Go SSA + Linux systemd in Anode?',
+		answer: 'Container daemons (dockerd and containerd) introduce ~210MB resident memory overhead, bridge NAT iptables latency, and slow cold boots (~450ms). Statically compiled Go binaries already include their runtime and system dependencies. By using Go SSA (Static Single Assignment) Variable Type Analysis to deduce database topology, routes, and ports directly from Go source code, Anode provisions native systemd service units, cgroups v2 slices, and Caddy reverse-proxy rules with cold boots under 8.2ms and 0 MB daemon RAM overhead.',
+	},
+	{
+		question: 'How does Tekmor prevent AI coding agents from faking test passes?',
+		answer: 'Coding agents frequently succumb to prompt-level hallucination: declaring "all tests pass" in chat without running commands, or running tests and inadvertently breaking code in a subsequent turn. Tekmor registers a native stop hook in Claude Code and agent environments, executes allowlisted commands strictly in isolated subshells, and writes cryptographic receipts (.verify/receipt.json) binding the exit code to the exact git-tree SHA. If the agent modifies any file after the test run, the git tree SHA changes, invalidating the receipt and hard-blocking the agent turn.',
+	},
+	{
+		question: 'Why does Tekmor consume 0 model tokens for test verification?',
+		answer: 'Unlike cloud evaluator agents or LLM-as-a-judge approaches that burn metered API tokens on fuzzy text analysis, Tekmor runs deterministic local code via POSIX subshells and hashes the workspace using native SHA-256. Verification is 100% local, sub-second (0.38s for 14 checks), and costs exactly 0 model tokens.',
+	},
+	{
+		question: 'Are these tools open source and production ready?',
+		answer: 'Yes. Anode, Tekmor, Shipnote, Agentrun, and Agent-Spine are distributed under permissive open-source licenses (MIT) on GitHub. Each project includes reproducible test suites, deterministic local execution guarantees, and active documentation.',
+	},
+];
+---
+
+<section class="space-y-6 scroll-mt-20" id="faq">
+	<div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-border pb-4 gap-3">
+		<div>
+			<div class="flex items-center gap-2">
+				<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+				<span class="font-mono text-xs text-text-dim uppercase tracking-wider">// Architectural Questions</span>
+			</div>
+			<h2 class="text-2xl sm:text-3xl font-semibold text-text mt-1 tracking-tight">Frequently Answered Questions</h2>
+			<p class="text-xs sm:text-sm text-text-muted mt-1 max-w-2xl">
+				Direct answers regarding architectural decisions, runtime invariants, and performance choices.
+			</p>
+		</div>
+
+		<div class="font-mono text-xs text-text-dim shrink-0">
+			<span>Homepage Exclusive Reference</span>
+		</div>
+	</div>
+
+	<!-- Interactive Accordion List -->
+	<div class="rounded-xl border border-border bg-surface-card overflow-hidden divide-y divide-border" id="faq-accordion">
+		{faqs.map((faq, idx) => (
+			<div class="faq-item group">
+				<button
+					type="button"
+					class="faq-trigger w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-bg-subtle/50 transition-colors"
+					aria-expanded={idx === 0 ? 'true' : 'false'}
+					aria-controls={`faq-answer-${idx}`}
+					id={`faq-btn-${idx}`}
+				>
+					<span class="text-sm sm:text-base font-medium text-text group-hover:text-accent transition-colors">
+						{faq.question}
+					</span>
+					<span class="faq-icon font-mono text-text-dim shrink-0 transition-transform duration-200">
+						{idx === 0 ? '−' : '+'}
+					</span>
+				</button>
+				<div
+					id={`faq-answer-${idx}`}
+					class={`faq-content px-5 sm:px-6 pb-6 pt-0 ${idx === 0 ? 'block' : 'hidden'}`}
+					role="region"
+					aria-labelledby={`faq-btn-${idx}`}
+				>
+					<p class="text-xs sm:text-sm text-text-muted leading-relaxed m-0 border-t border-border/50 pt-4">
+						{faq.answer}
+					</p>
+				</div>
+			</div>
+		))}
+	</div>
+</section>
+
+<script is:inline>
+	(function() {
+		const items = document.querySelectorAll('#faq-accordion .faq-item');
+		items.forEach(item => {
+			const trigger = item.querySelector('.faq-trigger');
+			const content = item.querySelector('.faq-content');
+			const icon = item.querySelector('.faq-icon');
+
+			if (trigger && content && icon) {
+				trigger.addEventListener('click', () => {
+					const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+
+					// Collapse all other items
+					items.forEach(other => {
+						const otherTrigger = other.querySelector('.faq-trigger');
+						const otherContent = other.querySelector('.faq-content');
+						const otherIcon = other.querySelector('.faq-icon');
+						if (otherTrigger && otherContent && otherIcon && other !== item) {
+							otherTrigger.setAttribute('aria-expanded', 'false');
+							otherContent.classList.add('hidden');
+							otherContent.classList.remove('block');
+							otherIcon.textContent = '+';
+						}
+					});
+
+					// Toggle current
+					if (isExpanded) {
+						trigger.setAttribute('aria-expanded', 'false');
+						content.classList.add('hidden');
+						content.classList.remove('block');
+						icon.textContent = '+';
+					} else {
+						trigger.setAttribute('aria-expanded', 'true');
+						content.classList.remove('hidden');
+						content.classList.add('block');
+						icon.textContent = '−';
+					}
+				});
+			}
+		});
+	})();
+</script>

@@ -41,55 +41,111 @@ const schema = graphJsonLd(
 <!doctype html>
 <html lang="en" class="dark">
 	<head>
-		<BaseHead title={`${meta.title} — Architecture & Deep Series`} description={meta.description} tags={[meta.title, series]} />
+		<BaseHead title={`${meta.title} — Architecture & Technical Track`} description={meta.description} tags={[meta.title, series]} />
 		<JsonLd schema={schema} />
 	</head>
 	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
-		<!-- Subdued ambient dark radial halo -->
-		<div
-			class="pointer-events-none fixed top-0 left-1/2 -z-10 h-[500px] w-[950px] -translate-x-1/2 rounded-full ambient-glow blur-[120px]"
-			aria-hidden="true"
-		></div>
+		<!-- Framer-Style Animated Moving Gradient Grid Background -->
+		<div class="framer-grid-container" aria-hidden="true" id="framer-bg">
+			<div class="framer-orb-1"></div>
+			<div class="framer-orb-2"></div>
+			<div class="framer-spotlight" id="framer-spotlight"></div>
+			<div class="framer-grid-overlay"></div>
+		</div>
 
 		<Header />
-		<main class="shell py-12 md:py-16 space-y-10">
-			<header class="border-b border-border pb-8">
-				<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted mb-4">
-					<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
-					<span>Curated Architecture Track &bull; {meta.badge}</span>
+
+		<main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 space-y-10 animate-fade-in">
+			<!-- Centered Header (Anode Style) -->
+			<header class="text-center max-w-2xl mx-auto space-y-4">
+				<div class="flex flex-wrap items-center justify-center gap-2">
+					<span class="text-xs font-mono uppercase tracking-wider text-white bg-white/[0.04] border border-white/[0.1] px-3.5 py-1 rounded-full inline-block font-semibold">
+						// ARCHITECTURE TRACK &bull; {meta.badge}
+					</span>
+					<span class="px-2.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] font-mono text-[11px] text-neutral-400">
+						{posts.length} {posts.length === 1 ? 'Dispatch' : 'Dispatches'}
+					</span>
 				</div>
-				<h1 class="text-3xl sm:text-4xl md:text-5xl font-sans font-semibold tracking-tight text-text">
+
+				<h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
 					#{meta.title}
 				</h1>
-				<p class="mt-3 text-base sm:text-lg text-text-muted leading-relaxed max-w-3xl">
+				<p class="text-sm sm:text-base text-neutral-400 leading-relaxed">
 					{meta.description}
 				</p>
-				<div class="mt-6 flex flex-wrap gap-3">
+
+				<div class="flex flex-wrap items-center justify-center gap-3 pt-2">
 					{meta.repoUrl && (
-						<a class="btn-primary" href={meta.repoUrl} target="_blank" rel="noopener noreferrer">
-							<span>View Repository</span>
-							<span aria-hidden="true">&nearr;</span>
+						<a
+							class="px-4 py-2 rounded-lg bg-white hover:bg-neutral-200 text-black font-semibold text-xs font-mono transition-colors no-underline inline-flex items-center gap-1.5"
+							href={meta.repoUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+								<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+							</svg>
+							<span>View Repository &nearr;</span>
 						</a>
 					)}
-					<a class="btn-secondary" href="/blog">
-						<span>All Articles</span>
-						<span aria-hidden="true">&rarr;</span>
+					<a
+						class="px-4 py-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-xs font-mono text-white transition-colors no-underline inline-flex items-center gap-1.5"
+						href="/blog"
+					>
+						<span>&larr; All Essays</span>
 					</a>
 				</div>
 			</header>
 
+			<!-- Filter Rail -->
 			<SeriesFilter activeSeries={series} />
 
+			<!-- Posts or Active In-Progress Banner (Anode Style) -->
 			{
 				posts.length > 0 ? (
-					<ul class="post-grid">
+					<ul class="space-y-6 list-none p-0 m-0">
 						{posts.map((post) => <PostCard post={post} showSeriesTag={false} />)}
 					</ul>
 				) : (
-					<p class="text-text-muted font-mono text-sm">No posts in this series yet.</p>
+					<div class="p-8 sm:p-12 rounded-2xl border border-white/[0.08] bg-[#0a0a0c]/90 text-center space-y-4 max-w-2xl mx-auto">
+						<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 font-mono text-xs text-emerald-400">
+							<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+							<span>Active Engineering &bull; R&amp;D In Progress</span>
+						</div>
+						<h2 class="text-xl font-semibold text-white">Dispatches are currently being drafted for #{meta.title}.</h2>
+						<p class="text-sm text-neutral-400 leading-relaxed">
+							The underlying codebase is live and open-source. Inspect the source code, open issues, and pull requests directly on GitHub.
+						</p>
+						{meta.repoUrl && (
+							<div class="pt-2">
+								<a
+									class="px-4 py-2 rounded-lg bg-white hover:bg-neutral-200 text-black font-semibold text-xs font-mono transition-colors no-underline inline-flex items-center gap-1.5"
+									href={meta.repoUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<span>Inspect Code on GitHub &nearr;</span>
+								</a>
+							</div>
+						)}
+					</div>
 				)
 			}
 		</main>
+
 		<Footer />
+
+		<script is:inline>
+			function initSpotlight() {
+				const bg = document.getElementById('framer-bg');
+				if (!bg) return;
+				document.addEventListener('pointermove', (e) => {
+					bg.style.setProperty('--mouse-x', `${e.clientX}px`);
+					bg.style.setProperty('--mouse-y', `${e.clientY}px`);
+				});
+			}
+			initSpotlight();
+			document.addEventListener('astro:page-load', initSpotlight);
+		</script>
 	</body>
 </html>

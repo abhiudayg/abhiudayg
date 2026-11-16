@@ -8,28 +8,28 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <header class="sticky top-0 z-50 w-full border-b border-border bg-[var(--header-bg)] backdrop-blur-md">
 	<div class="shell flex h-14 items-center justify-between gap-3 py-0">
-		<div class="flex items-center gap-3 sm:gap-4">
-			<a class="inline-flex items-center no-underline text-inherit transition hover:opacity-90" href="/" aria-label={`${SITE_TITLE} home`}>
+		<div class="flex items-center gap-3 sm:gap-4 shrink-0">
+			<a class="inline-flex items-center no-underline text-inherit transition hover:opacity-90 shrink-0" href="/" aria-label={`${SITE_TITLE} home`}>
 				<SiteLogo />
 			</a>
-			<!-- Live Telemetry Status Pill -->
-			<div class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-card border border-border font-mono text-[11px]">
-				<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+			<!-- Live Telemetry Status Pill (Only on wide screens >=1280px to prevent nav squishing) -->
+			<div class="hidden xl:inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-card border border-border font-mono text-[11px] whitespace-nowrap shrink-0">
+				<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse shrink-0"></span>
 				<span class="text-text-muted">Building Autonomous Systems</span>
 			</div>
 		</div>
 
 		<!-- Center Navigation Links (Desktop) -->
-		<nav class="hidden md:flex items-center gap-6 font-mono text-xs">
+		<nav class="hidden lg:flex items-center gap-6 font-mono text-xs whitespace-nowrap">
 			<HeaderLink href="/blog">Essays</HeaderLink>
 			<HeaderLink href="/#systems">Systems</HeaderLink>
-			<HeaderLink href="/#series">Series</HeaderLink>
+			<HeaderLink href="/#benchmarks">Benchmarks</HeaderLink>
+			<HeaderLink href="/#boundaries">Boundaries</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
-			<HeaderLink href="/subscribe">RSS</HeaderLink>
 		</nav>
 
 		<!-- Right Side Action Cluster -->
-		<div class="flex items-center gap-2 sm:gap-2.5">
+		<div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
 			<!-- Quick ⌘K Search trigger -->
 			<button
 				type="button"
@@ -88,6 +88,10 @@ import ThemeToggle from './ThemeToggle.astro';
 		<div class="flex flex-col space-y-2">
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/blog">Essays &amp; Archive</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#systems">Systems &amp; Runtimes</a>
+			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#benchmarks">Empirical Benchmarks</a>
+			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#evidence-inspector">Evidence Inspector</a>
+			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#boundaries">Honest Boundaries</a>
+			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#faq">FAQ</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/#series">Deep Series</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/about">About &amp; Manifesto</a>
 			<a class="text-text-muted hover:text-text py-1 no-underline transition-colors" href="/subscribe">RSS Syndication</a>
@@ -101,44 +105,49 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <script is:inline>
 	(function() {
-		const searchBtn = document.getElementById('header-search-btn');
-		if (searchBtn) {
-			searchBtn.addEventListener('click', (e) => {
-				e.preventDefault();
-				window.dispatchEvent(new CustomEvent('open-cmdk'));
-				document.dispatchEvent(new CustomEvent('open-cmdk'));
-			});
-		}
+		function initHeader() {
+			const searchBtn = document.getElementById('header-search-btn');
+			if (searchBtn) {
+				searchBtn.onclick = (e) => {
+					e.preventDefault();
+					window.dispatchEvent(new CustomEvent('open-cmdk'));
+					document.dispatchEvent(new CustomEvent('open-cmdk'));
+				};
+			}
 
-		const btn = document.getElementById('mobile-menu-btn');
-		const nav = document.getElementById('mobile-nav');
-		const bars = document.getElementById('menu-icon-bars');
-		const close = document.getElementById('menu-icon-close');
+			const btn = document.getElementById('mobile-menu-btn');
+			const nav = document.getElementById('mobile-nav');
+			const bars = document.getElementById('menu-icon-bars');
+			const close = document.getElementById('menu-icon-close');
 
-		if (btn && nav && bars && close) {
-			btn.addEventListener('click', () => {
-				const isOpen = !nav.classList.contains('hidden');
-				if (isOpen) {
-					nav.classList.add('hidden');
-					bars.classList.remove('hidden');
-					close.classList.add('hidden');
-					btn.setAttribute('aria-expanded', 'false');
-				} else {
-					nav.classList.remove('hidden');
-					bars.classList.add('hidden');
-					close.classList.remove('hidden');
-					btn.setAttribute('aria-expanded', 'true');
-				}
-			});
+			if (btn && nav && bars && close) {
+				btn.onclick = () => {
+					const isOpen = !nav.classList.contains('hidden');
+					if (isOpen) {
+						nav.classList.add('hidden');
+						bars.classList.remove('hidden');
+						close.classList.add('hidden');
+						btn.setAttribute('aria-expanded', 'false');
+					} else {
+						nav.classList.remove('hidden');
+						bars.classList.add('hidden');
+						close.classList.remove('hidden');
+						btn.setAttribute('aria-expanded', 'true');
+					}
+				};
 
-			nav.querySelectorAll('a').forEach(link => {
-				link.addEventListener('click', () => {
-					nav.classList.add('hidden');
-					bars.classList.remove('hidden');
-					close.classList.add('hidden');
-					btn.setAttribute('aria-expanded', 'false');
+				nav.querySelectorAll('a').forEach(link => {
+					link.onclick = () => {
+						nav.classList.add('hidden');
+						bars.classList.remove('hidden');
+						close.classList.add('hidden');
+						btn.setAttribute('aria-expanded', 'false');
+					};
 				});
-			});
+			}
 		}
+
+		initHeader();
+		document.addEventListener('astro:page-load', initHeader);
 	})();
 </script>

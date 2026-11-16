@@ -1,13 +1,13 @@
 ---
-title: 'agent-brain: memory scopes, expiration dates, and teaching agents not to hoard context ✨'
-description: 'Part 2 of the agent-brain series: why static memory turns into a digital attic, how we split global vs project scopes, and teaching AI agents to forget stale facts 🤍'
+title: 'tekmor: memory scopes, expiration dates, and teaching agents not to hoard context ✨'
+description: 'Part 2 of the tekmor series: why static memory turns into a digital attic, how we split global vs project scopes, and teaching AI agents to forget stale facts 🤍'
 pubDate: 2026-10-22
-series: agent-brain
+series: tekmor
 seriesPart: 2
-tags: ['agent-brain', 'memory-consolidation', 'vector-graph', 'reinforcement-learning', 'agent-memory', 'llm-agents']
+tags: ['tekmor', 'memory-consolidation', 'vector-graph', 'reinforcement-learning', 'agent-memory', 'llm-agents']
 ---
 
-in [Part 1 of our agent-brain series](/blog/agent-brain-local-mcp-routing/), we built a neat local Rust MCP server to solve one simple question for coding agents: **what should the model see right now under a strict token budget?**
+in [Part 1 of our tekmor series](/blog/agent-brain-local-mcp-routing/), we built a neat local Rust MCP server to solve one simple question for coding agents: **what should the model see right now under a strict token budget?**
 
 and in the first few weeks, it was such a breath of fresh air!
 
@@ -16,20 +16,20 @@ but as we used it every day across dozens of different repos, our little memory 
 - a rule about `bun test` in our web frontend kept getting injected into our Python machine learning repos.
 - our poor agent was drowning in yesterday's temporary workarounds!
 
-so today, i wanted to share how we gave [agent-brain](https://github.com/autonomic-ai-dev/agent-brain) a clean memory taxonomy: **project vs global scopes**, **expiration dates for facts**, and **cross-client memory sharing** between Cursor, Antigravity, and Gemini ✨!
+so today, i wanted to share how we gave [tekmor](https://github.com/autonomic-ai-dev/tekmor) a clean memory taxonomy: **project vs global scopes**, **expiration dates for facts**, and **cross-client memory sharing** between Cursor, Antigravity, and Gemini ✨!
 
 ---
 
 ## the updated routing loop at a glance 🚢
 
-here's how `agent-brain` routes context today before any prompt hits the model:
+here's how `tekmor` routes context today before any prompt hits the model:
 
 ```mermaid
 flowchart TB
   turn["Agent Turn\n(user_message + folder + open_files)"]
   gate["Hard Read Gate 🛑\n(read_gate=hard)"]
   
-  subgraph routing["agent-brain Router ✨"]
+  subgraph routing["tekmor Router ✨"]
     fastembed["Local ONNX Embeddings\n(FastEmbed on Apple Silicon)"]
     matcher["Ranked Matcher\n(Agents, Skills, Rules)"]
     mempool["Scoped Memory Pool\n(Global vs Project)"]
@@ -105,7 +105,7 @@ temporary build workarounds (like *"pass `--legacy-peer-deps` until the upstream
 }
 ```
 
-on every single turn, `agent-brain` checks `invalid_at`. if the timestamp has passed, the fact gets gently archived. unverified claims decay naturally, while battle-tested recipes that repeatedly pass verification get a confidence boost ✨.
+on every single turn, `tekmor` checks `invalid_at`. if the timestamp has passed, the fact gets gently archived. unverified claims decay naturally, while battle-tested recipes that repeatedly pass verification get a confidence boost ✨.
 
 ---
 
@@ -116,7 +116,7 @@ like most developers, i don't live in just one tool:
 - jump into Cursor or Antigravity to write the implementation.
 - and do final review in a separate CLI session.
 
-`agent-brain` periodically reads session logs from local transcripts (`~/.cursor/.../transcript.jsonl` and `~/.gemini/antigravity-cli/...`), condenses the core actions into a 150-token summary, and makes it available immediately in your other windows:
+`tekmor` periodically reads session logs from local transcripts (`~/.cursor/.../transcript.jsonl` and `~/.gemini/antigravity-cli/...`), condenses the core actions into a 150-token summary, and makes it available immediately in your other windows:
 
 > *"Retrieved via route_task (Gemini, 2 turns ago): Redesigned the blog navbar and bumped Node to v24.22.1."*
 
@@ -128,8 +128,8 @@ no more copy-pasting conversation summaries across chat windows 🤍!
 
 as the Model Context Protocol ecosystem exploded, connecting 15 different MCP servers directly to your editor became a recipe for token bankruptcy before you even started typing.
 
-`agent-brain` acts as a calm gateway:
-- upstream tools (like `agent-body` for sandboxed commands or Google `stitch` for UI screens) register behind `agent-brain`.
+`tekmor` acts as a calm gateway:
+- upstream tools (like `agent-body` for sandboxed commands or Google `stitch` for UI screens) register behind `tekmor`.
 - the model calls `route_to_mcp` with an explicit `max_tokens` ceiling.
 - massive JSON payloads get trimmed before hitting your model's context window.
 
@@ -139,7 +139,7 @@ as the Model Context Protocol ecosystem exploded, connecting 15 different MCP se
 
 giving agents a way to organize their thoughts and forget old mistakes turned our autonomous coding assistants from clumsy interns into sharp, reliable pairing buddies 🤍.
 
-all the code is open source at [github.com/autonomic-ai-dev/agent-brain](https://github.com/autonomic-ai-dev/agent-brain).
+all the code is open source at [github.com/autonomic-ai-dev/tekmor](https://github.com/autonomic-ai-dev/tekmor).
 
 in [Part 3](/blog/agent-brain-the-architectural-pivot-and-runtime/), we'll talk about the biggest pivot of all: why passive advice wasn't enough, and how hard execution gates made agent development reliable again!
 

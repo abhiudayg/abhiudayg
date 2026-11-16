@@ -1,0 +1,248 @@
+---
+/**
+ * EmpiricalBenchmarks.astro
+ * SSR-First Animated Empirical Numbers & Metrics
+ * 
+ * Implements:
+ * 1. Zero Cumulative Layout Shift (CLS) with pre-rendered formatted values
+ * 2. 60/120 FPS Direct DOM mutation on IntersectionObserver
+ * 3. Bidirectional reset and re-animation on scroll
+ * 4. Synchronized expanding metric progress bars
+ */
+
+interface BenchmarkItem {
+	system: string;
+	metric: string;
+	value: number;
+	displayValue: string;
+	unit: string;
+	targetBarWidth: string;
+	comparisonLabel: string;
+	comparisonValue: string;
+	comparisonBarWidth: string;
+	description: string;
+}
+
+const benchmarks: BenchmarkItem[] = [
+	{
+		system: 'anode',
+		metric: 'Cold Boot Latency',
+		value: 8.2,
+		displayValue: '< 8.2',
+		unit: 'ms',
+		targetBarWidth: '4%',
+		comparisonLabel: 'Docker Compose',
+		comparisonValue: '450 ms',
+		comparisonBarWidth: '92%',
+		description: 'Go SSA topology deduction booted directly under systemd vs container daemon virtualization.',
+	},
+	{
+		system: 'anode',
+		metric: 'Daemon RSS Overhead',
+		value: 0,
+		displayValue: '0',
+		unit: 'MB',
+		targetBarWidth: '2%',
+		comparisonLabel: 'dockerd + containerd',
+		comparisonValue: '~210 MB',
+		comparisonBarWidth: '88%',
+		description: 'Zero daemon memory footprint by delegating lifecycle supervision to native Linux cgroups v2.',
+	},
+	{
+		system: 'tekmor',
+		metric: 'Verification Token Cost',
+		value: 0,
+		displayValue: '0',
+		unit: 'model tokens',
+		targetBarWidth: '2%',
+		comparisonLabel: 'LLM Evaluator Prompts',
+		comparisonValue: '2,400+ tokens',
+		comparisonBarWidth: '95%',
+		description: 'Local POSIX subshell execution and deterministic SHA-256 tree hashing with zero LLM API cost.',
+	},
+	{
+		system: 'tekmor',
+		metric: 'Gate Execution Latency',
+		value: 0.38,
+		displayValue: '0.38',
+		unit: 's',
+		targetBarWidth: '5%',
+		comparisonLabel: 'Fuzzy Agent Inspection',
+		comparisonValue: '45+ s',
+		comparisonBarWidth: '94%',
+		description: 'Executes 14 allowlisted test checks and issues cryptographic git tree receipts in 0.38s.',
+	},
+];
+---
+
+<section class="space-y-6 scroll-mt-20" id="benchmarks">
+	<div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-border pb-4 gap-3">
+		<div>
+			<div class="flex items-center gap-2">
+				<span class="live-beacon"></span>
+				<span class="font-mono text-xs text-text-dim uppercase tracking-wider">// Verifiable Invariants</span>
+			</div>
+			<h2 class="text-2xl sm:text-3xl font-semibold text-text mt-1 tracking-tight">Empirical Benchmarks &amp; Telemetry</h2>
+			<p class="text-xs sm:text-sm text-text-muted mt-1 max-w-2xl">
+				Numbers engineers can check in the repositories. Zero synthetic hype, zero unverified claims.
+			</p>
+		</div>
+
+		<div class="font-mono text-xs text-text-dim shrink-0">
+			<span>Deterministic Local Invariants</span>
+		</div>
+	</div>
+
+	<!-- Bento Comparison Cards Grid -->
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="benchmarks-container">
+		{benchmarks.map((item, index) => (
+			<div class="bento-card-glow rounded-xl border border-border bg-surface-card p-5 sm:p-6 space-y-4">
+				<div class="flex items-center justify-between border-b border-border/70 pb-3">
+					<div>
+						<span class="font-mono text-[11px] text-status-emerald font-semibold uppercase">{item.system}</span>
+						<h3 class="text-base font-semibold text-text tracking-tight mt-0.5">{item.metric}</h3>
+					</div>
+					<div class="text-right">
+						<span
+							class="benchmark-number font-mono text-lg sm:text-xl font-bold text-text"
+							data-target={item.value}
+							data-display={item.displayValue}
+							data-unit={` ${item.unit}`}
+						>
+							{item.displayValue} {item.unit}
+						</span>
+					</div>
+				</div>
+
+				<!-- Synchronized Metric Bars -->
+				<div class="space-y-3 font-mono text-xs">
+					<!-- Optimized System Bar -->
+					<div>
+						<div class="flex justify-between text-[11px] text-text-muted mb-1">
+							<span class="text-text font-medium flex items-center gap-1.5">
+								<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+								<span>{item.system}</span>
+							</span>
+							<span class="text-status-emerald font-semibold">{item.displayValue} {item.unit}</span>
+						</div>
+						<div class="w-full h-4 sm:h-5 rounded bg-bg-subtle border border-border/80 overflow-hidden p-0.5">
+							<div
+								class="benchmark-bar h-full rounded bg-gradient-to-r from-status-emerald to-[#5fd39a] min-w-[28px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[0_0_8px_rgba(95,211,154,0.3)]"
+								data-width={item.targetBarWidth}
+								style="width: 0%;"
+							></div>
+						</div>
+					</div>
+
+					<!-- Legacy / Comparison Bar -->
+					<div>
+						<div class="flex justify-between text-[11px] text-text-dim mb-1">
+							<span>{item.comparisonLabel}</span>
+							<span class="text-text-dim">{item.comparisonValue}</span>
+						</div>
+						<div class="w-full h-4 sm:h-5 rounded bg-bg-subtle border border-border/80 overflow-hidden p-0.5">
+							<div
+								class="benchmark-bar-comp h-full rounded bg-border-zinc/60 min-w-[32px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]"
+								data-width={item.comparisonBarWidth}
+								style="width: 0%;"
+							></div>
+						</div>
+					</div>
+				</div>
+
+				<p class="text-xs text-text-muted leading-relaxed pt-1 m-0">
+					{item.description}
+				</p>
+			</div>
+		))}
+	</div>
+
+	<!-- Telemetry Summary Pill Bar -->
+	<div class="rounded-xl border border-border bg-code-bg p-4 flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-text-dim">
+		<div class="flex items-center gap-2">
+			<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
+			<span class="text-text">All benchmarks measured on standard POSIX / Darwin arm64 workstations</span>
+		</div>
+		<div class="flex items-center gap-4 text-[11px]">
+			<span>Zero Synthetic Benchmarking</span>
+			<span>&bull;</span>
+			<span>Reproducible via Test Suites</span>
+		</div>
+	</div>
+</section>
+
+<script is:inline>
+	(function() {
+		const container = document.getElementById('benchmarks-container');
+		if (!container) return;
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				const isVisible = entry.isIntersecting;
+				const cards = container.querySelectorAll('.bento-card-glow');
+
+				cards.forEach(card => {
+					const numEl = card.querySelector('.benchmark-number');
+					const barEl = card.querySelector('.benchmark-bar');
+					const barComp = card.querySelector('.benchmark-bar-comp');
+
+					if (isVisible) {
+						// Expand bars smoothly
+						if (barEl) {
+							const targetW = barEl.getAttribute('data-width') || '50%';
+							barEl.style.width = targetW;
+						}
+						if (barComp) {
+							const targetW = barComp.getAttribute('data-width') || '80%';
+							barComp.style.width = targetW;
+						}
+
+						// Count up number
+						if (numEl && !numEl.dataset.animating) {
+							numEl.dataset.animating = 'true';
+							const target = parseFloat(numEl.getAttribute('data-target') || '0');
+							const display = numEl.getAttribute('data-display') || '0';
+							const unit = numEl.getAttribute('data-unit') || '';
+
+							if (target === 0) {
+								numEl.textContent = `0${unit}`;
+								return;
+							}
+
+							const duration = 1200;
+							const start = performance.now();
+
+							function step(now) {
+								const elapsed = now - start;
+								const progress = Math.min(elapsed / duration, 1);
+								// Cubic bezier ease-out approximation: 1 - Math.pow(1 - progress, 3)
+								const ease = 1 - Math.pow(1 - progress, 3);
+								const current = (target * ease);
+
+								if (progress < 1) {
+									numEl.textContent = (display.startsWith('<') ? '< ' : '') + current.toFixed(target % 1 === 0 ? 0 : 1) + unit;
+									requestAnimationFrame(step);
+								} else {
+									numEl.textContent = `${display}${unit}`;
+									numEl.dataset.animating = '';
+								}
+							}
+							requestAnimationFrame(step);
+						}
+					} else {
+						// Bidirectional reset on leave
+						if (barEl) barEl.style.width = '0%';
+						if (barComp) barComp.style.width = '0%';
+						if (numEl) {
+							const unit = numEl.getAttribute('data-unit') || '';
+							numEl.textContent = `0${unit}`;
+							numEl.dataset.animating = '';
+						}
+					}
+				});
+			});
+		}, { threshold: 0.15 });
+
+		observer.observe(container);
+	})();
+</script>

@@ -1,0 +1,73 @@
+---
+/**
+ * HonestBoundaries.astro
+ * The "Honest Boundaries" Doctrine ("What It Does Not Do Yet")
+ * 
+ * High-conviction developer sites build authentic trust by stating what their
+ * systems refuse to do and where current architectural non-goals lie.
+ */
+
+const boundaries = [
+	{
+		system: 'anode',
+		scope: 'Single-Node VPS Focus',
+		description: 'Does not attempt multi-region distributed consensus or Kubernetes-style overlay networks. Explicitly engineered for single-node Linux VPS setups where Docker Compose and k8s are operational overkill.',
+	},
+	{
+		system: 'anode',
+		scope: 'Go SSA Specialization',
+		description: 'Does not perform SSA Variable Type Analysis on interpreted runtimes (Node, Python, Ruby). Purpose-built exclusively for statically-compiled Go binaries to guarantee <8.2ms boots.',
+	},
+	{
+		system: 'tekmor',
+		scope: 'Deterministic Test Gates Only',
+		description: 'Does not evaluate subjective code aesthetics or prose quality. Strictly asserts binary exit codes (0/1), subshell timeout boundaries, and cryptographic git-tree SHA hash match.',
+	},
+	{
+		system: 'tekmor',
+		scope: 'POSIX Subshell Runtime',
+		description: 'Does not support legacy Windows cmd.exe shells. Requires POSIX-compliant subshells (Linux / macOS) for subshell signal trapping and process supervision.',
+	},
+	{
+		system: 'shipnote',
+		scope: 'Zero Unverified Copy',
+		description: 'Refuses to draft release claims without direct git commit diff provenance. If a feature is not provable in the diff, Shipnote will not assert it shipped.',
+	},
+];
+---
+
+<section class="space-y-6 scroll-mt-20" id="boundaries">
+	<div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-border pb-4 gap-3">
+		<div>
+			<div class="flex items-center gap-2">
+				<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
+				<span class="font-mono text-xs text-text-dim uppercase tracking-wider">// Engineering Non-Goals</span>
+			</div>
+			<h2 class="text-2xl sm:text-3xl font-semibold text-text mt-1 tracking-tight">Honest Boundaries &amp; Non-Goals</h2>
+			<p class="text-xs sm:text-sm text-text-muted mt-1 max-w-2xl">
+				What these systems refuse to do. Clear architectural constraints build lasting technical trust.
+			</p>
+		</div>
+
+		<div class="font-mono text-xs text-text-dim shrink-0">
+			<span>Zero Phantom Capabilities</span>
+		</div>
+	</div>
+
+	<!-- Boundaries List -->
+	<div class="rounded-xl border border-border bg-surface-card overflow-hidden divide-y divide-border">
+		{boundaries.map((item) => (
+			<div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-start gap-4 transition-colors hover:bg-bg-subtle/60">
+				<div class="flex items-center gap-2 sm:w-48 shrink-0 font-mono text-xs">
+					<span class="w-2 h-2 rounded-full bg-border-zinc shrink-0"></span>
+					<span class="text-status-emerald font-semibold uppercase">{item.system}</span>
+					<span class="text-text-dim">&bull;</span>
+					<span class="text-text-muted truncate">{item.scope}</span>
+				</div>
+				<p class="text-xs sm:text-sm text-text-muted leading-relaxed m-0 flex-1">
+					{item.description}
+				</p>
+			</div>
+		))}
+	</div>
+</section>

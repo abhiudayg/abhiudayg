@@ -1,13 +1,13 @@
 ---
-title: 'agent-brain: the architectural pivot — why gentle suggestions don’t stop AI chaos 🤍'
-description: 'Part 3 of our agent-brain series: why polite prompts fail in real coding agents, and how we built hard gates, token knapsacks, and real test receipts in Rust ✨'
+title: 'tekmor: the architectural pivot — why gentle suggestions don’t stop AI chaos 🤍'
+description: 'Part 3 of our tekmor series: why polite prompts fail in real coding agents, and how we built hard gates, token knapsacks, and real test receipts in Rust ✨'
 pubDate: 2026-10-28
-series: agent-brain
+series: tekmor
 seriesPart: 3
-tags: ['agent-brain', 'autonomous-agents', 'mcp', 'cognitive-architecture', 'token-budgets', 'rust', 'llm-orchestration']
+tags: ['tekmor', 'autonomous-agents', 'mcp', 'cognitive-architecture', 'token-budgets', 'rust', 'llm-orchestration']
 ---
 
-when we first started hacking on [agent-brain](https://github.com/autonomic-ai-dev/agent-brain) ([Part 1](/blog/agent-brain-local-mcp-routing/) and [Part 2](/blog/agent-brain-memory-scopes-and-reinforcement/)), our premise was so innocent and simple:  
+when we first started hacking on [tekmor](https://github.com/autonomic-ai-dev/tekmor) ([Part 1](/blog/agent-brain-local-mcp-routing/) and [Part 2](/blog/agent-brain-memory-scopes-and-reinforcement/)), our premise was so innocent and simple:  
 *"hey, coding agents suffer from too much context! let's index all our markdown rules, skills, and memory into local ONNX embeddings and politely suggest what the model should look at 🤍."*
 
 and for small single-file edits? it worked nicely!
@@ -16,7 +16,7 @@ but as soon as we started asking agents to do real, meaty engineering tasks — 
 
 turns out, merely *suggesting* guidelines to an LLM without architectural guardrails is pure wishful thinking. when an agent is given polite advice without strict gates, it drifts. it invents CLI flags that don't exist. it skips safety checks. and the most classic move of all? it confidently declares *"All 48 tests have passed successfully!"* when it literally never ran the test runner in the first place 🤡.
 
-here's the story of our big architectural pivot: how we evolved `agent-brain` from a friendly advisory helper into a **deterministic cognitive runtime** in Rust with hard pre-tool gates, token knapsacks, and cryptographic verification receipts ✨!
+here's the story of our big architectural pivot: how we evolved `tekmor` from a friendly advisory helper into a **deterministic cognitive runtime** in Rust with hard pre-tool gates, token knapsacks, and cryptographic verification receipts ✨!
 
 ---
 
@@ -50,7 +50,7 @@ developers jump between tools constantly: Cursor in the IDE, Antigravity in the 
 
 ## the core pivot: hard gates, not gentle suggestions ✨
 
-we threw away gentle suggestions and introduced **hard execution invariants**. in `agent-brain` today, the router is no longer an advisory assistant — it is an unapologetic gatekeeper:
+we threw away gentle suggestions and introduced **hard execution invariants**. in `tekmor` today, the router is no longer an advisory assistant — it is an unapologetic gatekeeper:
 
 ```mermaid
 flowchart LR
@@ -77,15 +77,15 @@ and when `route_task` answers? it doesn't dump huge markdown essays. it packs a 
 
 ## multi-process peace: the daemon + stdio proxy 🚢
 
-to solve database locking once and for all, we split `agent-brain` into a supervised background daemon and featherlight stdio proxies:
+to solve database locking once and for all, we split `tekmor` into a supervised background daemon and featherlight stdio proxies:
 
 ```mermaid
 sequenceDiagram
     autonumber
     participant AgentA as Cursor / Antigravity
     participant AgentB as OpenCode / Terminal
-    participant Proxy as agent-brain stdio proxy
-    participant Daemon as agent-brain daemon (UDS)
+    participant Proxy as tekmor stdio proxy
+    participant Daemon as tekmor daemon (UDS)
     participant DB as SQLite WAL + HNSW
 
     AgentA->>Proxy: stdio: route_task
@@ -97,21 +97,21 @@ sequenceDiagram
     Proxy-->>AgentA: stdio MCP response
 ```
 
-now you can have 5 agents running across 5 windows, and every single memory write and task route goes through a dedicated Unix Domain Socket (`/tmp/agent-brain.sock`) with zero file lock contention ✨!
+now you can have 5 agents running across 5 windows, and every single memory write and task route goes through a dedicated Unix Domain Socket (`/tmp/tekmor.sock`) with zero file lock contention ✨!
 
 ---
 
-## `agent-brain verify`: real test receipts, zero hallucinated passes 🛡️
+## `tekmor verify`: real test receipts, zero hallucinated passes 🛡️
 
 my favorite feature we built is the verification ledger.
 
 whenever an agent claims a task is complete, we don't take its word for it. the agent has to execute:
 
 ```bash
-agent-brain verify -- bun test
+tekmor verify -- bun test
 ```
 
-`agent-brain verify` spawns an isolated subshell, captures the true process exit code, calculates a SHA-256 hash of the command output, and writes an immutable receipt to the local ledger.
+`tekmor verify` spawns an isolated subshell, captures the true process exit code, calculates a SHA-256 hash of the command output, and writes an immutable receipt to the local ledger.
 
 if the command exits non-zero or the tests fail, the receipt records the failure. the agent literally cannot fake a test pass. it brought sanity and trust back into our autonomous coding loops 🤍!
 
@@ -123,6 +123,6 @@ building this pivot taught me that autonomous agents don't need longer prompts o
 
 it turned autonomous coding from an exercise in crossing your fingers into an engineering workflow that's reliable, reproducible, and genuinely fun ✨!
 
-all code is open source under MIT at [github.com/autonomic-ai-dev/agent-brain](https://github.com/autonomic-ai-dev/agent-brain).
+all code is open source under MIT at [github.com/autonomic-ai-dev/tekmor](https://github.com/autonomic-ai-dev/tekmor).
 
 hope you enjoy it, and let me know what crazy bugs your agents have caught recently in the replies 🤍!

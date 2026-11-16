@@ -1,0 +1,212 @@
+---
+/**
+ * MainOrangeArrow.astro
+ * Continuous Conduit Motion & Glowing Thread Architecture
+ * 
+ * Reverted to previous full-page absolute conduit rail structure.
+ * Fast filling tracking relative to the middle of the viewport (user focal area).
+ */
+---
+
+<div
+	aria-hidden="true"
+	class="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 select-none"
+	id="conduit-container"
+>
+	<div class="shell h-full relative pointer-events-none">
+		<!-- Continuous Orange Thread Conduit in the outer gutter margin -->
+		<div
+			id="conduit-track-rail"
+			class="absolute top-12 bottom-20 left-1 sm:left-2 lg:left-2 xl:-left-6 2xl:-left-10 w-[2.5px]"
+		>
+			<!-- Top Source Knot (Hero Origin) -->
+			<div class="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center justify-center">
+				<div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-[#ff531a]/50 bg-[#0a0a0c] flex items-center justify-center shadow-[0_0_12px_rgba(255,83,26,0.5)]">
+					<span class="w-2 h-2 rounded-full bg-[#ff7a4a] shadow-[0_0_8px_#ff531a]"></span>
+				</div>
+				<div class="absolute w-14 h-14 rounded-full bg-[#ff531a]/20 blur-md -z-10"></div>
+			</div>
+
+			<!-- Background Static Guide Track -->
+			<div class="absolute inset-0 w-[2.5px] bg-gradient-to-b from-[#ff531a]/20 via-white/[0.05] to-[#ff531a]/25 rounded-full"></div>
+
+			<!-- Active Glowing High-Energy Conduit (Fast filling) -->
+			<div
+				id="conduit-active-line"
+				class="absolute top-0 left-0 w-full overflow-visible"
+				style="height: 0%;"
+			>
+				<!-- Multi-Tier Optical Glow 1: Wide Ambient Halo -->
+				<div class="absolute top-0 -left-[7px] w-[16px] h-full bg-[#ff531a] opacity-20 blur-[8px] rounded-full"></div>
+
+				<!-- Multi-Tier Optical Glow 2: Mid Focused Halo -->
+				<div class="absolute top-0 -left-[2px] w-[6px] h-full bg-[#ff531a] opacity-60 blur-[3px] rounded-full"></div>
+
+				<!-- Multi-Tier Optical Glow 3: Sharp Laser Core -->
+				<div class="absolute top-0 left-0 w-[2.5px] h-full bg-gradient-to-b from-[#ffd9c7] via-[#ff7a4a] to-[#ff531a] shadow-[0_0_10px_#ff531a]"></div>
+
+				<!-- Periodic Energy Pulse Tracer -->
+				<div class="conduit-tracer absolute left-0 w-full h-24 bg-gradient-to-b from-transparent via-white/80 to-transparent shadow-[0_0_12px_#ffffff]"></div>
+			</div>
+
+			<!-- Main Orange Arrow Runner (Tracking middle of screen) -->
+			<div
+				id="conduit-runner-arrow"
+				class="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-transform duration-75"
+				style="top: 0%;"
+			>
+				<!-- 240px Ambient Radial Glow Aura -->
+				<div
+					class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-60 sm:h-60 rounded-full pointer-events-none -z-10"
+					style="background: radial-gradient(circle, rgba(255, 83, 26, 0.45) 0%, rgba(255, 83, 26, 0.15) 45%, rgba(255, 83, 26, 0) 70%);"
+				></div>
+
+				<!-- Main Orange Arrow Badge -->
+				<div class="relative group flex items-center justify-center pointer-events-auto cursor-pointer" id="conduit-click-arrow" title="Scroll down">
+					<div class="absolute -inset-1 rounded-full bg-[#ff531a]/40 blur-sm animate-pulse"></div>
+					<div
+						class="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-b from-[#ff8c5a] via-[#ff6a3a] to-[#ff4500] border border-[#ffd9c7]/80 flex items-center justify-center transition-transform hover:scale-110 active:scale-95"
+						style="box-shadow: 0 0 16px 5px rgba(255, 83, 26, 0.85), 0 0 32px 10px rgba(255, 83, 26, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);"
+					>
+						<svg
+							class="w-3.5 h-3.5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] -translate-y-[0.5px]"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="3"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M12 4v16m0 0l-5.5-5.5M12 20l5.5-5.5"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+
+			<!-- Bottom Destination Terminal Node (Footer Landing Receptor) -->
+			<div class="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center">
+				<div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-[#ff531a]/50 bg-[#0a0a0c] flex items-center justify-center shadow-[0_0_12px_rgba(255,83,26,0.6)]">
+					<span class="w-2.5 h-2.5 rounded-full bg-[#ff7a4a] shadow-[0_0_10px_#ff531a]"></span>
+				</div>
+				<div class="absolute w-16 h-16 rounded-full bg-[#ff531a]/25 blur-lg -z-10"></div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<style>
+	@keyframes conduit-pulse-trace {
+		0% {
+			transform: translateY(-20%);
+			opacity: 0;
+		}
+		15% {
+			opacity: 1;
+		}
+		85% {
+			opacity: 1;
+		}
+		100% {
+			transform: translateY(400%);
+			opacity: 0;
+		}
+	}
+
+	.conduit-tracer {
+		animation: conduit-pulse-trace 3s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+	}
+</style>
+
+<script is:inline>
+	function setupConduitMotion() {
+		const activeLine = document.getElementById('conduit-active-line');
+		const runnerArrow = document.getElementById('conduit-runner-arrow');
+		const clickArrow = document.getElementById('conduit-click-arrow');
+		const track = document.getElementById('conduit-track-rail');
+		const container = document.getElementById('conduit-container');
+
+		if (!activeLine || !runnerArrow || !track || !container) return;
+
+		let targetProgress = 0;
+		let currentProgress = 0;
+		let ticking = false;
+
+		function calculateProgress() {
+			const scrollY = window.scrollY || window.pageYOffset;
+			const vh = window.innerHeight;
+			const maxScroll = document.documentElement.scrollHeight - vh;
+			if (maxScroll <= 0) return 0;
+
+			// Position of track in document
+			const containerRect = container.getBoundingClientRect();
+			const trackStartDocY = containerRect.top + scrollY + 48; // top-12
+			const trackHeight = track.clientHeight || (container.clientHeight - 128);
+			if (trackHeight <= 0) return 0;
+
+			// User focal point: tracks to the middle of the screen (vh * 0.5)
+			// At scrollY = 0, smoothly starts near top knot (48px)
+			const focalScreenY = Math.min(vh * 0.5, 48 + scrollY * 0.9);
+
+			// Near footer: smoothly glide to 100% (destination knot)
+			const remainingScroll = maxScroll - scrollY;
+			let targetDocY;
+			if (remainingScroll < vh * 0.5) {
+				const bottomRatio = 1 - (remainingScroll / (vh * 0.5));
+				const currentFocal = scrollY + (vh * 0.5);
+				const trackEndDocY = trackStartDocY + trackHeight;
+				targetDocY = currentFocal + (trackEndDocY - currentFocal) * bottomRatio;
+			} else {
+				targetDocY = scrollY + focalScreenY;
+			}
+
+			const progress = (targetDocY - trackStartDocY) / trackHeight;
+			return Math.min(Math.max(progress, 0), 1);
+		}
+
+		function updateScrollPosition() {
+			targetProgress = calculateProgress();
+			if (!ticking) {
+				ticking = true;
+				requestAnimationFrame(lerpRunner);
+			}
+		}
+
+		function lerpRunner() {
+			const diff = targetProgress - currentProgress;
+			// Fast filling damping (0.32) for snappy zero-lag response
+			if (Math.abs(diff) > 0.0004) {
+				currentProgress += diff * 0.32;
+				const pct = (currentProgress * 100).toFixed(2) + '%';
+				activeLine.style.height = pct;
+				runnerArrow.style.top = pct;
+				requestAnimationFrame(lerpRunner);
+			} else {
+				currentProgress = targetProgress;
+				const pct = (currentProgress * 100).toFixed(2) + '%';
+				activeLine.style.height = pct;
+				runnerArrow.style.top = pct;
+				ticking = false;
+			}
+		}
+
+		if (clickArrow) {
+			clickArrow.onclick = () => {
+				window.scrollBy({ top: window.innerHeight * 0.75, behavior: 'smooth' });
+			};
+		}
+
+		window.addEventListener('scroll', updateScrollPosition, { passive: true });
+		window.addEventListener('resize', updateScrollPosition, { passive: true });
+
+		// Initial calculation
+		targetProgress = calculateProgress();
+		currentProgress = targetProgress;
+		const initialPct = (currentProgress * 100).toFixed(2) + '%';
+		activeLine.style.height = initialPct;
+		runnerArrow.style.top = initialPct;
+	}
+
+	setupConduitMotion();
+	document.addEventListener('astro:page-load', setupConduitMotion);
+</script>

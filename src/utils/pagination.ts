@@ -23,6 +23,13 @@ export function getExtraPaginationPages(totalItems: number, perPage: number) {
 	return Array.from({ length: totalPages - 1 }, (_, index) => index + 2);
 }
 
+export function getReadingTime(text?: string): string {
+	if (!text) return '5 min read';
+	const words = text.trim().split(/\s+/).filter(Boolean).length;
+	const minutes = Math.max(1, Math.ceil(words / 220));
+	return `${minutes} min read`;
+}
+
 export function sortSeriesPosts<T extends { data: { seriesPart?: number; pubDate: Date } }>(
 	posts: T[],
 ) {

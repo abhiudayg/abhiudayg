@@ -35,34 +35,39 @@
 
 <script is:inline>
 	(function () {
-		const buttons = document.querySelectorAll('[data-theme-choice]');
-		const root = document.documentElement;
+		function setupTheme() {
+			const buttons = document.querySelectorAll('[data-theme-choice]');
+			const root = document.documentElement;
 
-		function getStoredTheme() {
-			return localStorage.getItem('theme') || 'light';
-		}
+			function getStoredTheme() {
+				return localStorage.getItem('theme') || 'dark';
+			}
 
-		function setActive(theme) {
+			function setActive(theme) {
+				buttons.forEach((button) => {
+					const isActive = button.getAttribute('data-theme-choice') === theme;
+					button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+					button.classList.toggle('theme-btn-active', isActive);
+				});
+			}
+
+			function applyTheme(theme) {
+				root.setAttribute('data-theme', theme);
+				localStorage.setItem('theme', theme);
+				setActive(theme);
+				document.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+			}
+
 			buttons.forEach((button) => {
-				const isActive = button.getAttribute('data-theme-choice') === theme;
-				button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-				button.classList.toggle('theme-btn-active', isActive);
+				button.onclick = () => {
+					applyTheme(button.getAttribute('data-theme-choice'));
+				};
 			});
+
+			setActive(getStoredTheme());
 		}
 
-		function applyTheme(theme) {
-			root.setAttribute('data-theme', theme);
-			localStorage.setItem('theme', theme);
-			setActive(theme);
-			document.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
-		}
-
-		buttons.forEach((button) => {
-			button.addEventListener('click', () => {
-				applyTheme(button.getAttribute('data-theme-choice'));
-			});
-		});
-
-		setActive(getStoredTheme());
+		setupTheme();
+		document.addEventListener('astro:page-load', setupTheme);
 	})();
 </script>

@@ -2,8 +2,6 @@
 title: 'building dustmap: a sub-12ms mac disk visualizer in Rust and Tauri ✨'
 description: 'why i built dustmap: parallel Rayon file walks, flat memory arrays with zero pointer chasing, and a friendly Trash-first cleaner that never eats your files 🤍'
 pubDate: 2026-10-21
-series: dustmap
-seriesPart: 1
 tags: ['dustmap', 'rust', 'tauri-2', 'disk-analyzer', 'macos-app', 'tree-maps', 'systems-programming']
 ---
 

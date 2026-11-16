@@ -4,6 +4,7 @@ import {
 	DEVTO_URL,
 	GITHUB_URL,
 	HASHNODE_URL,
+	INSTAGRAM_URL,
 	LINKEDIN_URL,
 	REDDIT_URL,
 	SITE_DESCRIPTION,
@@ -44,7 +45,7 @@ export function personJsonLd(site: URL | string = SITE_URL) {
 		name: AUTHOR_NAME,
 		alternateName: ['Abhiuday', 'aeswibon', 'abhiudayg'],
 		url: authorProfileUrl(),
-		sameAs: [GITHUB_URL, TWITTER_URL, LINKEDIN_URL, DEVTO_URL, HASHNODE_URL, REDDIT_URL].filter(Boolean),
+		sameAs: [GITHUB_URL, TWITTER_URL, INSTAGRAM_URL, LINKEDIN_URL, DEVTO_URL, HASHNODE_URL, REDDIT_URL].filter(Boolean),
 		jobTitle: 'Senior Software Development Engineer (SDE 2) & Systems Architect',
 		worksFor: {
 			'@type': 'Organization',

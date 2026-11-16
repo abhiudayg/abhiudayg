@@ -1,0 +1,38 @@
+{
+  "anode": {
+    "repo": "abhiudayg/anode",
+    "version": "v1.6.0",
+    "fallback": "v1.1.0",
+    "lastChecked": "2026-11-16T04:07:28.041Z"
+  },
+  "tekmor": {
+    "repo": "autonomic-ai-dev/tekmor",
+    "version": "v1.0.0",
+    "fallback": "v1.0.0",
+    "lastChecked": "2026-11-16T04:07:28.041Z"
+  },
+  "shipnote": {
+    "repo": "abhiudayg/shipnote",
+    "version": "v0.3.2",
+    "fallback": "v0.3.2",
+    "lastChecked": "2026-11-16T04:07:28.041Z"
+  },
+  "agentrun": {
+    "repo": "autonomic-ai-dev/agentrun",
+    "version": "Pre-alpha",
+    "fallback": "Pre-alpha",
+    "lastChecked": "2026-11-16T04:07:28.041Z"
+  },
+  "thesmos": {
+    "repo": "autonomic-ai-dev/thesmos",
+    "version": "v1.0.0",
+    "fallback": "v1.0.0",
+    "lastChecked": "2026-11-16T04:07:28.041Z"
+  },
+  "harbor": {
+    "repo": "autonomic-ai-dev/harbor",
+    "version": "Pre-alpha",
+    "fallback": "Pre-alpha",
+    "lastChecked": "2026-11-16T04:07:28.041Z"
+  }
+}

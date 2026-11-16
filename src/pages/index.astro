@@ -1,10 +1,15 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import EmpiricalBenchmarks from '../components/EmpiricalBenchmarks.astro';
+import EvidenceInspector from '../components/EvidenceInspector.astro';
+import FAQSection from '../components/FAQSection.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import HonestBoundaries from '../components/HonestBoundaries.astro';
 import JsonLd from '../components/JsonLd.astro';
-import { BLOG_SERIES, GITHUB_URL, RSS_FEED_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import MainOrangeArrow from '../components/MainOrangeArrow.astro';
+import { BLOG_SERIES, GITHUB_URL, INSTAGRAM_URL, RSS_FEED_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getSortedPosts } from '../utils/blog';
 import { graphJsonLd, personJsonLd, websiteJsonLd } from '../utils/seo';
 
@@ -35,7 +40,10 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 
 		<Header />
 
-		<main class="shell py-10 sm:py-16 md:py-20 space-y-20 md:space-y-28">
+		<div class="relative overflow-x-clip" id="conduit-parent">
+			<MainOrangeArrow />
+
+			<main class="shell relative py-12 sm:py-16 md:py-20 space-y-20 md:space-y-28 pl-6 sm:pl-10 md:pl-12 lg:pl-12 xl:pl-6">
 			<!-- 1. Hero Section -->
 			<section class="relative space-y-6 sm:space-y-8 max-w-4xl">
 				<!-- Status Badge / Pill (Resend style) -->
@@ -71,12 +79,50 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						</svg>
 						<span>GitHub (@abhiudayg)</span>
 					</a>
+					<a class="btn-secondary" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+						<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+							<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+						</svg>
+						<span>@baremetal.dev</span>
+					</a>
 					<a class="btn-secondary" href="/subscribe">
 						<svg class="w-3.5 h-3.5 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
 						</svg>
 						<span>RSS Feed</span>
 					</a>
+				</div>
+
+				<!-- BareMetal.dev Channel Spotlight Banner -->
+				<div class="rounded-xl border border-border bg-surface-card p-4 sm:p-5 bento-card-glow relative overflow-hidden">
+					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+						<div class="space-y-1">
+							<div class="flex items-center gap-2">
+								<span class="live-beacon"></span>
+								<span class="font-mono text-xs font-semibold text-status-emerald">@baremetal.dev</span>
+								<span class="text-text-dim">&bull;</span>
+								<span class="font-mono text-xs text-text-muted">Systems Engineering Without Cloud Bloat</span>
+							</div>
+							<p class="text-xs sm:text-sm text-text-muted m-0 font-sans">
+								Excalidraw &bull; Terminals &bull; Bare Metal. High-signal visual deep-dives into kernel primitives, Go runtime internals, and local systems.
+							</p>
+							<div class="flex items-center gap-2.5 font-mono text-[11px] text-text-dim pt-0.5">
+								<span>📍 Bengaluru</span>
+								<span>&bull;</span>
+								<span class="text-status-emerald">Deep-dives below 👇</span>
+							</div>
+						</div>
+
+						<a
+							class="btn-primary shrink-0 self-start sm:self-center font-mono text-xs no-underline flex items-center gap-2"
+							href={INSTAGRAM_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<span>Watch Deep Dives</span>
+							<span aria-hidden="true">&nearr;</span>
+						</a>
+					</div>
 				</div>
 
 				<!-- Resend-Style Capability Pills (Replaces fake vanity stats with authentic badges) -->
@@ -103,14 +149,14 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 
 					<!-- Interactive Category Filter Tabs -->
 					<div class="flex items-center gap-1.5 font-mono text-xs overflow-x-auto pb-1 sm:pb-0" id="system-filter-tabs">
-						<button type="button" class="system-tab-btn active px-2.5 py-1 rounded-md bg-surface-card border border-border text-text font-medium cursor-pointer transition-colors" data-filter="all">All (7)</button>
+						<button type="button" class="system-tab-btn active px-2.5 py-1 rounded-md bg-surface-card border border-border text-text font-medium cursor-pointer transition-colors" data-filter="all">All (6)</button>
 						<button type="button" class="system-tab-btn px-2.5 py-1 rounded-md bg-transparent border border-transparent text-text-dim hover:text-text cursor-pointer transition-colors" data-filter="systems">Orchestration &amp; Systems</button>
-						<button type="button" class="system-tab-btn px-2.5 py-1 rounded-md bg-transparent border border-transparent text-text-dim hover:text-text cursor-pointer transition-colors" data-filter="ai">AI Agents</button>
+						<button type="button" class="system-tab-btn px-2.5 py-1 rounded-md bg-transparent border border-transparent text-text-dim hover:text-text cursor-pointer transition-colors" data-filter="ai">AI Verification &amp; Agents</button>
 						<button type="button" class="system-tab-btn px-2.5 py-1 rounded-md bg-transparent border border-transparent text-text-dim hover:text-text cursor-pointer transition-colors" data-filter="tools">Developer Tools</button>
 					</div>
 				</div>
 
-				<!-- Bento Grid (Harmonic 12 Columns: Row 1 = 6+6, Row 2 = 4+4+4, Row 3 = 4+4+4) -->
+				<!-- Bento Grid (Harmonic 6x6 Layout: 3 Rows of 2 Symmetrical Cards) -->
 				<div class="grid grid-cols-1 md:grid-cols-12 gap-5" id="bento-grid-container">
 					<!-- Bento Card 1: anode (Col 12 md:6) -->
 					<div class="system-card md:col-span-6 bg-surface-card border border-border rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6" data-category="systems">
@@ -123,7 +169,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 										</svg>
 									</div>
 									<h3 class="text-xl font-semibold text-text tracking-tight">anode</h3>
-									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.1.0</span>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">{BLOG_SERIES.anode.badge}</span>
 								</div>
 								
 								<div class="flex items-center gap-1.5">
@@ -186,27 +232,27 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						</div>
 					</div>
 
-					<!-- Bento Card 2: agent-brain (Col 12 md:6) -->
+					<!-- Bento Card 2: tekmor (Col 12 md:6) -->
 					<div class="system-card md:col-span-6 bg-surface-card border border-border rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6" data-category="ai systems">
 						<div class="space-y-3">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-3">
 									<div class="w-8 h-8 rounded-lg bg-bg-subtle border border-border flex items-center justify-center text-status-emerald shrink-0">
 										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
 										</svg>
 									</div>
-									<h3 class="text-xl font-semibold text-text tracking-tight">agent-brain</h3>
-									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.0.0-rc8</span>
+									<h3 class="text-xl font-semibold text-text tracking-tight">tekmor</h3>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">{BLOG_SERIES.tekmor.badge}</span>
 								</div>
 								
 								<!-- GitHub Direct Button -->
 								<a
 									class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text hover:border-border-hover transition-colors font-mono text-xs no-underline"
-									href="https://github.com/autonomic-ai-dev/agent-brain"
+									href="https://github.com/autonomic-ai-dev/tekmor"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="View agent-brain on GitHub"
+									aria-label="View tekmor on GitHub"
 								>
 									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
 										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -216,89 +262,51 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								</a>
 							</div>
 							<p class="text-sm text-text-muted leading-relaxed">
-								Local-first cognitive governor, turn router &amp; procedure graph for coding agents under token budgets. Intercepts tool calls via host pre-tool hooks, packs ~500-token knapsack envelopes, and records verification receipts.
+								Hard gate verification engine &amp; cryptographic test ledger for coding agents. Intercepts turns via host stop hooks, executes checks in isolated POSIX subshells, and binds exit codes to git tree SHAs.
 							</p>
 						</div>
 
-						<!-- Interactive Live Cognitive Architecture Visualizer -->
-						<div class="bg-code-bg border border-border rounded-lg p-3 font-mono text-xs space-y-2.5">
-							<div class="flex items-center justify-between text-text-dim text-[11px] border-b border-border pb-1.5">
-								<span class="flex items-center gap-1.5">
-									<span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span>
-									<span>Cognitive Pipeline &bull; Click to inspect</span>
-								</span>
-								<span class="text-status-emerald font-medium" id="dag-mode-label">host pre-tool hook</span>
+						<!-- Telemetry Terminal -->
+						<div class="bg-code-bg border border-border rounded-lg p-3 font-mono text-xs space-y-1.5 text-text-dim">
+							<div class="flex justify-between">
+								<span>Gate Integration:</span>
+								<span class="text-status-emerald font-medium">Native Stop Hook in Claude Code</span>
 							</div>
-
-							<!-- Clickable Node Pipeline -->
-							<div class="overflow-x-auto py-0.5">
-								<div class="flex items-center gap-1.5 min-w-max text-xs">
-									<button
-										type="button"
-										class="dag-node-btn px-2 py-0.5 rounded bg-surface-card border border-status-emerald text-text cursor-pointer hover:border-border-hover transition-colors font-mono"
-										onclick="inspectDagStage('route_gate')"
-										id="node-route_gate"
-									>
-										<span class="text-status-emerald">&gt;</span> route_gate
-									</button>
-									<span class="text-text-dim">&mdash;(budget)&rarr;</span>
-									<button
-										type="button"
-										class="dag-node-btn px-2 py-0.5 rounded bg-surface-card border border-border text-text-muted cursor-pointer hover:border-border-hover transition-colors font-mono"
-										onclick="inspectDagStage('knapsack')"
-										id="node-knapsack"
-									>
-										knapsack
-									</button>
-									<span class="text-text-dim">&mdash;(exec)&rarr;</span>
-									<button
-										type="button"
-										class="dag-node-btn px-2 py-0.5 rounded bg-surface-card border border-border text-text-muted cursor-pointer hover:border-border-hover transition-colors font-mono"
-										onclick="inspectDagStage('verify')"
-										id="node-verify"
-									>
-										verify
-									</button>
-								</div>
+							<div class="flex justify-between">
+								<span>Token Overhead:</span>
+								<span class="text-text font-medium">0 model tokens (100% local deterministic code)</span>
 							</div>
-
-							<!-- Live Telemetry Terminal -->
-							<div class="p-2 rounded bg-bg border border-border text-[11px] font-mono text-text-dim space-y-0.5" id="dag-stage-info">
-								<div class="flex justify-between text-text">
-									<span class="text-status-emerald font-semibold">Active: route_gate</span>
-									<span class="text-text-dim">Hook: host pre-tool</span>
-								</div>
-								<div class="text-text-muted truncate">
-									Intercepts unrouted calls &bull; enforces route_task &bull; zero prompt bypass
-								</div>
+							<div class="flex justify-between">
+								<span>Cryptographic Proof:</span>
+								<span class="text-text font-medium">SHA-256 git tree binding (.verify/receipt.json)</span>
 							</div>
 						</div>
 
 						<!-- Tags & Action -->
 						<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-border font-mono text-xs">
 							<span class="tag-pill">Rust</span>
-							<span class="tag-pill">SQLite + HNSW</span>
-							<span class="tag-pill">FastEmbed ONNX</span>
-							<a class="ml-auto text-text-dim hover:text-text no-underline flex items-center gap-1" href="/blog/series/agent-brain/" aria-label="Read agent-brain series breakdown and publications">
-								<span>Series breakdown</span>
+							<span class="tag-pill">POSIX Subshell</span>
+							<span class="tag-pill">SHA-256</span>
+							<span class="tag-pill">Claude Code Hooks</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline flex items-center gap-1" href="#evidence-inspector">
+								<span>Inspect receipt</span>
 								<span aria-hidden="true">&rarr;</span>
 							</a>
 						</div>
 					</div>
 
-
-					<!-- Bento Card 4: shipnote (Col 12 md:4) -->
-					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="tools systems">
-						<div class="space-y-2.5">
+					<!-- Bento Card 3: shipnote (Col 12 md:6) -->
+					<div class="system-card md:col-span-6 bg-surface-card border border-border rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6" data-category="tools systems">
+						<div class="space-y-3">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-2">
-									<h3 class="text-base font-semibold text-text tracking-tight">shipnote</h3>
-									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v0.3.2</span>
+									<h3 class="text-lg font-semibold text-text tracking-tight">shipnote</h3>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">{BLOG_SERIES.shipnote.badge}</span>
 								</div>
 								
-								<div class="flex items-center gap-1">
+								<div class="flex items-center gap-1.5">
 									<a
-										class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+										class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
 										href="https://shipnote.abhiudayg.dev"
 										target="_blank"
 										rel="noopener noreferrer"
@@ -308,7 +316,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 										<span>&nearr;</span>
 									</a>
 									<a
-										class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+										class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
 										href="https://github.com/abhiudayg/shipnote"
 										target="_blank"
 										rel="noopener noreferrer"
@@ -321,12 +329,12 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 									</a>
 								</div>
 							</div>
-							<p class="text-xs text-text-muted leading-relaxed">
-								Turn the work you ship into posts you approve. Provenance-backed drafting engine that reads public commits, verifies claim grounding against diffs, and leaves every post for human approval.
+							<p class="text-sm text-text-muted leading-relaxed">
+								Turn the work you ship into posts you approve. Provenance-backed drafting engine reading public commits, verifying claim grounding against diffs, and leaving every post for human approval.
 							</p>
 						</div>
 
-						<div class="p-2.5 bg-code-bg border border-border rounded-lg font-mono text-xs text-text-dim space-y-1">
+						<div class="p-3 bg-code-bg border border-border rounded-lg font-mono text-xs text-text-dim space-y-1">
 							<div class="flex justify-between">
 								<span>Grounding:</span>
 								<span class="text-status-emerald font-medium">100% commit diff citation</span>
@@ -336,8 +344,8 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 								<span class="text-text font-medium">Action + Local CLI</span>
 							</div>
 							<div class="flex justify-between">
-								<span>Memory:</span>
-								<span class="text-text font-medium">agent-brain voice store</span>
+								<span>Verification:</span>
+								<span class="text-text font-medium">Zero hallucinated capabilities</span>
 							</div>
 						</div>
 
@@ -351,70 +359,17 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						</div>
 					</div>
 
-					<!-- Bento Card 5: dustmap (Col 12 md:4) -->
-					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="systems">
-						<div class="space-y-2.5">
+					<!-- Bento Card 4: agentrun (Col 12 md:6) -->
+					<div class="system-card md:col-span-6 bg-surface-card border border-border rounded-xl p-6 md:p-8 bento-card-glow flex flex-col justify-between space-y-6" data-category="ai systems">
+						<div class="space-y-3">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-2">
-									<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
-									<h3 class="text-base font-semibold text-text tracking-tight">dustmap</h3>
-									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.0.1</span>
+									<h3 class="text-lg font-semibold text-text tracking-tight">agentrun</h3>
+									<span class="px-2 py-0.5 rounded-full bg-bg-subtle border border-border font-mono text-[11px] text-text-dim">{BLOG_SERIES.agentrun.badge}</span>
 								</div>
 								
 								<a
-									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
-									href="https://github.com/abhiudayg/dustmap"
-									target="_blank"
-									rel="noopener noreferrer"
-									aria-label="View dustmap open source repository on GitHub"
-								>
-									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-									</svg>
-									<span>&nearr;</span>
-								</a>
-							</div>
-							<p class="text-xs text-text-muted leading-relaxed">
-								Blazing-fast macOS disk space visualizer and conservative system cleaner in Rust &amp; Tauri. Treemap &amp; sector donuts with Rayon parallel traversal.
-							</p>
-						</div>
-
-						<div class="p-2.5 bg-code-bg border border-border rounded-lg font-mono text-xs text-text-dim space-y-1">
-							<div class="flex justify-between">
-								<span>Scan speed:</span>
-								<span class="text-text font-medium">&lt; 12ms / 85k files</span>
-							</div>
-							<div class="flex justify-between">
-								<span>Engine:</span>
-								<span class="text-status-emerald font-medium">Rayon parallel walk</span>
-							</div>
-							<div class="flex justify-between">
-								<span>Storage:</span>
-								<span class="text-text font-medium">Trash-first &bull; 100% offline</span>
-							</div>
-						</div>
-
-						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
-							<span class="tag-pill">Rust</span>
-							<span class="tag-pill">Tauri 2</span>
-							<span class="tag-pill">macOS</span>
-							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/dustmap/">
-								<span>Explore dustmap &rarr;</span>
-							</a>
-						</div>
-					</div>
-
-					<!-- Bento Card 6: agentrun (Col 12 md:4) -->
-					<div class="system-card md:col-span-4 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
-						<div class="space-y-2">
-							<div class="flex items-center justify-between">
-								<div class="flex items-center gap-2">
-									<h3 class="text-base font-semibold text-text tracking-tight">agentrun</h3>
-									<span class="px-2 py-0.5 rounded-full bg-bg-subtle border border-border font-mono text-[11px] text-text-dim">Pre-alpha</span>
-								</div>
-								
-								<a
-									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
+									class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
 									href="https://github.com/autonomic-ai-dev/agentrun"
 									target="_blank"
 									rel="noopener noreferrer"
@@ -426,10 +381,26 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 									<span>&nearr;</span>
 								</a>
 							</div>
-							<p class="text-xs text-text-muted leading-relaxed">
+							<p class="text-sm text-text-muted leading-relaxed">
 								Runs coding-agent tasks as isolated, recoverable jobs on your machine. Lite mode executes in dedicated containers and git worktrees; Full mode manages shared queues and audit trails.
 							</p>
 						</div>
+
+						<div class="p-3 bg-code-bg border border-border rounded-lg font-mono text-xs text-text-dim space-y-1">
+							<div class="flex justify-between">
+								<span>Sandbox Isolation:</span>
+								<span class="text-status-emerald font-medium">Apple Containers &bull; native</span>
+							</div>
+							<div class="flex justify-between">
+								<span>Tree Recovery:</span>
+								<span class="text-text font-medium">Isolated Git worktree branches</span>
+							</div>
+							<div class="flex justify-between">
+								<span>Recovery:</span>
+								<span class="text-text font-medium">Instant rollback on failure</span>
+							</div>
+						</div>
+
 						<div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border font-mono text-xs">
 							<span class="tag-pill">Go</span>
 							<span class="tag-pill">Containers</span>
@@ -440,21 +411,21 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						</div>
 					</div>
 
-					<!-- Bento Card 6: agent-spine (Col 12 md:6) -->
+					<!-- Bento Card 5: thesmos (Col 12 md:6) -->
 					<div class="system-card md:col-span-6 bg-surface-card border border-border rounded-xl p-6 bento-card-glow flex flex-col justify-between space-y-4" data-category="ai systems">
 						<div class="space-y-2">
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-2">
-									<h3 class="text-base font-semibold text-text tracking-tight">agent-spine</h3>
-									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">v1.0.0-rc3</span>
+									<h3 class="text-base font-semibold text-text tracking-tight">thesmos</h3>
+									<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 border border-status-emerald/30 font-mono text-[11px] text-status-emerald font-medium">{BLOG_SERIES.thesmos.badge}</span>
 								</div>
 								
 								<a
 									class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-bg-subtle border border-border text-text-muted hover:text-text transition-colors font-mono text-xs no-underline"
-									href="https://github.com/autonomic-ai-dev/agent-spine"
+									href="https://github.com/autonomic-ai-dev/thesmos"
 									target="_blank"
 									rel="noopener noreferrer"
-									aria-label="View agent-spine open source repository on GitHub"
+									aria-label="View thesmos open source repository on GitHub"
 								>
 									<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
 										<path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
@@ -470,8 +441,9 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 							<span class="tag-pill">Rust</span>
 							<span class="tag-pill">Tokio</span>
 							<span class="tag-pill">YAML DAGs</span>
-							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/agent-spine/">
-								<span>Explore agent-spine &rarr;</span>
+							<span class="tag-pill">Tarjan SCC</span>
+							<a class="ml-auto text-text-dim hover:text-text no-underline" href="/blog/series/thesmos/">
+								<span>Explore series &rarr;</span>
 							</a>
 						</div>
 					</div>
@@ -482,7 +454,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-2">
 									<h3 class="text-base font-semibold text-text tracking-tight">harbor</h3>
-									<span class="px-2 py-0.5 rounded-full bg-bg-subtle border border-border font-mono text-[11px] text-text-dim">Pre-alpha</span>
+									<span class="px-2 py-0.5 rounded-full bg-bg-subtle border border-border font-mono text-[11px] text-text-dim">{BLOG_SERIES.harbor.badge}</span>
 								</div>
 								
 								<a
@@ -514,7 +486,16 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 				</div>
 			</section>
 
-			<!-- 3. Recent Engineering Dispatches (Blog Section) -->
+			<!-- 3. Empirical Benchmarks & Telemetry -->
+			<EmpiricalBenchmarks />
+
+			<!-- 4. Runtime Proof & Verification Inspector -->
+			<EvidenceInspector />
+
+			<!-- 5. Honest Boundaries & Engineering Non-Goals -->
+			<HonestBoundaries />
+
+			<!-- 6. Recent Engineering Dispatches (Blog Section) -->
 			<section class="space-y-6 scroll-mt-20" id="essays">
 				<div class="flex items-end justify-between border-b border-border pb-3">
 					<div>
@@ -608,7 +589,10 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 				</div>
 			</section>
 
-			<!-- 5. Resend-Inspired RSS & Syndication Banner -->
+			<!-- 7. Homepage Exclusive Technical FAQ -->
+			<FAQSection />
+
+			<!-- 8. Resend-Inspired RSS & Syndication Banner -->
 			<section class="rounded-xl border border-border bg-surface-card p-6 sm:p-10 bento-card-glow relative overflow-hidden" id="rss">
 				<div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
 					<div class="space-y-3 md:col-span-7">
@@ -651,6 +635,7 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 				</div>
 			</section>
 		</main>
+		</div>
 
 		<Footer />
 
@@ -679,57 +664,6 @@ const seriesList = Object.entries(BLOG_SERIES).map(([slug, meta]) => ({
 						}, 2000);
 					}
 				}
-			}
-
-			// Interactive Cognitive Pipeline Stage Inspector
-			const stages = {
-				route_gate: {
-					title: 'route_gate',
-					mode: 'host pre-tool hook',
-					detail: 'Intercepts unrouted tool calls before execution • enforces mandatory route_task routing • zero prompt bypass'
-				},
-				knapsack: {
-					title: 'knapsack',
-					mode: 'dynamic token budget',
-					detail: 'Greedy token-envelope packer (~500 tokens) • injects verified skills & rules • prevents context bloat'
-				},
-				verify: {
-					title: 'verify',
-					mode: 'agent-brain verify ledger',
-					detail: 'Evidence recorder: runs checks via subshell • logs exit codes & hashes • ensures zero hallucinated test passes'
-				}
-			};
-
-			function inspectDagStage(stageKey) {
-				const stage = stages[stageKey];
-				if (!stage) return;
-
-				document.getElementById('dag-mode-label').textContent = stage.mode;
-				const infoEl = document.getElementById('dag-stage-info');
-				if (infoEl) {
-					infoEl.innerHTML = `
-						<div class="flex justify-between text-text">
-							<span class="text-status-emerald font-semibold">Active Stage: ${stage.title}</span>
-							<span class="text-text-dim">Hook: ${stage.mode}</span>
-						</div>
-						<div class="text-text-muted">
-							${stage.detail}
-						</div>
-					`;
-				}
-
-				['route_gate', 'knapsack', 'verify'].forEach(k => {
-					const node = document.getElementById('node-' + k);
-					if (node) {
-						if (k === stageKey) {
-							node.classList.add('border-status-emerald', 'text-text');
-							node.classList.remove('border-border', 'text-text-muted');
-						} else {
-							node.classList.remove('border-status-emerald', 'text-text');
-							node.classList.add('border-border', 'text-text-muted');
-						}
-					}
-				});
 			}
 
 			// Bento Grid Filter Tabs

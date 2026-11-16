@@ -1,0 +1,29 @@
+# Abhiuday Gupta — Systems & AI Engineer
+> Personal platform, systems architecture, and engineering blog by Abhiuday Gupta.
+
+## Core Information
+- Author: Abhiuday Gupta (Bengaluru, India)
+- Focus: Bare-metal Go, Rust systems, Linux kernel primitives (systemd, cgroups v2), and autonomous coding agent runtimes under token budgets.
+- Website: https://www.abhiudayg.dev
+- RSS Feed: https://www.abhiudayg.dev/rss.xml
+- GitHub: https://github.com/abhiudayg
+- X / Twitter: https://x.com/abhiudayg
+- Instagram (@baremetal.dev): https://www.instagram.com/baremetal.dev/ (Systems engineering without cloud bloat — Excalidraw, Terminals, Bare Metal)
+
+## Systems & Open-Source Projects
+
+- [Anode](https://anode.abhiudayg.dev): Docker Compose & Kubernetes alternative for Go backends. Deduces infrastructure topology via Go SSA analysis and runs on Linux systemd & cgroups v2 with <8.2ms cold boots. Repository: https://github.com/abhiudayg/anode
+- [Tekmor](https://github.com/autonomic-ai-dev/tekmor): Hard-gate verification engine & cryptographic test ledger. Intercepts tool calls via host stop hooks and records cryptographic receipts to eliminate hallucinated test passes.
+- [Shipnote](https://shipnote.abhiudayg.dev): Provenance-backed technical drafting engine from public git commits with verified claim grounding against diffs. Repository: https://github.com/abhiudayg/shipnote
+- [Agentrun](https://github.com/autonomic-ai-dev/agentrun): Isolated coding agent environments on macOS using native Apple container sandboxes and git worktrees.
+- [Thesmos](https://github.com/autonomic-ai-dev/thesmos): Deterministic workflow DAG engine and state machine executing declarative YAML graphs with Tarjan SCC acyclicity validation.
+- [Harbor](https://github.com/autonomic-ai-dev/harbor): Open-source, agent-native macOS browser on WebKit with explicit permission engines and local MCP server.
+
+## Key Engineering Dispatches
+
+- [Why We Ditched Docker for Go Backends](https://www.abhiudayg.dev/blog/why-we-ditched-docker-for-go-backends/): 55x faster cold starts (<8.2ms) by running compiled Go binaries directly under Linux systemd and cgroups v2.
+- [Inside the SSA Compiler Core](https://www.abhiudayg.dev/blog/inside-the-ssa-compiler-core/): Deducing databases, routes, and ports in ~60ms without YAML using Go SSA Variable Type Analysis.
+- [Tekmor: The Architectural Pivot](https://www.abhiudayg.dev/blog/agent-brain-the-architectural-pivot-and-runtime/): Why polite prompts fail in coding agents, and how host pre-tool hooks enforce hard verification gates.
+- [Tekmor: Memory Scopes & Reinforcement](https://www.abhiudayg.dev/blog/agent-brain-memory-scopes-and-reinforcement/): Preventing context bloat by splitting global vs project memory scopes and expiring stale facts.
+- [Building Dustmap: Sub-12ms Disk Visualizer](https://www.abhiudayg.dev/blog/dustmap-disk-space-visualizer-rust-tauri/): Flat memory arrays, zero pointer chasing, and Rayon parallel file traversal.
+- [Tekmor: Local MCP Routing](https://www.abhiudayg.dev/blog/agent-brain-local-mcp-routing/): Routing tool calls deterministically over stdio MCP.

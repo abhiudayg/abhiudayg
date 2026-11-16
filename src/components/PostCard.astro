@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { BLOG_SERIES, type BlogSeriesSlug } from '../consts';
+import { getReadingTime } from '../utils/blog';
 import FormattedDate from './FormattedDate.astro';
 import PartTag from './PartTag.astro';
 
@@ -10,38 +11,87 @@ interface Props {
 }
 
 const { post, showSeriesTag = true } = Astro.props;
-const { title, description, pubDate, series, seriesPart } = post.data;
+const { title, description, pubDate, series, seriesPart, tags = [] } = post.data;
 const seriesMeta = series ? BLOG_SERIES[series as BlogSeriesSlug] : null;
+const tagsString = (tags ?? []).join(' ').toLowerCase();
+const readTime = getReadingTime(post.body);
 ---
 
-<li>
-	<a class="post-card group bento-card-glow" href={`/blog/${post.id}/`} aria-label={`Read ${title}`}>
-		<div class="mb-3.5 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
-			<p class="m-0 text-text-dim">
-				<FormattedDate date={pubDate} />
-			</p>
-			{showSeriesTag && seriesMeta && (
-				<span class="tag-pill text-text font-medium">
-					#{seriesMeta.title}
+<li
+	class="post-item list-none"
+	data-post-card
+	data-series={series ?? ''}
+	data-tags={tagsString}
+	data-title={title.toLowerCase()}
+>
+	<a
+		class="block rounded-2xl border border-white/[0.08] bg-[#0a0a0c]/90 p-6 sm:p-8 hover:border-white/[0.16] transition-all duration-300 cursor-pointer group shadow-xl hover:shadow-none no-underline"
+		href={`/blog/${post.id}/`}
+		aria-label={`Read ${title}`}
+	>
+		<!-- Top Metadata Row (Anode style) -->
+		<div class="flex flex-wrap items-center justify-between gap-3 mb-3.5 text-xs text-neutral-400 font-mono">
+			<div class="flex items-center gap-2">
+				{showSeriesTag && seriesMeta ? (
+					<span class="px-2.5 py-0.5 rounded-full bg-white/[0.04] text-white border border-white/[0.1] font-semibold">
+						#{seriesMeta.title}
+					</span>
+				) : (
+					<span class="px-2.5 py-0.5 rounded-full bg-white/[0.04] text-neutral-300 border border-white/[0.1] font-semibold">
+						Architecture
+					</span>
+				)}
+				{seriesPart ? <PartTag part={seriesPart} /> : null}
+			</div>
+
+			<div class="flex items-center gap-2.5 text-neutral-400">
+				<span>
+					<FormattedDate date={pubDate} />
 				</span>
-			)}
+				<span>&bull;</span>
+				<span>{readTime}</span>
+			</div>
 		</div>
 
-		<div class="post-card-body">
-			<h2 class="post-card-title group-hover:text-accent font-sans">
-				{title}
-			</h2>
-			<p class="post-card-description">
-				{description}
-			</p>
-		</div>
+		<!-- Title -->
+		<h2 class="text-xl sm:text-2xl font-bold text-white group-hover:text-white transition-colors tracking-tight">
+			{title}
+		</h2>
 
-		<div class="post-card-footer">
-			<span class="inline-flex items-center gap-1 font-mono text-xs text-text group-hover:translate-x-0.5 transition-transform">
-				<span>Read entry</span>
-				<span aria-hidden="true">&rarr;</span>
+		<!-- Description -->
+		<p class="mt-3 text-sm text-neutral-400 leading-relaxed font-normal">
+			{description}
+		</p>
+
+		<!-- Tags Cluster -->
+		{tags.length > 0 && (
+			<div class="mt-4 flex flex-wrap items-center gap-1.5">
+				{tags.slice(0, 4).map((tag) => (
+					<button
+						type="button"
+						class="post-tag-btn px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-white/[0.03] border border-white/[0.08] text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+						data-tag={tag}
+					>
+						#{tag}
+					</button>
+				))}
+				{tags.length > 4 && (
+					<span class="text-[10px] font-mono text-neutral-500">+{tags.length - 4}</span>
+				)}
+			</div>
+		)}
+
+		<!-- Footer (Anode style) -->
+		<div class="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between">
+			<span class="text-xs font-mono text-neutral-500">
+				By Abhiuday Gupta &bull; Systems &amp; Architecture
 			</span>
-			{seriesPart ? <PartTag part={seriesPart} /> : null}
+			<span class="text-xs font-mono text-white flex items-center gap-1.5 group-hover:translate-x-1 transition-transform font-medium">
+				<span>Read Architectural Essay</span>
+				<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M5 12h14M12 5l7 7-7 7" />
+				</svg>
+			</span>
 		</div>
 	</a>
 </li>
