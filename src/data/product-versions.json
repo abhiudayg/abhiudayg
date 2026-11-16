@@ -25,9 +25,10 @@
   },
   "thesmos": {
     "repo": "autonomic-ai-dev/thesmos",
-    "version": "v1.0.0",
-    "fallback": "v1.0.0",
-    "lastChecked": "2026-11-16T04:07:28.041Z"
+    "version": "v1.0.0-rc3",
+    "fallback": "v1.0.0-rc3",
+    "lastChecked": "2026-11-16T04:07:28.041Z",
+    "lastReleaseUrl": "https://github.com/autonomic-ai-dev/thesmos/releases/tag/v1.0.0-rc3"
   },
   "harbor": {
     "repo": "autonomic-ai-dev/harbor",
