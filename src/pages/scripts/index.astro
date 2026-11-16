@@ -50,10 +50,10 @@ const SCRIPTS = [
 		scriptName: "loopback.sh",
 		series: "The Bare-Metal Stack",
 		episode: "#02",
-		status: "LIVE",
-		badgeColor: "status-emerald",
-		duration: "0:32",
-		reelUrl: "https://instagram.com/baremetal.dev",
+		status: "DROPS WED 7:30 PM",
+		badgeColor: "accent",
+		duration: null,
+		reelUrl: null,
 		desc: "Binds the 16.7M RFC 1122 127.0.0.0/8 loopback subnet, maps clean .local domains in /etc/hosts, and configures Caddy on port 80/443 with 0 port collisions.",
 		curlCmd: "curl -fsSL https://abhiudayg.dev/scripts/loopback.sh | sudo bash",
 		href: "/scripts/loopback",
@@ -66,8 +66,8 @@ const SCRIPTS = [
 		series: "The Bare-Metal Stack",
 		episode: "#01",
 		status: "RELEASED",
-		badgeColor: "accent",
-		duration: "0:42",
+		badgeColor: "status-emerald",
+		duration: "0:48",
 		reelUrl: "https://www.instagram.com/p/DfxvAs9TqWg/",
 		desc: "Inspects Go AST to auto-detect routes and database connections. Auto-generates hardened Linux systemd service units with 18MB RAM footprint vs. 500MB Docker daemon.",
 		curlCmd: "brew install abhiudayg/tap/anode",
@@ -80,10 +80,10 @@ const SCRIPTS = [
 		scriptName: "cgroups-jail.sh",
 		series: "The Bare-Metal Stack",
 		episode: "#03",
-		status: "IN PRODUCTION",
+		status: "COMING SOON",
 		badgeColor: "text-dim",
-		duration: "0:35",
-		reelUrl: "https://instagram.com/baremetal.dev",
+		duration: null,
+		reelUrl: null,
 		desc: "Hard limit local dev processes to strictly 128MB RAM and 20% CPU using native Linux kernel cgroups v2 slices without installing Docker, containerd, or Kubernetes.",
 		curlCmd: "Coming in Episode #03",
 		href: "/scripts/bare-metal-stack",
@@ -284,11 +284,13 @@ const SCRIPTS = [
 
 							<!-- Badges: Duration Timer + Reel Link + Status -->
 							<div class="flex flex-wrap items-center gap-2 shrink-0">
-								<!-- Duration Timer -->
-								<span class="font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted flex items-center gap-1.5">
-									<span>⏱</span>
-									<span>{script.duration}</span>
-								</span>
+								<!-- Duration Timer (Only if released) -->
+								{script.duration && (
+									<span class="font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted flex items-center gap-1.5">
+										<span>⏱</span>
+										<span>{script.duration}</span>
+									</span>
+								)}
 
 								<!-- Instagram Reel Link -->
 								{script.reelUrl && (

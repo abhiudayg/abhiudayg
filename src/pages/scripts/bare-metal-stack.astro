@@ -23,8 +23,8 @@ const EPISODES = [
 		title: "Stop Declaring Go Infrastructure Twice",
 		tool: "anode deploy",
 		status: "RELEASED",
-		badgeColor: "accent",
-		duration: "0:42",
+		badgeColor: "status-emerald",
+		duration: "0:48",
 		reelUrl: "https://www.instagram.com/p/DfxvAs9TqWg/",
 		summary: "Inspects Go AST directly to auto-detect routes and database connections. Generates systemd units with Caddy reverse proxy on Linux VPS with 18MB RAM footprint vs. 500MB Docker daemon.",
 		quickCmd: "brew install abhiudayg/tap/anode",
@@ -36,10 +36,10 @@ const EPISODES = [
 		episode: "#02",
 		title: "The 16.7 Million Local IP Hack (RFC 1122)",
 		tool: "loopback.sh",
-		status: "LIVE",
-		badgeColor: "status-emerald",
-		duration: "0:32",
-		reelUrl: "https://instagram.com/baremetal.dev",
+		status: "DROPS WED 7:30 PM",
+		badgeColor: "accent",
+		duration: null,
+		reelUrl: null,
 		summary: "Eliminates local port collision hell (:8080, :8081, :8082) by binding 50 local microservices to separate 127.0.0.X loopback IPs, all on standard Port 80 with 0 Docker networking overhead.",
 		quickCmd: "curl -fsSL https://abhiudayg.dev/scripts/loopback.sh | sudo bash",
 		linkUrl: "/scripts/loopback",
@@ -50,10 +50,10 @@ const EPISODES = [
 		episode: "#03",
 		title: "Linux cgroups v2 Memory Jail",
 		tool: "cgroups-jail.sh",
-		status: "IN PRODUCTION",
+		status: "COMING SOON",
 		badgeColor: "text-dim",
-		duration: "0:35",
-		reelUrl: "https://instagram.com/baremetal.dev",
+		duration: null,
+		reelUrl: null,
 		summary: "Hard limits local dev processes to strictly 128MB RAM and 20% CPU using native Linux kernel cgroups v2 slices, without spinning up Docker, containerd, or Kubernetes.",
 		quickCmd: "Coming in Episode #03",
 		linkUrl: "#",
@@ -145,11 +145,13 @@ const EPISODES = [
 
 							<!-- Badges: Status + Duration + Reel Link -->
 							<div class="flex flex-wrap items-center gap-2 shrink-0">
-								<!-- Video Duration Timer -->
-								<span class="font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted flex items-center gap-1.5">
-									<span>⏱</span>
-									<span>{ep.duration}</span>
-								</span>
+								<!-- Video Duration Timer (Only if released) -->
+								{ep.duration && (
+									<span class="font-mono text-xs px-2.5 py-1 rounded bg-surface-card border border-border text-text-muted flex items-center gap-1.5">
+										<span>⏱</span>
+										<span>{ep.duration}</span>
+									</span>
+								)}
 
 								<!-- Instagram Reel Link -->
 								{ep.reelUrl && (
