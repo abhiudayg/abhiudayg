@@ -54,5 +54,6 @@ export default defineConfig({
   redirects: {
     '/loopback': '/scripts/loopback',
     '/loopbacks': '/scripts/loopback',
+    '/sitemap.xml': '/sitemap-index.xml',
   },
 });
