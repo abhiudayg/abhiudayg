@@ -118,17 +118,18 @@ const lineCount = rawScript.trim().split('\n').length;
 					</a>
 					<span class="text-text-dim">&bull;</span>
 					<div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted">
-						<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]" id="reel-status-dot"></span>
+						<span class="w-1.5 h-1.5 rounded-full bg-[#F97316]" id="reel-status-dot"></span>
 						<span class="text-text font-medium">Bare-Metal Logs #02</span>
 					</div>
-					<span class="text-text-dim">&bull;</span>
-					<div id="reel-badge-container">
+					<div id="reel-gate" class="inline-flex items-center gap-2">
+						<span class="text-text-dim">&bull;</span>
 						<a
 							id="reel-link"
 							href="https://www.instagram.com/reel/1145140394878107/"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F97316]/10 border border-[#F97316]/30 hover:border-[#F97316] font-mono text-xs text-[#F97316] hover:bg-[#F97316]/15 transition-all"
+							style="display: none;"
+							class="items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F97316]/10 border border-[#F97316]/30 hover:border-[#F97316] font-mono text-xs text-[#F97316] hover:bg-[#F97316]/15 transition-all"
 						>
 							<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
 								<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -137,7 +138,8 @@ const lineCount = rawScript.trim().split('\n').length;
 						</a>
 						<span
 							id="reel-countdown"
-							class="hidden inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-dim"
+							style="display: inline-flex;"
+							class="items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted"
 						>
 							<span class="w-1.5 h-1.5 rounded-full bg-[#F97316] animate-pulse"></span>
 							<span>Reel drops today 7:30 PM IST</span>
@@ -493,33 +495,32 @@ Server: Caddy (or nginx)
 					}
 				});
 			});
-			// Timed Reel Unlock for 7:30 PM IST (2026-11-18T19:30:00+05:30)
-			const UNLOCK_AT = 1795010400000;
-			function checkReelUnlock() {
-				const now = Date.now();
-				const link = document.getElementById('reel-link');
-				const countdown = document.getElementById('reel-countdown');
-				const dot = document.getElementById('reel-status-dot');
-				if (!link || !countdown) return;
+		</script>
 
-				if (now < UNLOCK_AT) {
-					link.classList.add('hidden');
-					countdown.classList.remove('hidden');
-					if (dot) {
-						dot.classList.remove('bg-[#10b981]');
-						dot.classList.add('bg-[#F97316]');
-					}
-					setTimeout(checkReelUnlock, Math.min(UNLOCK_AT - now + 500, 15000));
-				} else {
-					link.classList.remove('hidden');
-					countdown.classList.add('hidden');
-					if (dot) {
-						dot.classList.remove('bg-[#F97316]');
-						dot.classList.add('bg-[#10b981]');
+		<script is:inline>
+			(function () {
+				const UNLOCK_AT = 1795010400000; // 2026-11-18T19:30:00+05:30
+				function syncReelGate() {
+					const now = Date.now();
+					const link = document.getElementById('reel-link');
+					const countdown = document.getElementById('reel-countdown');
+					const dot = document.getElementById('reel-status-dot');
+					if (!link || !countdown) return;
+
+					if (now >= UNLOCK_AT) {
+						link.style.display = 'inline-flex';
+						countdown.style.display = 'none';
+						if (dot) dot.style.backgroundColor = '#10b981';
+					} else {
+						link.style.display = 'none';
+						countdown.style.display = 'inline-flex';
+						if (dot) dot.style.backgroundColor = '#F97316';
+						setTimeout(syncReelGate, Math.max(1000, UNLOCK_AT - now + 200));
 					}
 				}
-			}
-			checkReelUnlock();
+				syncReelGate();
+				document.addEventListener('astro:page-load', syncReelGate);
+			})();
 		</script>
 	</body>
 </html>
