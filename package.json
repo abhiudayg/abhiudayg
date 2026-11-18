@@ -10,7 +10,7 @@
   },
   "homepage": "https://www.abhiudayg.dev",
   "engines": {
-    "node": ">=24.22.1"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "astro dev",
