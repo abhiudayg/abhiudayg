@@ -21,6 +21,9 @@ export default defineConfig({
         if (item.url === 'https://www.abhiudayg.dev/' || item.url === 'https://www.abhiudayg.dev') {
           item.priority = 1.0;
           item.changefreq = 'daily';
+        } else if (item.url.includes('/scripts/')) {
+          item.priority = 0.95;
+          item.changefreq = 'weekly';
         } else if (item.url.includes('/blog/series/')) {
           item.priority = 0.9;
           item.changefreq = 'weekly';

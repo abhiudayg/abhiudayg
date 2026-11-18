@@ -19,6 +19,10 @@
 - [Thesmos](https://github.com/autonomic-ai-dev/thesmos): Deterministic workflow DAG engine and state machine executing declarative YAML graphs with Tarjan SCC acyclicity validation.
 - [Harbor](https://github.com/autonomic-ai-dev/harbor): Open-source, agent-native macOS browser on WebKit with explicit permission engines and local MCP server.
 
+## Bare-Metal & Systems Scripts
+
+- [Loopback Sharding: Three Services, Zero Port Collisions](https://www.abhiudayg.dev/scripts/loopback/): Give multiple local services their own IP in the 127.0.0.0/8 subnet and route by hostname with Caddy or Nginx without port collisions. Direct script: `curl -fsSL https://www.abhiudayg.dev/scripts/loopback.sh | bash`
+
 ## Key Engineering Dispatches
 
 - [Why We Ditched Docker for Go Backends](https://www.abhiudayg.dev/blog/why-we-ditched-docker-for-go-backends/): 55x faster cold starts (<8.2ms) by running compiled Go binaries directly under Linux systemd and cgroups v2.

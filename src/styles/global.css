@@ -174,12 +174,15 @@
 	z-index: -10;
 	overflow: hidden;
 	background-color: var(--bg);
+	contain: strict;
+	transform: translateZ(0);
 	transition: background-color 0.2s ease;
 }
 
 .framer-grid-overlay {
 	position: absolute;
 	inset: 0;
+	contain: strict;
 	background-size: 36px 36px;
 	background-image: 
 		linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
@@ -197,6 +200,9 @@
 	border-radius: 9999px;
 	background: var(--orb-1);
 	filter: blur(90px);
+	contain: strict;
+	will-change: transform;
+	transform: translateZ(0);
 	animation: orb-float-1 20s ease-in-out infinite;
 }
 
@@ -209,6 +215,9 @@
 	border-radius: 9999px;
 	background: var(--orb-2);
 	filter: blur(100px);
+	contain: strict;
+	will-change: transform;
+	transform: translateZ(0);
 	animation: orb-float-2 24s ease-in-out infinite;
 }
 

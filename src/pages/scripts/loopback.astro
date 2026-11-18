@@ -10,13 +10,43 @@ import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
 
 const title = "Loopback Sharding: Three Services, Zero Port Collisions — Bare-Metal Logs #02";
 const description = "Two services can't both listen on 127.0.0.1:8080. This setup gives each service its own loopback IP, keeps the port the same, and uses a reverse proxy (Caddy or Nginx) on port 80 to route by hostname.";
+const pageUrl = absoluteUrl('/scripts/loopback/', Astro.site);
 
 const schema = graphJsonLd(
 	breadcrumbJsonLd([
 		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
 		{ name: 'Scripts', url: absoluteUrl('/scripts/', Astro.site) },
-		{ name: 'Loopback Sharding', url: absoluteUrl('/scripts/loopback/', Astro.site) },
+		{ name: 'Loopback Sharding', url: pageUrl },
 	]),
+	{
+		'@type': 'TechArticle',
+		'@id': `${pageUrl}#article`,
+		headline: title,
+		description,
+		url: pageUrl,
+		inLanguage: 'en-US',
+		author: { '@id': `${Astro.site || 'https://www.abhiudayg.dev'}/#person` },
+		publisher: { '@id': `${Astro.site || 'https://www.abhiudayg.dev'}/#person` },
+		keywords: [
+			'loopback sharding',
+			'127.0.0.0/8',
+			'Linux loopback aliases',
+			'port collisions',
+			'Caddy reverse proxy',
+			'Nginx reverse proxy',
+			'bare metal linux',
+			'systemd',
+		],
+		articleSection: 'DevOps & Systems Engineering',
+	},
+	{
+		'@type': 'SoftwareSourceCode',
+		'@id': `${pageUrl}#code`,
+		name: 'loopback.sh',
+		description: 'Automated script to assign distinct 127.0.0.X loopback IPs and configure reverse proxy routing',
+		programmingLanguage: 'Bash',
+		codeSampleType: 'full script',
+	}
 );
 
 // Read raw script at build time
@@ -28,7 +58,25 @@ const lineCount = rawScript.trim().split('\n').length;
 <!doctype html>
 <html lang="en" class="dark">
 	<head>
-		<BaseHead title={`${title} — ${AUTHOR_NAME}`} description={description} />
+		<BaseHead
+			title={`${title} — ${AUTHOR_NAME}`}
+			description={description}
+			canonicalPath="/scripts/loopback/"
+			tags={[
+				'loopback',
+				'linux loopback',
+				'127.0.0.0/8',
+				'port collisions',
+				'caddy',
+				'nginx',
+				'reverse proxy',
+				'bare metal',
+				'systemd',
+				'devops',
+				'bash script',
+				'networking',
+			]}
+		/>
 		<JsonLd schema={schema} />
 		<style>
 			/* Subtle tactile hover effects */
