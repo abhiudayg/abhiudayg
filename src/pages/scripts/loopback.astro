@@ -8,8 +8,8 @@ import JsonLd from '../../components/JsonLd.astro';
 import { AUTHOR_NAME } from '../../consts';
 import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
 
-const title = "Loopback Sharding: Three Services, Zero Port Collisions — Bare-Metal Logs #02";
-const description = "Two services can't both listen on 127.0.0.1:8080. This setup gives each service its own loopback IP, keeps the port the same, and uses a reverse proxy (Caddy or Nginx) on port 80 to route by hostname.";
+const title = "Loopback Sharding: Two Services, Same Port :8080 — Bare-Metal Logs #02";
+const description = "Two services can't both listen on 127.0.0.1:8080. This setup gives each service its own loopback IP in the 127.0.0.0/8 subnet, keeps the port the same, and uses a reverse proxy (Caddy or Nginx) on port 80 to route by hostname.";
 const pageUrl = absoluteUrl('/scripts/loopback/', Astro.site);
 
 const schema = graphJsonLd(
@@ -125,7 +125,7 @@ const lineCount = rawScript.trim().split('\n').length;
 
 				<div class="space-y-2">
 					<h1 class="text-3xl sm:text-4xl font-sans font-bold tracking-[-0.03em] text-text leading-[1.2]">
-						Loopback Sharding: Three Services, Zero Port Collisions
+						Loopback Sharding: Two Services, Same Port :8080
 					</h1>
 					<p class="font-sans italic text-sm text-text-dim">
 						Bare-Metal Logs #02
@@ -133,8 +133,23 @@ const lineCount = rawScript.trim().split('\n').length;
 				</div>
 
 				<p class="text-base sm:text-lg text-text-muted leading-relaxed">
-					Two services can't both listen on <code class="font-mono text-xs bg-surface-card border border-border/80 px-1.5 py-0.5 rounded text-text font-semibold">127.0.0.1:8080</code>. This setup gives each service its own loopback IP, keeps the port the same, and uses a reverse proxy—Nginx or Caddy—on port 80 to route by hostname.
+					Two services can't both listen on <code class="font-mono text-xs bg-surface-card border border-border/80 px-1.5 py-0.5 rounded text-text font-semibold">127.0.0.1:8080</code>. This setup gives each service its own loopback IP in the <code class="font-mono text-xs text-[#F97316]">127.0.0.0/8</code> subnet, keeps the port identical, and uses a reverse proxy—Nginx or Caddy—on port 80 to route by hostname.
 				</p>
+
+				<!-- Quick 1-Liner Command Box -->
+				<div class="rounded-lg border border-border bg-code-bg p-3 flex items-center justify-between gap-3 font-mono text-xs text-text-muted">
+					<div class="flex items-center gap-2 overflow-x-auto">
+						<span class="text-[#F97316] select-none font-bold">❯</span>
+						<span class="text-text selection:bg-surface-card">curl -fsSL https://www.abhiudayg.dev/scripts/loopback.sh | sudo bash</span>
+					</div>
+					<button
+						type="button"
+						class="copy-cmd-btn shrink-0 px-2.5 py-1 rounded bg-surface-card border border-border text-text hover:border-border-hover cursor-pointer transition-colors"
+						data-cmd="curl -fsSL https://www.abhiudayg.dev/scripts/loopback.sh | sudo bash"
+					>
+						Copy
+					</button>
+				</div>
 			</header>
 
 			<!-- ## Setup -->
