@@ -40,11 +40,11 @@ const EPISODES = [
 		badgeColor: "accent",
 		duration: null,
 		reelUrl: null,
-		summary: "Eliminates local port collision hell on :8080 by sharding services across distinct 127.0.0.X loopback IPs with Caddy routing http://auth.test and http://api.test on port 80.",
+		summary: "Eliminates local port collision hell on :8080 by sharding services across distinct 127.0.0.X loopback IPs with reverse proxy routing (Caddy or Nginx) for auth.test and api.test on port 80.",
 		quickCmd: "sudo bash loopback.sh",
 		linkUrl: "/scripts/loopback",
 		linkText: "Inspect Script & Evidence →",
-		tags: ["Networking", "Loopback Sharding", "127.0.0.0/8", "Caddy"],
+		tags: ["Networking", "Loopback Sharding", "127.0.0.0/8", "Reverse Proxy"],
 	},
 	{
 		episode: "#03",

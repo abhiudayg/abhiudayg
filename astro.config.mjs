@@ -50,4 +50,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  redirects: {
+    '/loopback': '/scripts/loopback',
+    '/loopbacks': '/scripts/loopback',
+  },
 });

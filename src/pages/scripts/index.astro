@@ -54,10 +54,10 @@ const SCRIPTS = [
 		badgeColor: "accent",
 		duration: null,
 		reelUrl: null,
-		desc: "Binds the 16.7M RFC 1122 127.0.0.0/8 loopback subnet, maps clean .local domains in /etc/hosts, and configures Caddy on port 80/443 with 0 port collisions.",
+		desc: "Binds the 16.7M RFC 1122 127.0.0.0/8 loopback subnet, maps clean .test domains in /etc/hosts, and configures reverse proxies (Caddy/Nginx) on port 80 with 0 port collisions.",
 		curlCmd: "curl -fsSL https://abhiudayg.dev/scripts/loopback.sh | sudo bash",
 		href: "/scripts/loopback",
-		tags: ["Networking", "RFC 1122", "127.0.0.0/8", "Caddy"],
+		tags: ["Networking", "RFC 1122", "127.0.0.0/8", "Reverse Proxy"],
 	},
 	{
 		id: "systemd-unit",

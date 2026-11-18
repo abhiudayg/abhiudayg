@@ -9,7 +9,7 @@ import { AUTHOR_NAME } from '../../consts';
 import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
 
 const title = "Loopback Sharding: Three Services, Zero Port Collisions — Bare-Metal Logs #02";
-const description = "Two services can't both listen on 127.0.0.1:8080. This setup gives each service its own loopback IP, keeps the port the same, and uses Caddy on port 80 to route by hostname.";
+const description = "Two services can't both listen on 127.0.0.1:8080. This setup gives each service its own loopback IP, keeps the port the same, and uses a reverse proxy (Caddy or Nginx) on port 80 to route by hostname.";
 
 const schema = graphJsonLd(
 	breadcrumbJsonLd([
@@ -85,7 +85,7 @@ const lineCount = rawScript.trim().split('\n').length;
 				</div>
 
 				<p class="text-base sm:text-lg text-text-muted leading-relaxed">
-					Two services can't both listen on <code class="font-mono text-xs bg-surface-card border border-border/80 px-1.5 py-0.5 rounded text-text font-semibold">127.0.0.1:8080</code>. This setup gives each service its own loopback IP, keeps the port the same, and uses Caddy on port 80 to route by hostname.
+					Two services can't both listen on <code class="font-mono text-xs bg-surface-card border border-border/80 px-1.5 py-0.5 rounded text-text font-semibold">127.0.0.1:8080</code>. This setup gives each service its own loopback IP, keeps the port the same, and uses a reverse proxy—Nginx or Caddy—on port 80 to route by hostname.
 				</p>
 			</header>
 
@@ -116,7 +116,7 @@ const lineCount = rawScript.trim().split('\n').length;
 					</div>
 				</div>
 
-				<!-- Command Box -->
+				<!-- Command Box with Live Output from Bare-Metal Logs #02 -->
 				<div class="code-panel overflow-hidden">
 					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
 						<span class="flex items-center gap-2">
@@ -127,24 +127,24 @@ const lineCount = rawScript.trim().split('\n').length;
 							Copy
 						</button>
 					</div>
-					<pre class="p-4 font-mono text-sm text-text overflow-x-auto"><code><span class="text-[#F97316] select-none">❯ </span>sudo bash loopback.sh</code></pre>
+					<pre class="p-4 font-mono text-sm text-text overflow-x-auto space-y-1"><code><div><span class="text-[#F97316] select-none">❯ </span>sudo bash loopback.sh</div><div class="text-[#10b981] pt-1">✓ [ok] bound 127.0.0.2 & 127.0.0.3</div><div class="text-[#10b981]">✓ [ok] auth.test & api.test -> 127.0.0.1</div><div class="text-[#10b981]">✓ [ok] proxy config written (port 80)</div></code></pre>
 				</div>
 
 				<div class="space-y-2 text-sm text-text-muted leading-relaxed pt-1">
-					<p>The script does three things:</p>
+					<p>The script executes in milliseconds and does three things:</p>
 					<ul class="list-disc list-inside space-y-1.5 pl-1">
 						<li>
 							Binds <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.2</code> and <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.3</code> to the loopback interface. On macOS it uses <code class="font-mono text-xs text-[#F97316]">ifconfig lo0 alias</code>. On Linux it uses <code class="font-mono text-xs text-[#F97316]">ip addr add</code>.
 						</li>
 						<li>
-							Adds a block to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">/etc/hosts</code> that maps <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">auth.test</code> and <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">api.test</code> to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.1</code>. A backup of the original file is saved as <code class="font-mono text-xs text-text-muted">/etc/hosts.bare-metal-backup</code>.
+							Adds a clean block to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">/etc/hosts</code> mapping <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">auth.test</code> and <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">api.test</code> to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.1</code>. A backup of the original file is preserved as <code class="font-mono text-xs text-text-muted">/etc/hosts.bare-metal-backup</code>.
 						</li>
 						<li>
-							Writes a <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">Caddyfile</code> that routes <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">http://auth.test</code> to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.2:8080</code> and <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">http://api.test</code> to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.3:8080</code>.
+							Writes reverse proxy configurations (<code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">Caddyfile</code> and <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">nginx-loopback.conf</code>) on port 80 routing <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">http://auth.test</code> to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.2:8080</code> and <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">http://api.test</code> to <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.3:8080</code>.
 						</li>
 					</ul>
 					<p class="text-xs text-text-dim pt-1 font-mono">
-						Nothing is installed, and no Docker is required.
+						Zero container daemons, zero iptables bridge latency, zero .env port hacks.
 					</p>
 				</div>
 
@@ -170,7 +170,7 @@ const lineCount = rawScript.trim().split('\n').length;
 					Run your services
 				</h2>
 				<p class="text-sm text-text-muted">
-					Start each service on its own IP and the same port:
+					Start each service on its own IP and the exact same port:
 				</p>
 				<div class="code-panel overflow-hidden">
 					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
@@ -185,29 +185,49 @@ const lineCount = rawScript.trim().split('\n').length;
 					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto space-y-1"><code><div><span class="text-[#F97316] select-none">❯ </span>./auth --listen 127.0.0.2:8080</div><div><span class="text-[#F97316] select-none">❯ </span>./api  --listen 127.0.0.3:8080</div></code></pre>
 				</div>
 				<p class="text-xs sm:text-sm text-text-muted leading-relaxed">
-					If you run both on <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.1:8080</code>, the second one fails with <code class="font-mono text-xs text-[#F97316]">address already in use</code>. That's the collision this setup removes.
+					If you run both on <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.1:8080</code>, the second one fails with <code class="font-mono text-xs text-[#F97316]">address already in use</code>. With loopback sharding, both bind cleanly with zero port offsets.
 				</p>
 			</section>
 
-			<!-- ## Start Caddy -->
+			<!-- ## Start your reverse proxy -->
 			<section class="space-y-4">
 				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">
-					Start Caddy
+					Start your reverse proxy (Caddy or Nginx)
 				</h2>
-				<div class="code-panel overflow-hidden">
-					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
-						<span class="flex items-center gap-2">
-							<span class="w-2 h-2 rounded-full bg-border"></span>
-							<span>bash</span>
-						</span>
-						<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="sudo caddy run --config Caddyfile">
-							Copy
-						</button>
+				<p class="text-sm text-text-muted">
+					Pick either Caddy or Nginx to listen on <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.1:80</code>. Both config files are generated automatically in the current directory.
+				</p>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<!-- Option A: Caddy -->
+					<div class="code-panel overflow-hidden">
+						<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
+							<span class="flex items-center gap-1.5 font-semibold text-text">
+								<span class="w-1.5 h-1.5 rounded-full bg-[#F97316]"></span>
+								Option A &middot; Caddy
+							</span>
+							<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="sudo caddy run --config Caddyfile">
+								Copy
+							</button>
+						</div>
+						<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto"><code><span class="text-[#F97316] select-none">❯ </span>sudo caddy run --config Caddyfile</code></pre>
 					</div>
-					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto"><code><span class="text-[#F97316] select-none">❯ </span>sudo caddy run --config Caddyfile</code></pre>
+
+					<!-- Option B: Nginx -->
+					<div class="code-panel overflow-hidden">
+						<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
+							<span class="flex items-center gap-1.5 font-semibold text-text">
+								<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+								Option B &middot; Nginx
+							</span>
+							<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="sudo nginx -c $(pwd)/nginx-loopback.conf">
+								Copy
+							</button>
+						</div>
+						<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto"><code><span class="text-[#10b981] select-none">❯ </span>sudo nginx -c $(pwd)/nginx-loopback.conf</code></pre>
+					</div>
 				</div>
 				<p class="text-xs sm:text-sm text-text-muted leading-relaxed">
-					Caddy listens on <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">127.0.0.1:80</code>. The site blocks use <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">http://</code>, so no HTTPS certificates are involved.
+					The reverse proxy routes hostname headers to each loopback IP without TLS certificates or port remapping.
 				</p>
 			</section>
 
@@ -313,17 +333,17 @@ $ ./api --listen 127.0.0.3:8080
 					<!-- 4. HTTP Responses -->
 					<div class="code-panel p-4 space-y-2 font-mono text-xs">
 						<div class="text-text-dim flex justify-between items-center text-[11px]">
-							<span class="text-text-muted font-bold">4. CADDY PORT 80 ROUTING</span>
+							<span class="text-text-muted font-bold">4. REVERSE PROXY PORT 80 ROUTING</span>
 							<span class="px-1.5 py-0.5 rounded bg-surface-card border border-[#10b981]/40 text-[#10b981] font-bold text-[10px]">HTTP 200</span>
 						</div>
 						<pre class="text-text-muted text-[11px] leading-relaxed overflow-x-auto"><code>$ curl -i http://auth.test
 HTTP/1.1 200 OK
-Server: Caddy
+Server: Caddy (or nginx)
 &#123;"service":"auth"&#125;
 
 $ curl -i http://api.test
 HTTP/1.1 200 OK
-Server: Caddy
+Server: Caddy (or nginx)
 &#123;"service":"api"&#125;</code></pre>
 					</div>
 				</div>

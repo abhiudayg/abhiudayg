@@ -22,6 +22,16 @@
   ],
   "redirects": [
     {
+      "source": "/loopback",
+      "destination": "/scripts/loopback",
+      "permanent": true
+    },
+    {
+      "source": "/loopbacks",
+      "destination": "/scripts/loopback",
+      "permanent": true
+    },
+    {
       "source": "/feed",
       "destination": "/rss.xml",
       "permanent": true

@@ -83,6 +83,10 @@ const allKeywords = Array.from(new Set([...tags, ...defaultKeywords]));
 
 <link rel="canonical" href={canonicalURL} />
 
+{import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && (
+	<meta name="google-site-verification" content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION} />
+)}
+
 <title>{pageTitle}</title>
 <meta name="title" content={pageTitle} />
 <meta name="description" content={description} />

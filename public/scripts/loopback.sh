@@ -4,11 +4,12 @@
 # https://abhiudayg.dev/scripts/loopback
 #
 # Binds two shard IPs (127.0.0.2 and 127.0.0.3) on the loopback interface,
-# maps auth.test and api.test to 127.0.0.1, and writes a Caddyfile that routes
-# http://auth.test and http://api.test on 127.0.0.1:80.
+# maps auth.test and api.test to 127.0.0.1, and writes reverse proxy configs
+# (Caddyfile and nginx-loopback.conf) that route http://auth.test and
+# http://api.test on 127.0.0.1:80.
 #
 # Usage:
-#   sudo bash loopback.sh             # set up aliases, hosts, and Caddyfile
+#   sudo bash loopback.sh             # set up aliases, hosts, and proxy configs
 #   sudo bash loopback.sh --status    # show alias and hosts state
 #   sudo bash loopback.sh --uninstall # remove aliases and the hosts block
 # ==============================================================================
@@ -57,29 +58,25 @@ alias_active() {
 bind_alias() {
   local ip="$1" os="$2"
   if alias_active "$ip" "$os"; then
-    echo "  [-] $ip already bound"
-    return
+    return 0
   fi
   if [[ "$os" == "macos" ]]; then
     ifconfig lo0 alias "$ip" 255.0.0.0
   else
     ip addr add "${ip}/8" dev lo
   fi
-  echo "  [ok] bound $ip"
 }
 
 unbind_alias() {
   local ip="$1" os="$2"
   if ! alias_active "$ip" "$os"; then
-    echo "  [-] $ip not bound"
-    return
+    return 0
   fi
   if [[ "$os" == "macos" ]]; then
     ifconfig lo0 -alias "$ip" || true
   else
     ip addr del "${ip}/8" dev lo || true
   fi
-  echo "  [ok] removed $ip"
 }
 
 backup_hosts() {
@@ -105,13 +102,11 @@ write_hosts() {
     echo "127.0.0.1 auth.test api.test"
     echo "$HOSTS_END"
   } >> /etc/hosts
-  echo "  [ok] auth.test and api.test point to 127.0.0.1"
 }
 
 write_caddyfile() {
   if [[ -f Caddyfile ]]; then
     cp Caddyfile Caddyfile.bak
-    echo "  [!] existing Caddyfile saved as Caddyfile.bak"
   fi
   cat > Caddyfile << 'EOF'
 http://auth.test {
@@ -124,7 +119,49 @@ http://api.test {
     reverse_proxy 127.0.0.3:8080
 }
 EOF
-  echo "  [ok] Caddyfile written"
+}
+
+write_nginx_conf() {
+  if [[ -f nginx-loopback.conf ]]; then
+    cp nginx-loopback.conf nginx-loopback.conf.bak
+  fi
+  cat > nginx-loopback.conf << 'EOF'
+# Bare-Metal Logs #02: Nginx Reverse Proxy on 127.0.0.1:80
+# Run: sudo nginx -c $(pwd)/nginx-loopback.conf
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 127.0.0.1:80;
+        server_name auth.test;
+
+        location / {
+            proxy_pass http://127.0.0.2:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+    server {
+        listen 127.0.0.1:80;
+        server_name api.test;
+
+        location / {
+            proxy_pass http://127.0.0.3:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+}
+EOF
+}
+
+write_proxy_configs() {
+  write_caddyfile
+  write_nginx_conf
+  echo "✓ [ok] proxy config written (port 80)"
 }
 
 show_status() {
@@ -140,9 +177,15 @@ show_status() {
     fi
   done
   if grep -qF "$HOSTS_START" /etc/hosts; then
-    echo "Hosts block: present"
+    echo "Hosts block: present (127.0.0.1 auth.test api.test)"
   else
     echo "Hosts block: not present"
+  fi
+  if [[ -f Caddyfile ]]; then
+    echo "Proxy config (Caddy): present (Caddyfile)"
+  fi
+  if [[ -f nginx-loopback.conf ]]; then
+    echo "Proxy config (Nginx): present (nginx-loopback.conf)"
   fi
 }
 
@@ -155,22 +198,18 @@ setup() {
     exit 1
   fi
 
-  echo "Bare-Metal Logs #02: Loopback Sharding"
-  echo
-  echo "1. Binding shard IPs on the loopback interface ($os)"
+  # Terminal output directly matching Bare-Metal Logs #02
   for item in "${SHARDS[@]}"; do
     read -r ip name <<< "$item"
     bind_alias "$ip" "$os"
   done
+  echo "✓ [ok] bound 127.0.0.2 & 127.0.0.3"
 
-  echo
-  echo "2. Updating /etc/hosts"
   backup_hosts
   write_hosts
+  echo "✓ [ok] auth.test & api.test -> 127.0.0.1"
 
-  echo
-  echo "3. Writing Caddyfile"
-  write_caddyfile
+  write_proxy_configs
 
   echo
   echo "Setup done. Aliases do not survive a reboot, so re-run this script after restarting."
@@ -179,8 +218,9 @@ setup() {
   echo "  1. Start each service on its shard IP and port:"
   echo "       ./auth --listen 127.0.0.2:$SHARD_PORT"
   echo "       ./api  --listen 127.0.0.3:$SHARD_PORT"
-  echo "  2. Start Caddy on 127.0.0.1:80 (needs root for port 80):"
-  echo "       sudo caddy run --config Caddyfile"
+  echo "  2. Start your reverse proxy on 127.0.0.1:80 (Caddy or Nginx):"
+  echo "       Caddy: sudo caddy run --config Caddyfile"
+  echo "       Nginx: sudo nginx -c \$(pwd)/nginx-loopback.conf"
   echo "  3. Test:"
   echo "       curl -i http://auth.test"
   echo "       curl -i http://api.test"
@@ -198,15 +238,16 @@ uninstall() {
     exit 1
   fi
 
-  echo "Reverting loopback setup"
+  echo "Reverting loopback setup..."
   for item in "${SHARDS[@]}"; do
     read -r ip name <<< "$item"
     unbind_alias "$ip" "$os"
   done
   remove_hosts_block
-  echo "  [ok] removed the hosts block"
+  echo "✓ [ok] removed loopback aliases (127.0.0.2, 127.0.0.3)"
+  echo "✓ [ok] removed hosts block from /etc/hosts"
   echo
-  echo "Done. The Caddyfile was left in place. Delete it yourself if you no longer need it."
+  echo "Done. Config files (Caddyfile, nginx-loopback.conf) were left in place."
 }
 
 main() {
