@@ -32,6 +32,21 @@
       "permanent": true
     },
     {
+      "source": "/cgroups",
+      "destination": "/scripts/bare-metal-stack",
+      "permanent": true
+    },
+    {
+      "source": "/cgroups-jail",
+      "destination": "/scripts/bare-metal-stack",
+      "permanent": true
+    },
+    {
+      "source": "/cgroups-jail.sh",
+      "destination": "/scripts/cgroups-jail.sh",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
