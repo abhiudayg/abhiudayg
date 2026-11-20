@@ -33,12 +33,12 @@
     },
     {
       "source": "/cgroups",
-      "destination": "/scripts/bare-metal-stack",
+      "destination": "/scripts/cgroups",
       "permanent": true
     },
     {
       "source": "/cgroups-jail",
-      "destination": "/scripts/bare-metal-stack",
+      "destination": "/scripts/cgroups",
       "permanent": true
     },
     {

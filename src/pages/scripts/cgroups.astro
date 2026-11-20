@@ -1,0 +1,277 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { AUTHOR_NAME } from '../../consts';
+import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
+
+const title = "Linux cgroups v2 Memory Jail: Cap Any Process at 256 MB — Bare-Metal Logs #03";
+const description = "Stop an app from taking the whole server down. One systemd-run command puts it in a cgroups v2 slice with a 256 MB memory cap and a 20% CPU quota. No Docker, containerd or Kubernetes.";
+const pageUrl = absoluteUrl('/scripts/cgroups/', Astro.site);
+const REEL_URL = 'https://www.instagram.com/p/Df92JAeBCPj/';
+const INSTALL_CMD = 'curl -fsSL https://www.abhiudayg.dev/scripts/cgroups-jail.sh | sudo bash -s -- ./app';
+
+const schema = graphJsonLd(
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'Scripts', url: absoluteUrl('/scripts/', Astro.site) },
+		{ name: 'cgroups v2 Memory Jail', url: pageUrl },
+	]),
+	{
+		'@type': 'TechArticle',
+		'@id': `${pageUrl}#article`,
+		headline: title,
+		description,
+		url: pageUrl,
+		inLanguage: 'en-US',
+		author: { '@id': `${Astro.site || 'https://www.abhiudayg.dev'}/#person` },
+		publisher: { '@id': `${Astro.site || 'https://www.abhiudayg.dev'}/#person` },
+		keywords: ['cgroups v2', 'memory.max', 'systemd-run', 'MemoryMax', 'CPUQuota', 'Linux resource limits', 'bare metal linux'],
+		articleSection: 'DevOps & Systems Engineering',
+	},
+	{
+		'@type': 'SoftwareSourceCode',
+		'@id': `${pageUrl}#code`,
+		name: 'cgroups-jail.sh',
+		description: 'Runs one command in a cgroups v2 slice with a MemoryMax cap and a CPUQuota',
+		programmingLanguage: 'Bash',
+		codeSampleType: 'full script',
+	}
+);
+
+const scriptPath = path.resolve('./public/scripts/cgroups-jail.sh');
+const rawScript = fs.readFileSync(scriptPath, 'utf-8');
+const lineCount = rawScript.trim().split('\n').length;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead
+			title={`${title} — ${AUTHOR_NAME}`}
+			description={description}
+			canonicalPath="/scripts/cgroups/"
+			tags={['cgroups v2', 'memory limit', 'systemd-run', 'linux resource limits', 'bare metal', 'devops', 'bash script', 'systemd']}
+		/>
+		<JsonLd schema={schema} />
+		<style>
+			.code-panel {
+				background: var(--surface-card);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				transition: border-color 0.2s ease, box-shadow 0.2s ease;
+			}
+			.code-panel:hover {
+				border-color: var(--border-hover);
+			}
+			.copy-btn {
+				transition: all 0.15s ease;
+			}
+			.copy-btn:hover {
+				background: rgba(255, 255, 255, 0.08);
+				color: var(--text);
+			}
+		</style>
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<div class="framer-grid-container" aria-hidden="true" id="framer-bg">
+			<div class="framer-orb-1"></div>
+			<div class="framer-orb-2"></div>
+			<div class="framer-spotlight" id="framer-spotlight"></div>
+			<div class="framer-grid-overlay"></div>
+		</div>
+
+		<Header />
+
+		<main class="shell relative py-12 sm:py-16 md:py-20 space-y-12 max-w-3xl animate-fade-in">
+			<header class="space-y-4 border-b border-border pb-8">
+				<div class="flex flex-wrap items-center gap-2">
+					<a href="/scripts" class="font-mono text-xs text-text-dim hover:text-accent transition-colors flex items-center gap-1">
+						<span>←</span> All Scripts
+					</a>
+					<span class="text-text-dim">&bull;</span>
+					<div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted">
+						<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+						<span class="text-text font-medium">Bare-Metal Logs #03</span>
+					</div>
+					<span class="text-text-dim">&bull;</span>
+					<a
+						href={REEL_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F97316]/10 border border-[#F97316]/30 hover:border-[#F97316] font-mono text-xs text-[#F97316] hover:bg-[#F97316]/15 transition-all"
+					>
+						<span>Watch Reel (0:29) ↗</span>
+					</a>
+				</div>
+
+				<div class="space-y-2">
+					<h1 class="text-3xl sm:text-4xl font-sans font-bold tracking-[-0.03em] text-text leading-[1.2]">
+						Linux cgroups v2 Memory Jail
+					</h1>
+					<p class="font-sans italic text-sm text-text-dim">
+						Bare-Metal Logs #03
+					</p>
+				</div>
+
+				<p class="text-base sm:text-lg text-text-muted leading-relaxed">
+					Your app leaks memory and the kernel kills it, or worse, the whole server freezes. One <code class="font-mono text-xs text-[#F97316]">systemd-run</code> command puts the process in its own cgroups v2 slice with a <code class="font-mono text-xs text-text">MemoryMax=256M</code> cap. Over the cap, the kernel throttles the process instead of freezing your server. A 20% <code class="font-mono text-xs text-text">CPUQuota</code> is an optional bonus.
+				</p>
+
+				<div class="rounded-lg border border-border bg-code-bg p-3 flex items-center justify-between gap-3 font-mono text-xs text-text-muted">
+					<div class="flex items-center gap-2 overflow-x-auto">
+						<span class="text-[#F97316] select-none font-bold">❯</span>
+						<span class="text-text selection:bg-surface-card">{INSTALL_CMD}</span>
+					</div>
+					<button
+						type="button"
+						class="copy-cmd-btn shrink-0 px-2.5 py-1 rounded bg-surface-card border border-border text-text hover:border-border-hover cursor-pointer transition-colors"
+						data-cmd={INSTALL_CMD}
+					>
+						Copy
+					</button>
+				</div>
+			</header>
+
+			<section class="space-y-4">
+				<div class="flex items-center justify-between">
+					<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Run it</h2>
+					<div class="flex items-center gap-2">
+						<button
+							type="button"
+							id="copy-script-btn"
+							class="copy-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-border text-text-muted hover:text-text font-mono text-xs cursor-pointer"
+						>
+							<span id="copy-script-text">Copy cgroups-jail.sh</span>
+						</button>
+						<a
+							href="/scripts/cgroups-jail.sh"
+							download="cgroups-jail.sh"
+							class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-border text-text-muted hover:text-text font-mono text-xs transition-colors"
+						>
+							Download .sh
+						</a>
+					</div>
+				</div>
+
+				<div class="code-panel overflow-hidden">
+					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
+						<span class="flex items-center gap-2">
+							<span class="w-2 h-2 rounded-full bg-border"></span>
+							<span>bash</span>
+						</span>
+						<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="sudo bash cgroups-jail.sh -- ./app">
+							Copy
+						</button>
+					</div>
+					<pre class="p-4 font-mono text-sm text-text overflow-x-auto space-y-1"><code><div><span class="text-[#F97316] select-none">❯ </span>sudo bash cgroups-jail.sh -- ./app</div><div class="text-text-dim pt-1"># 256M RAM cap and 20% CPU quota by default</div><div class="text-text-dim"># change them with --mem 128M --cpu 10%</div></code></pre>
+				</div>
+
+				<p class="text-sm text-text-muted leading-relaxed">
+					The script runs the same command shown in the reel:
+				</p>
+				<div class="code-panel overflow-hidden">
+					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto"><code>systemd-run --scope --slice=jail.slice -p MemoryMax=256M -p CPUQuota=20% -- ./app</code></pre>
+				</div>
+
+				<details class="group code-panel overflow-hidden mt-3">
+					<summary class="flex items-center justify-between px-4 py-2.5 cursor-pointer select-none bg-surface-card/60 text-xs font-mono text-text-dim hover:text-text transition-colors">
+						<div class="flex items-center gap-2">
+							<span class="group-open:rotate-90 transition-transform">▸</span>
+							<span class="font-bold text-text">cgroups-jail.sh</span>
+							<span>&bull; {lineCount} lines</span>
+						</div>
+						<span class="text-[11px] text-text-dim">Linux with systemd on cgroups v2</span>
+					</summary>
+					<div class="p-4 border-t border-border/40 font-mono text-xs text-text-secondary overflow-x-auto max-h-[460px] overflow-y-auto leading-relaxed">
+						<pre class="text-text/90"><code>{rawScript}</code></pre>
+					</div>
+				</details>
+			</section>
+
+			<section class="space-y-4">
+				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Check the cap</h2>
+				<p class="text-sm text-text-muted leading-relaxed">
+					Find the slice and read the limit the kernel is enforcing:
+				</p>
+				<div class="code-panel overflow-hidden">
+					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
+						<span class="flex items-center gap-2">
+							<span class="w-2 h-2 rounded-full bg-border"></span>
+							<span>bash</span>
+						</span>
+						<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="systemctl show -p MemoryMax,CPUQuotaPerSecUSec jail.slice">
+							Copy
+						</button>
+					</div>
+					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto"><code><span class="text-[#F97316] select-none">❯ </span>systemctl show -p MemoryMax,CPUQuotaPerSecUSec jail.slice</code></pre>
+				</div>
+			</section>
+
+			<section class="space-y-4">
+				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Evidence</h2>
+				<p class="text-sm text-text-muted leading-relaxed">
+					The reel shows the same flow: the process is capped at 256 MB, the kernel throttles it when it goes over, and the host stays responsive. The raw run output will be added here once the script has been run on a Linux machine.
+				</p>
+			</section>
+
+			<section class="code-panel p-4 font-mono text-xs space-y-1">
+				<span class="text-text-dim uppercase tracking-wider text-[10px]">Requirements</span>
+				<div class="text-text-secondary text-xs sm:text-sm">
+					Linux with systemd on cgroups v2 (<code class="font-mono text-xs">/sys/fs/cgroup/cgroup.controllers</code> must exist), run as root. The script refuses to run on macOS.
+				</div>
+			</section>
+
+			<footer class="pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-text-dim">
+				<div>Bare-Metal Logs by <a href="/" class="text-text underline hover:text-accent">Abhiuday</a> &bull; Bengaluru</div>
+				<div class="flex items-center gap-4">
+					<a href="/scripts" class="hover:text-accent transition-colors">All Scripts</a>
+					<a href="https://instagram.com/baremetal.dev" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">Instagram</a>
+					<a href="https://github.com/abhiudayg" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">GitHub</a>
+				</div>
+			</footer>
+		</main>
+
+		<Footer />
+
+		<script>
+			const copyScriptBtn = document.getElementById('copy-script-btn');
+			const copyScriptText = document.getElementById('copy-script-text');
+			if (copyScriptBtn && copyScriptText) {
+				copyScriptBtn.addEventListener('click', async () => {
+					try {
+						const res = await fetch('/scripts/cgroups-jail.sh');
+						const code = await res.text();
+						await navigator.clipboard.writeText(code);
+						copyScriptText.innerText = 'Copied!';
+						setTimeout(() => {
+							copyScriptText.innerText = 'Copy cgroups-jail.sh';
+						}, 2000);
+					} catch (e) {
+						console.error('Failed to copy', e);
+					}
+				});
+			}
+
+			document.querySelectorAll('.copy-cmd-btn').forEach((btn) => {
+				btn.addEventListener('click', async (e) => {
+					const target = e.currentTarget as HTMLButtonElement;
+					const cmd = target.getAttribute('data-cmd') || '';
+					try {
+						await navigator.clipboard.writeText(cmd);
+						const orig = target.innerText;
+						target.innerText = 'Copied!';
+						setTimeout(() => {
+							target.innerText = orig;
+						}, 1800);
+					} catch (err) {
+						console.error('Copy failed', err);
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
