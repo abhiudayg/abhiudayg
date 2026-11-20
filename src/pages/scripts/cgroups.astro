@@ -193,9 +193,9 @@ const lineCount = rawScript.trim().split('\n').length;
 			</section>
 
 			<section class="space-y-4">
-				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Check the cap</h2>
+				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Verify the cap</h2>
 				<p class="text-sm text-text-muted leading-relaxed">
-					Find the slice and read the limit the kernel is enforcing:
+					Run a real process in the same slice and read the limits the kernel applied to it. Expected output on a passing run:
 				</p>
 				<div class="code-panel overflow-hidden">
 					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
@@ -203,18 +203,18 @@ const lineCount = rawScript.trim().split('\n').length;
 							<span class="w-2 h-2 rounded-full bg-border"></span>
 							<span>bash</span>
 						</span>
-						<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="systemctl show -p MemoryMax,CPUQuotaPerSecUSec jail.slice">
+						<button class="copy-cmd-btn text-text-dim hover:text-text text-[11px] font-mono transition-colors" data-cmd="sudo bash cgroups-jail.sh --verify">
 							Copy
 						</button>
 					</div>
-					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto"><code><span class="text-[#F97316] select-none">❯ </span>systemctl show -p MemoryMax,CPUQuotaPerSecUSec jail.slice</code></pre>
+					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto space-y-1"><code><div><span class="text-[#F97316] select-none">❯ </span>sudo bash cgroups-jail.sh --verify</div><div class="text-text-dim">memory.max: 268435456 (expected 268435456)</div><div class="text-text-dim">cpu.max:    20000 100000 (quota for 20%)</div><div class="text-[#10b981]">PASS: the memory cap is enforced</div></code></pre>
 				</div>
 			</section>
 
 			<section class="space-y-4">
 				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Evidence</h2>
 				<p class="text-sm text-text-muted leading-relaxed">
-					The reel shows the same flow: the process is capped at 256 MB, the kernel throttles it when it goes over, and the host stays responsive. The raw run output will be added here once the script has been run on a Linux machine.
+					The reel shows the same flow: the process is capped at 256 MB, the kernel throttles it when it goes over, and the host stays responsive. The run output from the verify step will be added here once it has been run on a Linux machine.
 				</p>
 			</section>
 
