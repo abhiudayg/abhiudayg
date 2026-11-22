@@ -89,7 +89,21 @@ const SCRIPTS = [
 		curlCmd: "curl -fsSL https://abhiudayg.dev/scripts/cgroups-jail.sh | sudo bash -s -- --verify",
 		href: "/scripts/cgroups",
 		tags: ["cgroups v2", "Linux Kernel", "Memory Limits", "Isolation"],
+	},	{
+		id: "share",
+		title: "Share a Folder to Your Phone Over Wi-Fi",
+		scriptName: "python3 -m http.server",
+		series: "The Bare-Metal Stack",
+		episode: "#04",
+		status: "NEW",
+		badgeColor: "accent",
+		duration: "0:36",
+		desc: "Serves one folder on your Wi-Fi with a single command. Your phone opens it in the browser and downloads files. No upload, no app, no cable.",
+		curlCmd: "python3 -m http.server 8000 --directory ~/share",
+		href: "/scripts/share",
+		tags: ["Local Wi-Fi", "python3", "No Cloud", "Terminal"],
 	},
+
 ];
 ---
 
