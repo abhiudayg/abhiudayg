@@ -58,6 +58,7 @@ export default defineConfig({
     '/loopback': '/scripts/loopback',
     '/loopbacks': '/scripts/loopback',
     '/share': '/scripts/share',
+    '/shares': '/scripts/share',
     '/sitemap.xml': '/sitemap-index.xml',
   },
 });

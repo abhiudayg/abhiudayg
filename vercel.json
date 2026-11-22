@@ -52,6 +52,11 @@
       "permanent": true
     },
     {
+      "source": "/shares",
+      "destination": "/scripts/share",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
