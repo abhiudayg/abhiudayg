@@ -118,7 +118,7 @@ const lineCount = rawScript.trim().split('\n').length;
 				</div>
 
 				<p class="text-base sm:text-lg text-text-muted leading-relaxed">
-					Your app leaks memory and the kernel kills it, or worse, the whole server freezes. One <code class="font-mono text-xs text-[#F97316]">systemd-run</code> command puts the process in its own cgroups v2 slice with a <code class="font-mono text-xs text-text">MemoryMax=256M</code> cap. Over the cap, the kernel throttles the process instead of freezing your server. A 20% <code class="font-mono text-xs text-text">CPUQuota</code> is an optional bonus.
+					Your app leaks memory and the kernel kills it, or worse, the whole server freezes. One <code class="font-mono text-xs text-[#F97316]">systemd-run</code> command puts the process in its own cgroups v2 slice with a <code class="font-mono text-xs text-text">MemoryMax=256M</code> cap. Over the cap, the kernel OOM-kills the process inside its slice instead of letting it freeze your server. A 20% <code class="font-mono text-xs text-text">CPUQuota</code> is an optional bonus.
 				</p>
 
 				<div class="rounded-lg border border-border bg-code-bg p-3 flex items-center justify-between gap-3 font-mono text-xs text-text-muted">
@@ -214,7 +214,7 @@ const lineCount = rawScript.trim().split('\n').length;
 			<section class="space-y-4">
 				<h2 class="text-xl sm:text-2xl font-sans font-bold tracking-tight text-text">Evidence</h2>
 				<p class="text-sm text-text-muted leading-relaxed">
-					The reel shows the same flow: the process is capped at 256 MB, the kernel throttles it when it goes over, and the host stays responsive. The run output from the verify step will be added here once it has been run on a Linux machine.
+					The reel shows the same flow: the process is capped at 256 MB, the kernel kills it when it goes over, and the host stays responsive. The run output from the verify step will be added here once it has been run on a Linux machine.
 				</p>
 			</section>
 
