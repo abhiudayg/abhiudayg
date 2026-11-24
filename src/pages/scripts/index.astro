@@ -103,6 +103,20 @@ const SCRIPTS = [
 		href: "/scripts/share",
 		tags: ["Local Wi-Fi", "python3", "No Cloud", "Terminal"],
 	},
+	{
+		id: "socket-activation",
+		title: "Socket Activation: 0 MB While Idle",
+		scriptName: "app.socket + app.service",
+		series: "The Bare-Metal Stack",
+		episode: "#05",
+		status: "NEW",
+		badgeColor: "accent",
+		duration: "0:25",
+		desc: "Two small systemd unit files let Linux hold port 8080 while your program uses zero memory. The first request starts it in ~40 ms and never dies — no daemon, no Docker.",
+		curlCmd: "curl -fsSL https://abhiudayg.dev/scripts/socket-activation.sh | sudo bash",
+		href: "/scripts/socket-activation",
+		tags: ["systemd", "Socket Activation", "Linux", "Zero Idle Memory"],
+	},
 
 ];
 ---

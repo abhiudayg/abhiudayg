@@ -57,6 +57,11 @@
       "permanent": true
     },
     {
+      "source": "/socket-activation",
+      "destination": "/scripts/socket-activation",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
