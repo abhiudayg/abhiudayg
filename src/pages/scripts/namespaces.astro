@@ -1,0 +1,254 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { AUTHOR_NAME } from '../../consts';
+import { absoluteUrl, breadcrumbJsonLd, graphJsonLd } from '../../utils/seo';
+
+const title = "A Container Is Three Kernel Switches — Bare-Metal Logs #06";
+const description = "A container isn't a thing — it's one process with a few kernel switches flipped. unshare -m -p -f + chroot runs a lone static binary as PID 1 in fresh mount + PID namespaces, inside a folder holding only itself. Measured: PID 1, 3 processes, one file. No Docker, no daemon.";
+const pageUrl = absoluteUrl('/scripts/namespaces/', Astro.site);
+
+const RECIPE = `sudo unshare --mount --pid --fork --mount-proc chroot /tmp/bare /server`;
+
+const STEPS = [
+	{
+		title: 'Install (builds one static binary, drops it alone in /tmp/bare, starts the jail)',
+		cmd: 'curl -fsSL https://abhiudayg.dev/scripts/namespaces.sh | sudo bash',
+		note: 'Linux only — needs unshare, Go and root. Any static binary works; the script just builds one so you have something to jail.',
+	},
+	{
+		title: 'Knock on it',
+		cmd: 'curl localhost:8090',
+		note: 'It answers — from a process whose entire filesystem is one file. No libc, no /etc, no shell inside.',
+	},
+	{
+		title: "Look at its filesystem",
+		cmd: 'sudo ls -la /proc/$(pgrep -x server)/root',
+		note: 'Just "server" — 5.2 MB. /proc/<pid>/root resolves to the chrooted root, so you see exactly what the process sees.',
+	},
+	{
+		title: "Look at its world",
+		cmd: 'sudo nsenter -t $(pgrep -x server) -m -p ps -e',
+		note: "It's PID 1 and ps sees ~2 processes total — the jail's /proc was remounted fresh. Run ps -e on the host for contrast.",
+	},
+	{
+		title: 'Stop it',
+		cmd: 'sudo pkill -x server',
+		note: 'That is the whole teardown — no daemon was ever running, so there is nothing else to clean up.',
+	},
+];
+
+const schema = graphJsonLd(
+	breadcrumbJsonLd([
+		{ name: 'Home', url: absoluteUrl('/', Astro.site) },
+		{ name: 'Scripts', url: absoluteUrl('/scripts/', Astro.site) },
+		{ name: 'Namespaces', url: pageUrl },
+	]),
+	{
+		'@type': 'TechArticle',
+		'@id': `${pageUrl}#article`,
+		headline: title,
+		description,
+		url: pageUrl,
+		inLanguage: 'en-US',
+		author: { '@id': `${Astro.site || 'https://www.abhiudayg.dev'}/#person` },
+		publisher: { '@id': `${Astro.site || 'https://www.abhiudayg.dev'}/#person` },
+		keywords: ['linux namespaces', 'unshare', 'chroot', 'CLONE_NEWNS', 'CLONE_NEWPID', 'containers without docker', 'bare metal', 'Linux'],
+		articleSection: 'DevOps & Systems Engineering',
+	},
+	{
+		'@type': 'SoftwareSourceCode',
+		'@id': `${pageUrl}#code`,
+		name: 'namespaces.sh',
+		description: 'Builds a static Go server, leaves it alone in /tmp/bare, and runs it at PID 1 inside fresh mount + PID namespaces via unshare + chroot',
+		programmingLanguage: 'Bash',
+		codeSampleType: 'full script',
+	},
+	{
+		'@type': 'HowTo',
+		'@id': `${pageUrl}#howto`,
+		name: 'Run a process in a container built from raw Linux namespaces',
+		description,
+		url: pageUrl,
+		step: STEPS.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.title, text: s.note })),
+	}
+);
+
+const scriptPath = path.resolve('./public/scripts/namespaces.sh');
+const rawScript = fs.readFileSync(scriptPath, 'utf-8');
+const lineCount = rawScript.trim().split('\n').length;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<BaseHead
+			title={`${title} — ${AUTHOR_NAME}`}
+			description={description}
+			canonicalPath="/scripts/namespaces/"
+			tags={['linux namespaces', 'unshare', 'chroot', 'containers', 'no docker', 'bare metal', 'linux', 'kernel']}
+		/>
+		<JsonLd schema={schema} />
+		<style>
+			.code-panel {
+				background: var(--surface-card);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				transition: border-color 0.2s ease;
+			}
+			.code-panel:hover {
+				border-color: var(--border-hover);
+			}
+		</style>
+	</head>
+	<body class="relative min-h-screen bg-bg text-text antialiased selection:bg-surface-card selection:text-accent">
+		<div class="framer-grid-container" aria-hidden="true" id="framer-bg">
+			<div class="framer-orb-1"></div>
+			<div class="framer-orb-2"></div>
+			<div class="framer-spotlight" id="framer-spotlight"></div>
+			<div class="framer-grid-overlay"></div>
+		</div>
+
+		<Header />
+
+		<main class="shell relative py-12 sm:py-16 md:py-20 space-y-12 max-w-3xl animate-fade-in">
+			<header class="space-y-4 border-b border-border pb-8">
+				<div class="flex flex-wrap items-center gap-2">
+					<a href="/scripts" class="font-mono text-xs text-text-dim hover:text-accent transition-colors flex items-center gap-1">
+						<span>←</span> All Scripts
+					</a>
+					<span class="text-text-dim">&bull;</span>
+					<div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-surface-card border border-border font-mono text-xs text-text-muted">
+						<span class="w-1.5 h-1.5 rounded-full bg-[#F97316]"></span>
+						<span class="text-text font-medium">Bare-Metal Logs #06</span>
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<h1 class="text-3xl sm:text-4xl font-sans font-bold tracking-[-0.03em] text-text leading-[1.2]">
+						A Container Is Three Kernel Switches
+					</h1>
+				</div>
+
+				<p class="text-base sm:text-lg text-text-muted leading-relaxed">
+					It isn't a thing — it's one process that can't see your files. <code class="font-mono text-xs text-[#F97316]">unshare -m -p -f</code> + <code class="font-mono text-xs text-[#F97316]">chroot</code> runs a lone static binary as <code class="font-mono text-xs text-[#F97316]">PID 1</code> in fresh mount + PID namespaces, inside a folder holding only itself. No Docker, no daemon — the kernel does all of it.
+				</p>
+
+				<div class="rounded-lg border border-border bg-code-bg p-3 flex items-center justify-between gap-3 font-mono text-xs text-text-muted">
+					<div class="flex items-center gap-2 overflow-x-auto">
+						<span class="text-[#F97316] select-none font-bold">❯</span>
+						<span class="text-text selection:bg-surface-card">curl -fsSL https://abhiudayg.dev/scripts/namespaces.sh | sudo bash</span>
+					</div>
+					<button
+						type="button"
+						class="copy-cmd-btn shrink-0 px-2.5 py-1 rounded bg-surface-card border border-border text-text hover:border-border-hover cursor-pointer transition-colors"
+						data-cmd="curl -fsSL https://abhiudayg.dev/scripts/namespaces.sh | sudo bash"
+					>
+						Copy
+					</button>
+				</div>
+			</header>
+
+			<section class="space-y-4">
+				<h2 class="font-mono text-xs uppercase tracking-wider text-text-dim">// The whole recipe — one command</h2>
+				<div class="code-panel overflow-hidden">
+					<div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-surface-card/40 text-xs font-mono text-text-dim">
+						<span class="font-bold text-text">the "container"</span>
+						<span class="text-[11px]">no daemon, no image, no Docker</span>
+					</div>
+					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto leading-relaxed"><code>{RECIPE}</code></pre>
+				</div>
+				<div class="code-panel overflow-hidden">
+					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto space-y-1"><code><div>-m            <span class="text-[#F97316]">CLONE_NEWNS</span>   fresh mount table — then chroot points its root at the folder</div><div>-p -f         <span class="text-[#F97316]">CLONE_NEWPID</span>  + fork — the process is PID 1 inside</div><div>--mount-proc  fresh <span class="text-[#F97316]">/proc</span>      so `ps` inside sees only the jail</div><div>add -n        <span class="text-[#F97316]">CLONE_NEWNET</span>  a third switch — only loopback exists</div></code></pre>
+				</div>
+				<p class="text-xs sm:text-sm text-text-muted leading-relaxed">
+					Want the proof without installing anything? <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">sudo unshare -m -p -f --mount-proc bash</code> then <code class="font-mono text-xs text-text bg-surface-card px-1 py-0.5 rounded">echo $$</code> — it prints <code class="font-mono text-xs text-[#F97316]">1</code>.
+				</p>
+			</section>
+
+			<section class="space-y-6" aria-labelledby="steps-heading">
+				<h2 id="steps-heading" class="font-mono text-xs uppercase tracking-wider text-text-dim">// Prove it</h2>
+				<ol class="space-y-5">
+					{STEPS.map((step, i) => (
+						<li class="space-y-2">
+							<h3 class="text-base font-semibold text-text">
+								<span class="font-mono text-[#F97316] mr-2">{i + 1}.</span>{step.title}
+							</h3>
+							<div class="code-panel flex items-center justify-between gap-3 p-3 font-mono text-xs text-text-muted">
+								<div class="flex items-center gap-2 overflow-x-auto">
+									<span class="text-[#F97316] select-none font-bold">❯</span>
+									<span class="text-text select-all">{step.cmd}</span>
+								</div>
+								<button
+									type="button"
+									class="copy-cmd-btn shrink-0 px-2.5 py-1 rounded bg-surface-card border border-border text-text hover:border-border-hover cursor-pointer transition-colors"
+									data-cmd={step.cmd}
+								>
+									Copy
+								</button>
+							</div>
+							<p class="text-sm text-text-dim">{step.note}</p>
+						</li>
+					))}
+				</ol>
+			</section>
+
+			<section class="space-y-4" aria-labelledby="measured-heading">
+				<h2 id="measured-heading" class="font-mono text-xs uppercase tracking-wider text-text-dim">// Measured</h2>
+				<p class="text-sm text-text-muted">OrbStack Ubuntu 26.04 (kernel 7.2.12, aarch64), Go 1.27.4 static build — the numbers in the reel come from this run:</p>
+				<div class="code-panel overflow-hidden">
+					<pre class="p-4 font-mono text-xs sm:text-sm text-text overflow-x-auto space-y-1"><code><div>$ lsns              <span class="text-[#F97316]">8 types</span> native to the kernel: cgroup ipc mnt net pid time user uts</div><div>inside the jail:</div><div>  echo $$           <span class="text-[#F97316]">1</span> — fresh pid namespace, it's PID 1</div><div>  ps -e             <span class="text-[#F97316]">3 procs</span> vs hundreds on the host</div><div>  ip link (with -n) <span class="text-[#F97316]">lo only</span> — fresh net namespace</div><div>  ls /              <span class="text-[#10b981]">server</span> — 5.2 MB, the only file it can see</div><div>  curl :8090        <span class="text-[#10b981]">200</span> — answering from inside the empty folder</div></code></pre>
+				</div>
+			</section>
+
+			<section class="space-y-4">
+				<details class="group code-panel overflow-hidden">
+					<summary class="flex items-center justify-between px-4 py-2.5 cursor-pointer select-none bg-surface-card/60 text-xs font-mono text-text-dim hover:text-text transition-colors">
+						<div class="flex items-center gap-2">
+							<span class="group-open:rotate-90 transition-transform">▸</span>
+							<span class="font-bold text-text">namespaces.sh</span>
+							<span>&bull; {lineCount} lines</span>
+						</div>
+						<a href="/scripts/namespaces.sh" download="namespaces.sh" class="text-[11px] hover:text-text">download .sh</a>
+					</summary>
+					<div class="p-4 border-t border-border/40 font-mono text-xs text-text-secondary overflow-x-auto max-h-[460px] overflow-y-auto leading-relaxed">
+						<pre class="text-text/90"><code>{rawScript}</code></pre>
+					</div>
+				</details>
+			</section>
+
+			<section class="space-y-4" aria-labelledby="notes-heading">
+				<h2 id="notes-heading" class="font-mono text-xs uppercase tracking-wider text-text-dim">// Before you use it</h2>
+				<ul class="space-y-2 text-sm text-text-muted leading-relaxed list-disc pl-5">
+					<li>Needs root — <code class="font-mono text-xs text-text">chroot</code> and <code class="font-mono text-xs text-text">CLONE_NEWPID</code> are privileged. Rootless is possible via user namespaces; that's another episode.</li>
+					<li>Needs Go to build the demo binary. Any <em>static</em> binary works — a dynamic one can't run in the empty folder because there is no libc. That's the point of the test.</li>
+					<li>The recipe uses mount + PID switches so <code class="font-mono text-xs text-text">curl</code> can reach :8090 on the host network. Add <code class="font-mono text-xs text-text">-n</code> for the third switch — then it has only loopback and nothing can reach it.</li>
+					<li><code class="font-mono text-xs text-text">ps</code> inside needs <code class="font-mono text-xs text-text">--mount-proc</code> — without it the jail inherits the host /proc and sees everything.</li>
+					<li>This is a teaching demo, not a runtime — real containers add cgroups, seccomp, dropped capabilities and image distribution. The isolation itself is still just these switches.</li>
+				</ul>
+			</section>
+		</main>
+
+		<Footer />
+
+		<script>
+			document.querySelectorAll<HTMLButtonElement>('.copy-cmd-btn').forEach((btn) => {
+				btn.addEventListener('click', async () => {
+					const cmd = btn.dataset.cmd ?? '';
+					try {
+						await navigator.clipboard.writeText(cmd);
+						btn.textContent = 'Copied';
+						setTimeout(() => (btn.textContent = 'Copy'), 1500);
+					} catch {
+						btn.textContent = 'Failed';
+						setTimeout(() => (btn.textContent = 'Copy'), 1500);
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
